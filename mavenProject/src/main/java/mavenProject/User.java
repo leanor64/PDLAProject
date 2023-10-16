@@ -61,8 +61,12 @@ public class User {
 			return this.adresse;
 		}
 		
-		public void setAge(int age) {
-			this.age = age;
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+		
+		public void setPrenom(String prenom) {
+			this.prenom = prenom;
 		}
 		
 		public void setEmail(String email) {
