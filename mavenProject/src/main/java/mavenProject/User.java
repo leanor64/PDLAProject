@@ -2,6 +2,8 @@ package mavenProject;
 
 public class User {
 	
+	//Attributs
+	
 		private int idUser;
 		private String nom;
 		private String prenom;
@@ -11,6 +13,8 @@ public class User {
 		private String ville;
 		private String adresse;
 		
+		
+	//Constructeur
 		
 		public User(int idUser, String nom, String prenom, int age, String email, String telephone, String ville, String adresse) {
 			this.idUser = idUser;
@@ -22,6 +26,66 @@ public class User {
 			this.ville = ville;
 			this.adresse = adresse;
 		}
+		
+	//Méthodes
+		
+		public int getIdUser() {
+			return this.idUser;
+		}
+		
+		public String getNom() {
+			return this.nom;
+		}
+		
+		public String getPrenom() {
+			return this.prenom;
+		}
+		
+		public int getAge() {
+			return this.age;
+		}
+		
+		public String getEmail() {
+			return this.email;
+		}
+		
+		public String getTelephone() {
+			return this.telephone;
+		}
+		
+		public String getVille() {
+			return this.ville;
+		}
+		
+		public String getAdresse() {
+			return this.adresse;
+		}
+		
+		public void setAge(int age) {
+			this.age = age;
+		}
+		
+		public void setEmail(String email) {
+			this.email = email;
+		}
+		
+		public void setTelephone(String telephone) {
+			this.telephone = telephone;
+		}
+		
+		public void setVille(String ville) {
+			this.ville = ville;
+		}
+		
+		public void setAdresse(String adresse) {
+			this.adresse = adresse;
+		}
+		
+		public void creerAvis (String commentaire, User utilisateurVise, int note) {
+			
+		}
+		
+		
 		
 
 }
