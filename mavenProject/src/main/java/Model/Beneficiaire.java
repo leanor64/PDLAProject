@@ -1,4 +1,4 @@
-package mavenProject;
+package Model;
 
 public class Beneficiaire extends User{
 	
