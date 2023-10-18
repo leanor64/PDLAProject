@@ -6,14 +6,15 @@ import java.awt.Font;
 public class FormulaireInscription  extends JFrame{
 	
 	//Attributs
-	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse;
-	JTextField jtfnom,jtfprenom,jtfage, jtfemail, jtftelephone, jtfville, jtfadresse;
+	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword;
+	JTextField jtfnom,jtfprenom,jtfage, jtfemail, jtftelephone, jtfville, jtfadresse, jtfid;
+	JPasswordField jpfpassword;
 	JButton btajout;
 	
 	//Constructeur
 	public FormulaireInscription(){
 		this.setTitle("Inscription");
-		this.setSize(400,480);
+		this.setSize(400,540);
 		this.setLocationRelativeTo(null);
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
@@ -33,7 +34,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labnom);
 		
 		jtfnom = new JTextField();
-		jtfnom.setBounds(130,60,200,25);
+		jtfnom.setBounds(160,60,200,25);
 		pan.add(jtfnom);
 		
 		labprenom = new JLabel("Prénom :");
@@ -43,7 +44,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labprenom);
 		
 		jtfprenom = new JTextField();
-		jtfprenom.setBounds(130,100,200,25);
+		jtfprenom.setBounds(160,100,200,25);
 		pan.add(jtfprenom);
 		
 		labage = new JLabel("Age :");
@@ -53,7 +54,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labage);
 		
 		jtfage=new JTextField();
-		jtfage.setBounds(130,140,200,25);
+		jtfage.setBounds(160,140,200,25);
 		pan.add(jtfage);
 		
 		labemail = new JLabel("Email :");
@@ -63,7 +64,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labemail);
 		
 		jtfemail = new JTextField();
-		jtfemail.setBounds(130,180,200,25);
+		jtfemail.setBounds(160,180,200,25);
 		pan.add(jtfemail);
 		
 		labtelephone = new JLabel("Telephone :");
@@ -73,7 +74,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labtelephone);
 		
 		jtftelephone = new JTextField();
-		jtftelephone.setBounds(130,220,200,25);
+		jtftelephone.setBounds(160,220,200,25);
 		pan.add(jtftelephone);
 		
 		labville = new JLabel("Ville :");
@@ -83,7 +84,7 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labville);
 		
 		jtfville = new JTextField();
-		jtfville.setBounds(130,260,200,25);
+		jtfville.setBounds(160,260,200,25);
 		pan.add(jtfville);
 		
 		labadresse = new JLabel("Adresse :");
@@ -93,11 +94,31 @@ public class FormulaireInscription  extends JFrame{
 		pan.add(labadresse);
 		
 		jtfadresse = new JTextField();
-		jtfadresse.setBounds(130,300,200,25);
+		jtfadresse.setBounds(160,300,200,25);
 		pan.add(jtfadresse);
 		
-		btajout = new JButton("Enregistrer");
-		btajout.setBounds(150,360,150,30);
+		labid = new JLabel("Identifiant :"); //Vérifier que cet id n'existe pas déjà
+		labid.setBounds(20,340,300,30);
+		labid.setFont(new Font("Arial",Font.BOLD,18));
+		labid.setForeground(Color.black);
+		pan.add(labid);
+		
+		jtfid = new JTextField();
+		jtfid.setBounds(160,340,200,25);
+		pan.add(jtfid);
+		
+		labpassword = new JLabel("Mot de passe :"); //Vérifier que cet id n'existe pas déjà
+		labpassword.setBounds(20,380,300,30);
+		labpassword.setFont(new Font("Arial",Font.BOLD,18));
+		labpassword.setForeground(Color.black);
+		pan.add(labpassword);
+		
+		jpfpassword = new JPasswordField();
+		jpfpassword.setBounds(160,380,200,25);
+		pan.add(jpfpassword);
+		
+		btajout = new JButton("S'inscrire");
+		btajout.setBounds(150,440,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -112,4 +133,9 @@ public class FormulaireInscription  extends JFrame{
 	}
 
 }
+/*A faire
+ * ajouter mdp et iduser dans formulaire et User
+ * créer formulaire connexion
+ */
+
 

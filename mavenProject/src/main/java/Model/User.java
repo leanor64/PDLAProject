@@ -5,6 +5,7 @@ public class User {
 	//Attributs
 	
 		private int idUser;
+		private String password;
 		private String nom;
 		private String prenom;
 		private int age;
@@ -16,8 +17,9 @@ public class User {
 		
 	//Constructeur
 		
-		public User(int idUser, String nom, String prenom, int age, String email, String telephone, String ville, String adresse) {
+		public User(int idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse) {
 			this.idUser = idUser;
+			this.password = password;
 			this.nom = nom;
 			this.prenom = prenom;
 			this.age = age;
@@ -31,6 +33,10 @@ public class User {
 		
 		public int getIdUser() {
 			return this.idUser;
+		}
+		
+		public String getPassword() {
+			return this.password;
 		}
 		
 		public String getNom() {
