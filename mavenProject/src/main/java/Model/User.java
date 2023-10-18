@@ -4,7 +4,7 @@ public class User {
 	
 	//Attributs
 	
-		private int idUser;
+		private String idUser;
 		private String password;
 		private String nom;
 		private String prenom;
@@ -13,11 +13,12 @@ public class User {
 		private String telephone;
 		private String ville;
 		private String adresse;
+		private int note ;
 		
 		
 	//Constructeur
 		
-		public User(int idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse) {
+		public User(String idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse, int note) {
 			this.idUser = idUser;
 			this.password = password;
 			this.nom = nom;
@@ -27,11 +28,12 @@ public class User {
 			this.telephone = telephone;
 			this.ville = ville;
 			this.adresse = adresse;
+			this.note = note;
 		}
 		
 	//Méthodes
 		
-		public int getIdUser() {
+		public String getIdUser() {
 			return this.idUser;
 		}
 		
@@ -65,6 +67,10 @@ public class User {
 		
 		public String getAdresse() {
 			return this.adresse;
+		}
+		
+		public int getNote() {
+			return this.note;
 		}
 		
 		public void setNom(String nom) {
