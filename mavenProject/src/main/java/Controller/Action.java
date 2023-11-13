@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import Model.User;
+
 import Model.Avis;
+import Model.User;
+
 
 import View.FormulaireInscription;
 
-public class ActionAvis {
+public class Action {
 
 	static Connection conn;
     static Statement state;
@@ -20,9 +22,9 @@ public class ActionAvis {
     static Object[][] donn;
     static String[] champs;
     static Object[] val;
-    static String tableBDD = "Avis";
-	
-	public ActionAvis(String commande) {
+    
+    
+	public Action(String commande, String tableBDD) {
 	   	String BDD = "projet_gei_014";
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/" + BDD;
 		String user = "projet_gei_014";
@@ -36,7 +38,7 @@ public class ActionAvis {
 	        state.executeUpdate(commande);
 	        
 	        //Print la database
-	        ResultSet result = state.executeQuery("SELECT * FROM Avis order by num");
+	        ResultSet result = state.executeQuery("SELECT * FROM "+tableBDD);
 	        ResultSetMetaData resultMeta = result.getMetaData();                                     
 	        System.out.println("\n****************************************************************************");
 	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
@@ -58,21 +60,25 @@ public class ActionAvis {
 	}
 	
 	public static void main(String[] args) {
+		User us = new User ("act", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		User d = new User ("hugo", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		User e = new User ("patrick", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		
+		NewUser u1 = new NewUser (us);
+		NewUser u = new NewUser (d);
+		NewUser v = new NewUser (e);
+		
 		try {
-			NewUser u = new NewUser (d);
-			NewUser v = new NewUser (e);
-			
-			//2 lignes pour ajouter un avis dans la base de données
-			Avis av = new Avis ("Maurice il était top", d, e, 1);
+			Avis av = new Avis ("Maurice il était top", d, e, 3);
 			NewAvis a = new NewAvis (av, av.getNoAvis());
-			
 		} catch (Exception x) {
 			System.out.println("Erreur note");
 		}
+		
+		
 	}
+
+	
 }
 
 	
