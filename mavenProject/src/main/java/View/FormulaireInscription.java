@@ -1,9 +1,15 @@
 package View;
 import javax.swing.*;
+
+import Controller.NewUser;
+import Model.User;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class FormulaireInscription  extends JFrame{
+public class FormulaireInscription  extends JFrame implements ActionListener{
 	
 	//Attributs
 	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword;
@@ -123,19 +129,42 @@ public class FormulaireInscription  extends JFrame{
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
 		pan.add(btajout);
-		
+		btajout.addActionListener(this);
 	}
+		
+	//Méthodes
+	
+	public void AfficherIDDejaUtilise(String iduser) {
+		JOptionPane.showMessageDialog(this, "Identifiant déjà utilisé, veuillez en saisir un nouveau");
+	}
+	
+	public String toString(char[] password) {
+		String result = "";
+		for (int i = 0;i<password.length;i++) {
+			result += password[i];
+		}
+		return result;
+	}
+		
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btajout) {
+			System.out.println("vous avez cliqué sur le bouton s'inscrire");
+			//User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
+			//NewUser u = new NewUser(us);
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		
      FormulaireInscription form = new FormulaireInscription();
      form.setVisible(true);
+     
 	}
 
 }
 /*A faire
- * ajouter mdp et iduser dans formulaire et User
- * créer formulaire connexion
+ * actionperformed
  */
 
 
