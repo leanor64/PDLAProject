@@ -135,7 +135,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 		
 	//Méthodes
 	
-	public void AfficherIDDejaUtilise(String iduser) {
+	public void AfficherIDDejaUtilise() {
 		JOptionPane.showMessageDialog(this, "Identifiant déjà utilisé, veuillez en saisir un nouveau");
 	}
 	
@@ -154,7 +154,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 				User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
 				NewUser u = new NewUser(us);
 			} catch (SQLIntegrityConstraintViolationException exc) {
-				AfficherIDDejaUtilise(jtfid.getText());
+				AfficherIDDejaUtilise();
 			}
 		}
 	}
@@ -164,12 +164,9 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 		
      FormulaireInscription form = new FormulaireInscription();
      form.setVisible(true);
-     
 	}
 
 }
-/*A faire
- * actionperformed
- */
+
 
 

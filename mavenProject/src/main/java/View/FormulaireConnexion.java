@@ -63,10 +63,10 @@ public class FormulaireConnexion extends JFrame {
 
 		}
 		
-		//Méthode
+		//Méthodes
 		
-		public void afficherMDPIncorrect(String mdp) {
-		
+		public void afficherErreur() {
+			JOptionPane.showMessageDialog(this, "Mot de passe ou identifiant incorrect, retentez de nouveau");
 		}
 		
 		public String toString(char[] password) {
@@ -79,13 +79,10 @@ public class FormulaireConnexion extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
-				System.out.println("vous avez cliqué sur le bouton s'inscrire");
-				/*try {
-					User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
-					NewUser u = new NewUser(us);
-				} catch (SQLIntegrityConstraintViolationException exc) {
-					afficherMDPIncorrect(jtfid.getText());
-				}*/
+				System.out.println("vous avez cliqué sur le bouton se connecter");
+				if (!Action.checkConnection(jtfid.getText(),toString(jpfpassword.getPassword()))) {
+					afficherErreur();
+				}
 			}
 		}
 
