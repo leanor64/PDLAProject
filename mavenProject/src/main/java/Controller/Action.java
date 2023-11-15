@@ -36,7 +36,7 @@ public class Action {
 		    Statement state = conn.createStatement();
 		    
 		    //réaliser la commande dans la database
-	        state.executeUpdate(commande);
+		    state.executeUpdate(commande);
 	        
 	        //Print la database
 	        ResultSet result = state.executeQuery("SELECT * FROM "+tableBDD);
@@ -53,6 +53,7 @@ public class Action {
 	        //fermer la connexion avec la base de données
 	        result.close();
 	        state.close();
+	        
 		} catch (SQLIntegrityConstraintViolationException exc) {
 			throw exc;
 		} catch (Exception e){
@@ -61,16 +62,21 @@ public class Action {
 	    	    System.exit(0);
 	    }
 	}
-	
+		
 	public static void main(String[] args) {
 		User us = new User ("act", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		User d = new User ("hugo", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		User e = new User ("patrick", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		
-		/*NewUser u1 = new NewUser (us);
-		NewUser u = new NewUser (d);
-		NewUser v = new NewUser (e);
-		*/
+		try {
+			NewUser u1 = new NewUser (us);
+			NewUser u = new NewUser (d);
+			NewUser v = new NewUser (e);
+		} catch (Exception exc) {
+			System.out.println ("erreur id");
+		}
+		
+		
 		
 		try {
 			Avis av = new Avis ("Maurice il était top", d, e, 3);
