@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class FormulaireInscription  extends JFrame implements ActionListener{
 	
@@ -149,8 +150,12 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton s'inscrire");
-			//User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
-			//NewUser u = new NewUser(us);
+			try {
+				User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
+				NewUser u = new NewUser(us);
+			} catch (SQLIntegrityConstraintViolationException exc) {
+				AfficherIDDejaUtilise(jtfid.getText());
+			}
 		}
 	}
 	

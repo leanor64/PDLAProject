@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 
 import Model.Avis;
@@ -24,7 +25,7 @@ public class Action {
     static Object[] val;
     
     
-	public Action(String commande, String tableBDD) {
+	public Action(String commande, String tableBDD) throws SQLIntegrityConstraintViolationException{
 	   	String BDD = "projet_gei_014";
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/" + BDD;
 		String user = "projet_gei_014";
@@ -52,6 +53,8 @@ public class Action {
 	        //fermer la connexion avec la base de données
 	        result.close();
 	        state.close();
+		} catch (SQLIntegrityConstraintViolationException exc) {
+			throw exc;
 		} catch (Exception e){
 		    e.printStackTrace();
 		    System.out.println("Erreur");
@@ -64,9 +67,10 @@ public class Action {
 		User d = new User ("hugo", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		User e = new User ("patrick", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		
-		NewUser u1 = new NewUser (us);
+		/*NewUser u1 = new NewUser (us);
 		NewUser u = new NewUser (d);
 		NewUser v = new NewUser (e);
+		*/
 		
 		try {
 			Avis av = new Avis ("Maurice il était top", d, e, 3);

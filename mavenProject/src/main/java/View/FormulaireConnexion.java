@@ -1,8 +1,12 @@
 package View;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
+
+import Controller.NewUser;
+import Model.User;
 
 public class FormulaireConnexion extends JFrame {
 
@@ -57,6 +61,32 @@ public class FormulaireConnexion extends JFrame {
 			btajout.setForeground(Color.black);
 			pan.add(btajout);
 
+		}
+		
+		//Méthode
+		
+		public void afficherMDPIncorrect(String mdp) {
+		
+		}
+		
+		public String toString(char[] password) {
+			String result = "";
+			for (int i = 0;i<password.length;i++) {
+				result += password[i];
+			}
+			return result;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btajout) {
+				System.out.println("vous avez cliqué sur le bouton s'inscrire");
+				/*try {
+					User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
+					NewUser u = new NewUser(us);
+				} catch (SQLIntegrityConstraintViolationException exc) {
+					afficherMDPIncorrect(jtfid.getText());
+				}*/
+			}
 		}
 
 		public static void main(String[] args) {
