@@ -71,7 +71,7 @@ public class ViewDemande extends JFrame implements ActionListener{
 				//changer statut de l'annonce à refusée
 				String[] options = {"abusive", "date passée", "autre"};
 		        int motif = JOptionPane.showOptionDialog(null, "Pourquoi estimez-vous que cette annonce est invalidable?",
-		                "Click a button",
+		                "Choisissez un motif",
 		                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 		        System.out.println(motif);
 		        //prendre en compte le motif
