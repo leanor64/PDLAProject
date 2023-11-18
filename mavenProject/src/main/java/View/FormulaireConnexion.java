@@ -65,7 +65,7 @@ public class FormulaireConnexion extends JFrame {
 		
 		//Méthodes
 		
-		public void afficherErreur() {
+		public void afficherErreurConnexion() {
 			JOptionPane.showMessageDialog(this, "Mot de passe ou identifiant incorrect, retentez de nouveau");
 		}
 		
@@ -79,10 +79,12 @@ public class FormulaireConnexion extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
-				System.out.println("vous avez cliqué sur le bouton se connecter");
-				if (!Action.checkConnection(jtfid.getText(),toString(jpfpassword.getPassword()))) {
-					afficherErreur();
+				try {
+				CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
+				} catch (BadConnectionException e){
+					afficherErreurConnexion();
 				}
+				System.out.println("vous avez cliqué sur le bouton se connecter");
 			}
 		}
 

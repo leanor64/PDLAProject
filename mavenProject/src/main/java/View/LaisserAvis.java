@@ -15,8 +15,8 @@ import Model.*;
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener{
 	
 	//Attributs
-	//Beneficiaire benef;
-	Benevole benev;
+	User benef;
+	User benev;
 	JLabel labtitre, labavis, labnote;
 	JTextField jtfavis;
 	JList liste = new JList();
@@ -25,8 +25,8 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	JButton btajout;
 	
 	//Constructeur
-	public LaisserAvis(/*Beneficiaire benef, Benevole benev*/) {
-		//this.benef = benef;
+	public LaisserAvis(User benef, User benev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
+		this.benef = benef;
 		this.benev = benev;
 		this.setTitle("Votre retour d'expérience") /* à " + benev.getPrenom())*/;
 		this.setSize(600,600);
@@ -36,7 +36,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		pan.setBackground(Color.pink);
 		add(pan, BorderLayout.CENTER);
 		
-		labtitre = new JLabel("Laisser un avis");
+		labtitre = new JLabel("Laisser un avis à "/* + benev.getPrenom()*/);
 		labtitre.setBounds(60,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
@@ -84,18 +84,23 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton Enregistrer");
+			NewAvis a = new NewAvis(jtfavis.getText(),benev.getIdUser(),benef.getIdUser(),liste.getSelectedValue());
 		}
 	}
 	
 	public void valueChanged(ListSelectionEvent evt) { 
 		 etiquette.setText((String)liste.getSelectedValue());
+		 
 	}
 	
 	
 	public static void main(String[] args) {
-		
-	     LaisserAvis avis = new LaisserAvis();
-	     avis.setVisible(true);
+		User benevole, beneficiaire;
+		benevole = new User("testbenev", "coucou", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
+		beneficiaire = new User("test benef", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
+	    
+		LaisserAvis avis = new LaisserAvis(beneficiaire, benevole);
+	    avis.setVisible(true);
 		}
 
 	

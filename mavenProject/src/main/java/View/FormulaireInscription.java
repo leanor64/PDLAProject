@@ -1,5 +1,7 @@
 package View;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import Controller.NewUser;
 import Model.User;
@@ -10,13 +12,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-public class FormulaireInscription  extends JFrame implements ActionListener{
+public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener{
 	
 	//Attributs
-	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword;
+	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword, labtype;
 	JTextField jtfnom,jtfprenom,jtfage, jtfemail, jtftelephone, jtfville, jtfadresse, jtfid;
+	int type;
 	JPasswordField jpfpassword;
 	JButton btajout;
+	
+	JList liste = new JList();
+	JLabel etiquette = new JLabel(" ");
+	String choix[] = {"Bénévole", "Bénéficiaire", "Valideur"};
 	
 	//Constructeur
 	public FormulaireInscription(){
@@ -124,8 +131,24 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 		jpfpassword.setBounds(160,380,200,25);
 		pan.add(jpfpassword);
 		
+		labtype = new JLabel("Sélectionner un type de profil :");
+		labtype.setBounds(20,420,300,30);
+		labtype.setFont(new Font("Arial",Font.BOLD,18));
+		labtype.setForeground(Color.black);
+		pan.add(labtype);
+		
+		liste = new JList(choix);
+		liste.setBounds(320,420,200,55);
+		liste.addListSelectionListener(this);
+		pan.add(etiquette);
+		pan.add(liste);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pack();
+		etiquette.setText((String)liste.getSelectedValue());
+		//Revoir le choix de la note
+		
 		btajout = new JButton("S'inscrire");
-		btajout.setBounds(150,440,150,30);
+		btajout.setBounds(150,500,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -146,13 +169,30 @@ public class FormulaireInscription  extends JFrame implements ActionListener{
 		}
 		return result;
 	}
+	/*
+	 * 0 : Bénévole
+	 * 1 : Bénéficiaire
+	 * 2 : Valideur
+	*/
+	public void valueChanged(ListSelectionEvent evt) { 
+		 etiquette.setText((String)liste.getSelectedValue());
+		 if ((String)liste.getSelectedValue() == "Bénévole"){
+			 type = 0;
+		 } else if ((String)liste.getSelectedValue() == "Bénéficiaire"){
+			 type = 1;
+			 
+		 } else {
+			 type = 2;
+		 }
+	}
 		
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton s'inscrire");
 			try {
-				User us = new User (jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(), jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(), jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0);
-				NewUser u = new NewUser(us);
+				NewUser u = new NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
+						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
+						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0, type);
 			} catch (SQLIntegrityConstraintViolationException exc) {
 				AfficherIDDejaUtilise();
 			}
