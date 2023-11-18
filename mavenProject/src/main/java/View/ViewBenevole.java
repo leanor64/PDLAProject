@@ -54,6 +54,8 @@ public class ViewBenevole extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btdeconnexion) {
 			this.setVisible(false);
+			FormulaireConnexion fco = new FormulaireConnexion();
+			fco.setVisible(true);
 		}
 		
 	}

@@ -81,6 +81,8 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		}
 		if (e.getSource() == btdeconnexion) {
 			this.setVisible(false);
+			FormulaireConnexion fco = new FormulaireConnexion();
+			fco.setVisible(true);
 		}
 	}
 	

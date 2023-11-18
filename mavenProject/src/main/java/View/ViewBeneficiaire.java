@@ -81,6 +81,8 @@ public class ViewBeneficiaire extends JFrame implements ActionListener{
 		}
 		if (e.getSource() == btdeconnexion) {
 			this.setVisible(false);
+			FormulaireConnexion fco = new FormulaireConnexion();
+			fco.setVisible(true);
 		}
 	}
 	
