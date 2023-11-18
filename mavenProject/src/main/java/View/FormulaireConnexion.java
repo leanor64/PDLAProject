@@ -7,7 +7,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import javax.swing.*;
 
 import Controller.*;
-import Model.User;
 
 public class FormulaireConnexion extends JFrame implements ActionListener {
 
@@ -16,9 +15,13 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 		JTextField jtfid;
 		JPasswordField jpfpassword;
 		JButton btajout;
+		boolean connexionOK;
 
 		//Constructeur
 		public FormulaireConnexion(){
+			
+			connexionOK = false;
+			
 			this.setTitle("Connexion");
 			this.setSize(400,260);
 			this.setResizable(false);
@@ -84,19 +87,26 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
-				
-				try {
-					System.out.println("id:" + jtfid.getText());
-					System.out.println("pw:" + toString(jpfpassword.getPassword()));
-				CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
-				
 				System.out.println("vous avez cliqué sur le bouton se connecter");
+				try {
+					CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
+					connexionOK = true;
 				} catch (BadConnectionException excp){
-					System.out.println("dans catch");
 					afficherErreurConnexion();
-				}
-				
-				
+				}			
+			}
+			if (connexionOK == true) {
+				this.setVisible(false);
+				/*if (jtfid.getText().getType() == 0) {
+					ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
+					viewbn.setVisible(true);
+				} else if (jtfid.getText().getType() == 1) {
+					ViewBeneficiaire viewbf = new ViewBeneficiaire(jtfid.getText());
+					viewbf.setVisible(true);
+				} else {
+					ViewValideur viewv = new ViewValideur(jtfid.getText());
+					viewv.setVisible(true);
+				}*/
 			}
 		}
 

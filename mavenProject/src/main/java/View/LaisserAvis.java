@@ -8,26 +8,29 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.NewAvis;
-import Model.*;
+import Controller.*;
 
 
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener{
 	
 	//Attributs
-	User benef;
-	User benev;
+	String idbenef;
+	String idbenev;
 	JLabel labtitre, labavis, labnote;
 	JTextField jtfavis;
 	JList liste = new JList();
 	JLabel etiquette = new JLabel(" ");
 	String choix[] = {"0", "1", "2", "3", "4", "5"};
 	JButton btajout;
+	boolean avisOK;
 	
 	//Constructeur
-	public LaisserAvis(User benef, User benev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
-		this.benef = benef;
-		this.benev = benev;
+	public LaisserAvis(String idbenef, String idbenev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
+		this.idbenef = idbenef;
+		this.idbenev = idbenev;
+		
+		avisOK = false;
+		
 		this.setTitle("Votre retour d'expérience") /* à " + benev.getPrenom())*/;
 		this.setSize(600,500);
 		this.setResizable(false);
@@ -39,7 +42,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		pan.setBackground(custom);
 		add(pan, BorderLayout.CENTER);
 		
-		labtitre = new JLabel("Laisser un avis à " + benev.getPrenom());
+		labtitre = new JLabel("Laisser un avis à " + idbenev);
 		labtitre.setBounds(150,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
@@ -87,29 +90,36 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
 	}
 	
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-			NewAvis a = new NewAvis(jtfavis.getText(),benev.getIdUser(),benef.getIdUser(),Integer.parseInt(((String)liste.getSelectedValue())));
-			catch (BadLengthException exc) {
-				afficherTailleNonValide(exc.getMessage());
+			NewAvis a = new NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
+			avisOK = true;
+			} catch (BadLengthException exc1) {
+				afficherTailleNonValide(exc1.getMessage());
+			} catch (BadConnectionException exc2) {
+				System.out.println("Erreur connexion");
 			}
+		}
+		if (avisOK == true) {
+			this.setVisible(false);
+		
 		}
 	}
 	
 	public void valueChanged(ListSelectionEvent evt) { 
 		 etiquette.setText((String)liste.getSelectedValue());
-		 
 	}
 	
 	
 	public static void main(String[] args) {
-		User benevole, beneficiaire;
-		benevole = new User("testbenev", "coucou", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
-		beneficiaire = new User("test benef", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
+		String benev, benef;
+		benev = "benev";
+		benef = "benef";
 	    
-		LaisserAvis avis = new LaisserAvis(beneficiaire, benevole);
+		LaisserAvis avis = new LaisserAvis(benef,benev);
 	    avis.setVisible(true);
 		}
 

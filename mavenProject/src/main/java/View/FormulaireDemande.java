@@ -2,28 +2,27 @@ package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
-import Model.*;
-
 
 public class FormulaireDemande extends JFrame implements ActionListener{
 	
 	//Attributs
-	Beneficiaire benef;
+	String idbenef;
 	JLabel labtitre,labtitredemande, labdemande, labdate, labville;
 	JTextField jtftitredemande, jtfdemande, jtfdate, jtfville;
 	JButton btajout;
+	boolean demandeOK;
 	
 	//Constructeur
-	public FormulaireDemande(Beneficiaire benef) {
+	public FormulaireDemande(String idbenef) {
 
-		this.benef = benef;
+		this.idbenef = idbenef;
+		
+		demandeOK = false;
+		
 		this.setTitle("Postez une annonce");
 		this.setSize(650,450);
 		this.setResizable(false);
@@ -62,19 +61,29 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		jtfdemande.setBounds(280,90,300,100);
 		pan.add(jtfdemande);
 		
+		labdate = new JLabel("Saisissez la date concernée :");
+		labdate.setBounds(20,230,300,30);
+		labdate.setFont(new Font("Arial",Font.BOLD,18));
+		labdate.setForeground(Color.black);
+		pan.add(labdate);
+		
+		jtfdate = new JTextField();
+		jtfdate.setBounds(280,230,300,25);
+		pan.add(jtfdate);
+		
 		labville = new JLabel("Saisissez la ville concernée :");
-		labville.setBounds(20,230,300,30);
+		labville.setBounds(20,270,300,30);
 		labville.setFont(new Font("Arial",Font.BOLD,18));
 		labville.setForeground(Color.black);
 		pan.add(labville);
 		
 		jtfville = new JTextField();
-		jtfville.setBounds(280,230,300,25);
+		jtfville.setBounds(280,270,300,25);
 		pan.add(jtfville);
 		
 		
 		btajout = new JButton("Enregistrer");
-		btajout.setBounds(220,300,150,30);
+		btajout.setBounds(220,340,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -90,21 +99,30 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
 	}
 	
+	public void afficherInfoNulle(String info) {
+		JOptionPane.showMessageDialog(this, info + " invalide, veuillez rentrer votre " + info);
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
-			System.out.println("vous avez cliqué sur le bouton Enregistrer");
+			//System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-				Demande dem = new Demande(jtftitredemande.getText(),jtfdemande.getText(),benef,"en attente");
-				NewDemande d = new NewDemande(dem);
-			} catch (BadLengthException exc) {
-				afficherTailleNonValide(exc.getMessage());
+				NewDemande d = new NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,"en attente",jtfdate.getText(), jtfville.getText());
+				demandeOK = true;
+			} catch (BadLengthException exc1) {
+				afficherTailleNonValide(exc1.getMessage());
+			//} catch (InfoNullException exc2) {
+				//afficherInfoNulle(exc2.getMessage());
 			}
+		}
+		if (demandeOK == true) {
+			this.setVisible(false);
 		}
 	}
 	
 	public static void main(String[] args) {
-		Beneficiaire beneficiaire;
-		beneficiaire = new Beneficiaire("test demande", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
+		String beneficiaire;
+		beneficiaire = "benef";
 	    
 		FormulaireDemande demande = new FormulaireDemande(beneficiaire);
 	    demande.setVisible(true);

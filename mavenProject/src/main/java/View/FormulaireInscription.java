@@ -3,8 +3,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.NewUser;
-import Model.User;
+import Controller.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,12 +24,15 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	JLabel etiquette = new JLabel(" ");
 	String choix[] = {"Bénévole", "Bénéficiaire", "Valideur"};
 	
+	boolean inscriptionOK;
+	
 	//Constructeur
 	public FormulaireInscription(){
 		this.setTitle("Inscription");
 		this.setSize(550,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
+		inscriptionOK = false;
 		
 		Color custom = new Color(204, 153, 255);
 		JPanel pan = new JPanel();
@@ -198,18 +200,31 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
-			System.out.println("vous avez cliqué sur le bouton s'inscrire");
-			
+			//System.out.println("vous avez cliqué sur le bouton s'inscrire");
 			try {
 				NewUser u = new NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
 						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0, type);
+				inscriptionOK = true;
 			} catch (SQLIntegrityConstraintViolationException exc1) {
 				afficherIDDejaUtilise();
-			//} catch (BadLengthException exc2 {
-			//	afficherTailleNonValide(exc2.getMessage());
+			} catch (BadLengthException exc2) {
+				afficherTailleNonValide(exc2.getMessage());
 			} catch (NumberFormatException exc3) {
 				afficherAgeNonValide();
+			}
+		}
+		if (inscriptionOK == true) {
+			this.setVisible(false);
+			if (type == 0) {
+				ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
+				viewbn.setVisible(true);
+			} else if (type == 1) {
+				ViewBeneficiaire viewbf = new ViewBeneficiaire(jtfid.getText());
+				viewbf.setVisible(true);
+			} else {
+				ViewValideur viewv = new ViewValideur(jtfid.getText());
+				viewv.setVisible(true);
 			}
 		}
 	}
