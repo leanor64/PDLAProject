@@ -28,15 +28,18 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	//Constructeur
 	public FormulaireInscription(){
 		this.setTitle("Inscription");
-		this.setSize(400,540);
+		this.setSize(550,600);
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
+		
+		Color custom = new Color(204, 153, 255);
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(Color.orange);
+		pan.setBackground(custom);
 		add(pan);
 		
 		labtitre = new JLabel("Formulaire d'inscription");
-		labtitre.setBounds(60,10,300,30);
+		labtitre.setBounds(150,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
@@ -143,12 +146,11 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		pan.add(etiquette);
 		pan.add(liste);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
 		etiquette.setText((String)liste.getSelectedValue());
 		//Revoir le choix de la note
 		
 		btajout = new JButton("S'inscrire");
-		btajout.setBounds(150,500,150,30);
+		btajout.setBounds(175,520,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -158,8 +160,16 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 	//Méthodes
 	
-	public void AfficherIDDejaUtilise() {
+	public void afficherIDDejaUtilise() {
 		JOptionPane.showMessageDialog(this, "Identifiant déjà utilisé, veuillez en saisir un nouveau");
+	}
+	
+	public void afficherTailleNonValide(String info) {
+		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
+	}
+	
+	public void afficherAgeNonValide() {
+		JOptionPane.showMessageDialog(this, "Age invalide, veuillez rentrer un nombre entier");
 	}
 	
 	public String toString(char[] password) {
@@ -189,12 +199,17 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton s'inscrire");
+			
 			try {
 				NewUser u = new NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
 						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0, type);
-			} catch (SQLIntegrityConstraintViolationException exc) {
-				AfficherIDDejaUtilise();
+			} catch (SQLIntegrityConstraintViolationException exc1) {
+				afficherIDDejaUtilise();
+			//} catch (BadLengthException exc2 {
+			//	afficherTailleNonValide(exc2.getMessage());
+			} catch (NumberFormatException exc3) {
+				afficherAgeNonValide();
 			}
 		}
 	}

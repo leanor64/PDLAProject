@@ -1,14 +1,15 @@
 package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
 
-import Controller.NewUser;
+import Controller.*;
 import Model.User;
 
-public class FormulaireConnexion extends JFrame {
+public class FormulaireConnexion extends JFrame implements ActionListener {
 
 	//Attributs
 		JLabel labtitre, labid, labpassword;
@@ -20,10 +21,13 @@ public class FormulaireConnexion extends JFrame {
 		public FormulaireConnexion(){
 			this.setTitle("Connexion");
 			this.setSize(400,260);
+			this.setResizable(false);
 			this.setLocationRelativeTo(null);
+			
+			Color custom = new Color(204, 153, 255);
 			JPanel pan = new JPanel();
 			pan.setLayout(null);
-			pan.setBackground(Color.orange);
+			pan.setBackground(custom);
 			add(pan);
 
 			labtitre = new JLabel("Connexion");
@@ -60,6 +64,7 @@ public class FormulaireConnexion extends JFrame {
 			btajout.setFont(new Font("Arial",Font.BOLD,18));
 			btajout.setForeground(Color.black);
 			pan.add(btajout);
+			btajout.addActionListener(this);
 
 		}
 		
@@ -79,12 +84,19 @@ public class FormulaireConnexion extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
+				
 				try {
+					System.out.println("id:" + jtfid.getText());
+					System.out.println("pw:" + toString(jpfpassword.getPassword()));
 				CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
-				} catch (BadConnectionException e){
+				
+				System.out.println("vous avez cliqué sur le bouton se connecter");
+				} catch (BadConnectionException excp){
+					System.out.println("dans catch");
 					afficherErreurConnexion();
 				}
-				System.out.println("vous avez cliqué sur le bouton se connecter");
+				
+				
 			}
 		}
 

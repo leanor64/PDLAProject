@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.NewUser;
+import Controller.NewAvis;
 import Model.*;
 
 
@@ -21,7 +21,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	JTextField jtfavis;
 	JList liste = new JList();
 	JLabel etiquette = new JLabel(" ");
-	String choix[] = {" 0", " 1", " 2", " 3", " 4", " 5"};
+	String choix[] = {"0", "1", "2", "3", "4", "5"};
 	JButton btajout;
 	
 	//Constructeur
@@ -29,15 +29,18 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		this.benef = benef;
 		this.benev = benev;
 		this.setTitle("Votre retour d'expérience") /* à " + benev.getPrenom())*/;
-		this.setSize(600,600);
+		this.setSize(600,500);
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
+		
+		Color custom = new Color(204, 153, 255);
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(Color.pink);
+		pan.setBackground(custom);
 		add(pan, BorderLayout.CENTER);
 		
-		labtitre = new JLabel("Laisser un avis à "/* + benev.getPrenom()*/);
-		labtitre.setBounds(60,10,300,30);
+		labtitre = new JLabel("Laisser un avis à " + benev.getPrenom());
+		labtitre.setBounds(150,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre, BorderLayout.CENTER);
@@ -64,12 +67,10 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		pan.add(etiquette);
 		pan.add(liste);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
 		etiquette.setText((String)liste.getSelectedValue());
-		//Revoir le choix de la note
 			
 		btajout = new JButton("Enregistrer");
-		btajout.setBounds(150,350,150,30);
+		btajout.setBounds(200,370,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -81,10 +82,19 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	
 	//Méthodes
 	
+
+	public void afficherTailleNonValide(String info) {
+		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton Enregistrer");
-			NewAvis a = new NewAvis(jtfavis.getText(),benev.getIdUser(),benef.getIdUser(),liste.getSelectedValue());
+			try {
+			NewAvis a = new NewAvis(jtfavis.getText(),benev.getIdUser(),benef.getIdUser(),Integer.parseInt(((String)liste.getSelectedValue())));
+			catch (BadLengthException exc) {
+				afficherTailleNonValide(exc.getMessage());
+			}
 		}
 	}
 	
