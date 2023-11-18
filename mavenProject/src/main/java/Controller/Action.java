@@ -64,14 +64,12 @@ public class Action {
 	}
 		
 	public static void main(String[] args) {
-		User us = new User ("act", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
-		User d = new User ("hugo", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
-		User e = new User ("patrick", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14);
 		
 		try {
-			NewUser u1 = new NewUser (us);
-			NewUser u = new NewUser (d);
-			NewUser v = new NewUser (e);
+			Action del = new Action("DELETE FROM `Person`;", "Person");
+			NewUser u1 = new NewUser ("maurice", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14, 1);
+			NewUser u = new NewUser ("albert", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14, 0);
+			NewUser v = new NewUser ("pat", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 14, 2);
 		} catch (Exception exc) {
 			System.out.println ("erreur id");
 		}
@@ -79,8 +77,11 @@ public class Action {
 		
 		
 		try {
-			Avis av = new Avis ("Maurice il était top", d, e, 3);
-			NewAvis a = new NewAvis (av, av.getNoAvis());
+			NewAvis a = new NewAvis ("Maurice il était top", "maurice", "albert", 3);
+			NewAvis b = new NewAvis ("Jean il était top", "maurice", "albert", 3);
+			NewAvis c = new NewAvis ("Patoche il était top", "maurice", "albert", 3);
+			NewAvis d = new NewAvis ("AA il était top", "maurice", "albert", 3);
+
 		} catch (Exception x) {
 			System.out.println("Erreur note");
 		}
