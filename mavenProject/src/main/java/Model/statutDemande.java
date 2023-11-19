@@ -1,10 +1,12 @@
 package Model;
 
-public enum statutDemande { 
+public enum StatutDemande { 
 	EN_ATTENTE, 
 	VALIDEE, 
 	REALISEE,
 	REFUSEE_EXPIREE, 
 	REFUSEE_INAPPROPRIEE, 
-	REFUSE_AUTRE
+	REFUSE_AUTRE,
+	ERREUR
 	}
+

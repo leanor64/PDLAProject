@@ -9,6 +9,8 @@ import Controller.*;
 
 public class FormulaireDemande extends JFrame implements ActionListener{
 	
+	MainController controller = new MainController();
+	
 	//Attributs
 	String idbenef;
 	JLabel labtitre,labtitredemande, labdemande, labdate, labville;
@@ -107,7 +109,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		if (e.getSource() == btajout) {
 			//System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-				NewDemande d = new NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,jtfdate.getText(), jtfville.getText());
+				controller.NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,jtfdate.getText(), jtfville.getText());
 				demandeOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());

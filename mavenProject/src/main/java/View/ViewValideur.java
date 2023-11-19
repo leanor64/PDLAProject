@@ -9,9 +9,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.UnexistingUserException;
-import Controller.BadLengthException;
-import Controller.NewAvis;
+import Controller.*;
 
 public class ViewValideur extends JFrame implements ListSelectionListener, ActionListener{
 

@@ -13,6 +13,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener{
 	
+	MainController controller = new MainController();
+	
 	//Attributs
 	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword, labtype;
 	JTextField jtfnom,jtfprenom,jtfage, jtfemail, jtftelephone, jtfville, jtfadresse, jtfid;
@@ -202,7 +204,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		if (e.getSource() == btajout) {
 			//System.out.println("vous avez cliqué sur le bouton s'inscrire");
 			try {
-				NewUser u = new NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
+				controller.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
 						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
 				inscriptionOK = true;

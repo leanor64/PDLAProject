@@ -9,6 +9,8 @@ import javax.swing.*;
 import Controller.*;
 
 public class FormulaireConnexion extends JFrame implements ActionListener {
+	
+	MainController controller = new MainController();
 
 	//Attributs
 		JLabel labtitre, labid, labpassword;
@@ -88,12 +90,8 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
 				System.out.println("vous avez cliqué sur le bouton se connecter");
-				try {
-					CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
-					connexionOK = true;
-				} catch (UnexistingUserException excp){
-					afficherErreurConnexion();
-				}			
+				connexionOK = controller.CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
+						
 			}
 			if (connexionOK == true) {
 				this.setVisible(false);

@@ -13,6 +13,8 @@ import Controller.*;
 
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener{
 	
+	MainController controller = new MainController();
+	
 	//Attributs
 	String idbenef;
 	String idbenev;
@@ -95,7 +97,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-			NewAvis a = new NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
+			controller.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
 			avisOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());
@@ -121,7 +123,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	    
 		LaisserAvis avis = new LaisserAvis(benef,benev);
 	    avis.setVisible(true);
-		}
+	}
 
 	
 
