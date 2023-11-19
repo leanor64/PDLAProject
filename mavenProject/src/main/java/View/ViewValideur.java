@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.BadConnectionException;
+import Controller.UnexistingUserException;
 import Controller.BadLengthException;
 import Controller.NewAvis;
 

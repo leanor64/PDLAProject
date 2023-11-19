@@ -107,7 +107,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		if (e.getSource() == btajout) {
 			//System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-				NewDemande d = new NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,"en attente",jtfdate.getText(), jtfville.getText());
+				NewDemande d = new NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,jtfdate.getText(), jtfville.getText());
 				demandeOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());

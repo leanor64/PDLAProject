@@ -12,20 +12,18 @@ import Model.Demande;
 
 public class NewDemande {
 
-	public NewDemande(String title, String explication, String demandeur, String etat, String jour, String ville) throws BadLengthException{
+	public NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException{
 		
 		/*vérification taille des arguments*/
-		if (title.length() > 50) {
+		if ((title.length() > 50) || (title.length()==0)){
 			throw new BadLengthException ("Titre");
-		} else if (explication.length() > 300) {
+		} else if ((explication.length() > 300) || (explication.length()==0)){
 			throw new BadLengthException ("Détails");
-		} else if (demandeur.length() > 20) {
+		} else if ((demandeur.length() > 20) || (demandeur.length()==0)){
 			throw new BadLengthException ("Beneficiaire");
-		} else if (etat.length() > 10) {
-			throw new BadLengthException ("Etat");
-		} else if (jour.length() > 10) {
+		} else if ((jour.length() > 10) || (jour.length()==0)) {
 			throw new BadLengthException ("Date");
-		} else if (ville.length() > 30) {
+		} else if ((ville.length() > 30) || (ville.length()==0)){
 			throw new BadLengthException ("Ville");
 		}  
 		
@@ -47,7 +45,7 @@ public class NewDemande {
 		    }
 		    
 			//insérer l'avis dans la database
-			String commande = "INSERT into DemandeAide VALUES ('"+noDemande+"','"+title+"','"+explication+"','"+demandeur+"','"+etat+"','"+jour+"','"+ville+"');";
+			String commande = "INSERT into DemandeAide VALUES ('"+noDemande+"','"+title+"','"+explication+"','"+demandeur+"','EN_ATTENTE','"+jour+"','"+ville+"');";
 		    state.executeUpdate(commande);
 		    
 		    

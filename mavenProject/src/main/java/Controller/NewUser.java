@@ -19,24 +19,24 @@ public class NewUser {
 	 Valideur : 2
 	 */
 	
-	public NewUser (String idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse, int note, int type) throws SQLIntegrityConstraintViolationException, BadLengthException{
+	public NewUser (String idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse, int type) throws SQLIntegrityConstraintViolationException, BadLengthException{
 		
 		/*vérification taille des arguments*/
-		if (nom.length() > 20) {
+		if ((nom.length() > 20) || (nom.length()==0)) {
 			throw new BadLengthException ("Nom");
-		} else if (prenom.length() > 20) {
+		} else if ((prenom.length() > 20) || (prenom.length()==0)) {
 			throw new BadLengthException ("Prenom");
-		} else if (email.length() > 50) {
+		} else if ((email.length() > 50) || (email.length()==0)) {
 			throw new BadLengthException ("Email");
-		} else if (telephone.length() > 10) {
+		} else if ((telephone.length() > 10) || (telephone.length()==0)) {
 			throw new BadLengthException ("Téléphone");
-		} else if (ville.length() > 30) {
+		} else if ((ville.length() > 30) || (ville.length()==0)) {
 			throw new BadLengthException ("Ville");
-		} else if (adresse.length() > 100) {
+		} else if ((adresse.length() > 100) || (adresse.length()==0)) {
 			throw new BadLengthException ("Adresse");
-		} else if (idUser.length() > 20) {
+		} else if ((idUser.length() > 20) || (idUser.length()==0)) {
 			throw new BadLengthException ("Identifiant");
-		} else if (password.length() > 20) {
+		} else if ((password.length() > 20) || (password.length()<8)) {
 			throw new BadLengthException ("Mot de passe");
 		}		
 		
@@ -49,7 +49,7 @@ public class NewUser {
 		    Statement state = conn.createStatement();
 		    
 		    //insérer la personne dans la database
-			String commande = "INSERT into Person VALUES ('" +idUser+"','" +nom+ "','" +prenom+ "','" +age+"','" +type+ "','" +email+"','" +telephone+"','" +ville+"','" +adresse+"','" +note+"','" +password+"','" +0+"');";
+			String commande = "INSERT into Person VALUES ('" +idUser+"','" +nom+ "','" +prenom+ "','" +age+"','" +type+ "','" +email+"','" +telephone+"','" +ville+"','" +adresse+"','" +0.0+"','" +password+"','" +0+"');";
 		    state.executeUpdate(commande);
 	        
 	        //Print la database

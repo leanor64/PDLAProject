@@ -204,7 +204,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 			try {
 				NewUser u = new NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
-						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), 0, type);
+						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
 				inscriptionOK = true;
 			} catch (SQLIntegrityConstraintViolationException exc1) {
 				afficherIDDejaUtilise();

@@ -91,7 +91,7 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 				try {
 					CheckConnection ccnx = new CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
 					connexionOK = true;
-				} catch (BadConnectionException excp){
+				} catch (UnexistingUserException excp){
 					afficherErreurConnexion();
 				}			
 			}

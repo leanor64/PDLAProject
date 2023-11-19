@@ -99,7 +99,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 			avisOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());
-			} catch (BadConnectionException exc2) {
+			} catch (UnexistingUserException exc2) {
 				System.out.println("Erreur connexion");
 			}
 		}

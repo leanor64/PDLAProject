@@ -8,16 +8,16 @@ import java.sql.Statement;
 
 public class NewAvis {
 	
-	public NewAvis(String message, String destinataire, String emetteur, int note) throws BadLengthException, BadConnectionException{
+	public NewAvis(String message, String destinataire, String emetteur, int note) throws BadLengthException, UnexistingUserException{
 		
 		/*vérification taille des arguments*/
 		if (message.length() > 300) {
 			throw new BadLengthException ("Message");
-		} else if (destinataire.length() > 20) {
+		} else if ((destinataire.length() > 20) || (destinataire.length()==0)){
 			throw new BadLengthException ("Destinataire");
-		} else if (emetteur.length() > 50) {
+		} else if ((emetteur.length() > 50) || (emetteur.length()==0)) {
 			throw new BadLengthException ("Emetteur");
-		} 
+		}	
 		
 		int noAvis = 1 ;
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
@@ -32,13 +32,13 @@ public class NewAvis {
 		    /*On vérifie si le destinataire existe bien dans la base de données*/
 		    ResultSet result2 = state.executeQuery("SELECT * FROM Person WHERE userName = '"+destinataire+"';");
 		    if (!(result2.next())) {
-		    	throw (new BadConnectionException("Destinataire inexistant"));
+		    	throw (new UnexistingUserException("Destinataire inexistant"));
 		    } else {
 		    	 //mise à jour de la note du destinataire
 			    int oldNbAvis = result2.getInt(12) ;
-			    int newNote = note ;
+			    float newNote = note ;
 			    if (!(oldNbAvis == 0)) {
-			    	int oldNote = result2.getInt(10) ;
+			    	float oldNote = result2.getFloat(10) ;
 					newNote = (oldNote * oldNbAvis + note)/(oldNbAvis+1);
 			    }
 			    String commande2 = "UPDATE Person SET nbAvis = '" +(oldNbAvis+1)+ "', note = '"+newNote+"' WHERE userName = '"+destinataire+"' ;";
@@ -79,7 +79,7 @@ public class NewAvis {
 	        result.close();
 	        state.close();
 	        
-		} catch (BadConnectionException exc1) {
+		} catch (UnexistingUserException exc1) {
 			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
