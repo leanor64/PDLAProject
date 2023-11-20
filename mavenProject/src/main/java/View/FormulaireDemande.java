@@ -2,12 +2,14 @@ package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
 import Controller.*;
 
-public class FormulaireDemande extends JFrame implements ActionListener{
+public class FormulaireDemande extends JFrame implements ActionListener, KeyListener{
 	
 	MainController controller = new MainController();
 	
@@ -51,6 +53,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		
 		jtftitredemande = new JTextField();
 		jtftitredemande.setBounds(280,50,300,30);
+		jtftitredemande.addKeyListener(this);
 		pan.add(jtftitredemande);
 		
 		labdemande = new JLabel("Saisissez votre demande :");
@@ -61,6 +64,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		
 		jtfdemande = new JTextField();
 		jtfdemande.setBounds(280,90,300,100);
+		jtfdemande.addKeyListener(this);
 		pan.add(jtfdemande);
 		
 		labdate = new JLabel("Saisissez la date concernée :");
@@ -71,6 +75,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		
 		jtfdate = new JTextField();
 		jtfdate.setBounds(280,230,300,25);
+		jtfdate.addKeyListener(this);
 		pan.add(jtfdate);
 		
 		labville = new JLabel("Saisissez la ville concernée :");
@@ -81,6 +86,7 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 		
 		jtfville = new JTextField();
 		jtfville.setBounds(280,270,300,25);
+		jtfville.addKeyListener(this);
 		pan.add(jtfville);
 		
 		
@@ -103,6 +109,24 @@ public class FormulaireDemande extends JFrame implements ActionListener{
 	
 	public void afficherInfoNulle(String info) {
 		JOptionPane.showMessageDialog(this, info + " invalide, veuillez rentrer votre " + info);
+	}
+	
+	public boolean isCaractereAutorise(char c) {
+	    return c != '"' && c != '\'' && c != '`' && c != '\\';
+	}
+	
+	public void keyTyped(KeyEvent k) {
+        if (!isCaractereAutorise(k.getKeyChar())) {
+            k.consume();
+        }
+    }	
+	
+	public void keyPressed(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
 	}
 	
 	public void actionPerformed(ActionEvent e) {

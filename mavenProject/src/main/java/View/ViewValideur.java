@@ -17,7 +17,7 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 	//Attributs
 	String idvalideur;
 	JLabel labtitre;
-	JButton btsuiv, btdeconnexion;
+	JButton btsuiv, btdeconnexion, btbene;
 	JList liste = new JList();
 	JLabel etiquette = new JLabel(" ");
 	String choix[] = {"Bénévole         Titre annonce"};
@@ -61,6 +61,14 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		pan.add(btsuiv);
 		btsuiv.addActionListener(this);
 		
+		btbene = new JButton("Accéder à votre profil bénévole");
+		btbene.setBounds(250,650,400,30);
+		btbene.setBackground(Color.white);
+		btbene.setFont(new Font("Arial",Font.BOLD,18));
+		btbene.setForeground(Color.black);
+		pan.add(btbene);
+		btbene.addActionListener(this);
+		
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(300,700,300,30);
 		btdeconnexion.setBackground(Color.white);
@@ -81,6 +89,11 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 			this.setVisible(false);
 			FormulaireConnexion fco = new FormulaireConnexion();
 			fco.setVisible(true);
+		}
+		if (e.getSource() == btbene) {
+			this.setVisible(false);
+			ViewBenevole vbene = new ViewBenevole(idvalideur);
+			vbene.setVisible(true);
 		}
 	}
 	

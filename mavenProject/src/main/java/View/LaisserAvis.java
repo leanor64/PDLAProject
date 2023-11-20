@@ -2,6 +2,8 @@ package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
@@ -11,7 +13,7 @@ import javax.swing.event.ListSelectionListener;
 import Controller.*;
 
 
-public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener{
+public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener, KeyListener{
 	
 	MainController controller = new MainController();
 	
@@ -58,6 +60,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		
 		jtfavis = new JTextField();
 		jtfavis.setBounds(220,60,300,100);
+		jtfavis.addKeyListener(this);
 		pan.add(jtfavis);
 		
 		labnote = new JLabel("Laissez une note :");
@@ -92,6 +95,23 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
 	}
 	
+	public boolean isCaractereAutorise(char c) {
+	    return c != '"' && c != '\'' && c != '`' && c != '\\';
+	}
+	
+	public void keyTyped(KeyEvent k) {
+        if (!isCaractereAutorise(k.getKeyChar())) {
+            k.consume();
+        }
+    }	
+	
+	public void keyPressed(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
+	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {

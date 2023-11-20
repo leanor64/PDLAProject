@@ -9,9 +9,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener{
+public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener, KeyListener{
 	
 	MainController controller = new MainController();
 	
@@ -56,6 +58,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfnom = new JTextField();
 		jtfnom.setBounds(160,60,200,25);
+		jtfnom.addKeyListener(this);
 		pan.add(jtfnom);
 		
 		labprenom = new JLabel("Prénom :");
@@ -66,6 +69,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfprenom = new JTextField();
 		jtfprenom.setBounds(160,100,200,25);
+		jtfprenom.addKeyListener(this);
 		pan.add(jtfprenom);
 		
 		labage = new JLabel("Age :");
@@ -76,6 +80,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfage=new JTextField();
 		jtfage.setBounds(160,140,200,25);
+		jtfage.addKeyListener(this);
 		pan.add(jtfage);
 		
 		labemail = new JLabel("Email :");
@@ -86,6 +91,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfemail = new JTextField();
 		jtfemail.setBounds(160,180,200,25);
+		jtfemail.addKeyListener(this);
 		pan.add(jtfemail);
 		
 		labtelephone = new JLabel("Telephone :");
@@ -96,6 +102,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtftelephone = new JTextField();
 		jtftelephone.setBounds(160,220,200,25);
+		jtftelephone.addKeyListener(this);
 		pan.add(jtftelephone);
 		
 		labville = new JLabel("Ville :");
@@ -106,6 +113,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfville = new JTextField();
 		jtfville.setBounds(160,260,200,25);
+		jtfville.addKeyListener(this);
 		pan.add(jtfville);
 		
 		labadresse = new JLabel("Adresse :");
@@ -116,6 +124,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfadresse = new JTextField();
 		jtfadresse.setBounds(160,300,200,25);
+		jtfadresse.addKeyListener(this);
 		pan.add(jtfadresse);
 		
 		labid = new JLabel("Identifiant :"); //Vérifier que cet id n'existe pas déjà
@@ -126,6 +135,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jtfid = new JTextField();
 		jtfid.setBounds(160,340,200,25);
+		jtfid.addKeyListener(this);
 		pan.add(jtfid);
 		
 		labpassword = new JLabel("Mot de passe :"); //Vérifier que cet id n'existe pas déjà
@@ -136,6 +146,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 		jpfpassword = new JPasswordField();
 		jpfpassword.setBounds(160,380,200,25);
+		jpfpassword.addKeyListener(this);
 		pan.add(jpfpassword);
 		
 		labtype = new JLabel("Sélectionner un type de profil :");
@@ -183,6 +194,27 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		}
 		return result;
 	}
+	
+	//Pour empêcher l'utilisateur de rentrer certains caracères spéciaux 
+	public boolean isCaractereAutorise(char c) {
+	    return c != '"' && c != '\'' && c != '`' && c != '\\';
+	}
+	
+	public void keyTyped(KeyEvent k) {
+        if (!isCaractereAutorise(k.getKeyChar())) {
+            k.consume();
+        }
+    }	
+	
+	public void keyPressed(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
+	}
+	
+	
 	/*
 	 * 0 : Bénévole
 	 * 1 : Bénéficiaire

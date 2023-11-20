@@ -89,22 +89,28 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btajout) {
-				System.out.println("vous avez cliqué sur le bouton se connecter");
+				//System.out.println("vous avez cliqué sur le bouton se connecter");
 				connexionOK = controller.CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
 						
 			}
 			if (connexionOK == true) {
 				this.setVisible(false);
-				/*if (jtfid.getText().getType() == 0) {
-					ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
-					viewbn.setVisible(true);
-				} else if (jtfid.getText().getType() == 1) {
-					ViewBeneficiaire viewbf = new ViewBeneficiaire(jtfid.getText());
-					viewbf.setVisible(true);
-				} else {
-					ViewValideur viewv = new ViewValideur(jtfid.getText());
-					viewv.setVisible(true);
-				}*/
+				try {
+					if (controller.getTypeOfUser(jtfid.getText())== 0) {
+						ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
+						viewbn.setVisible(true);
+					} else if (controller.getTypeOfUser(jtfid.getText()) == 1) {
+						ViewBeneficiaire viewbf = new ViewBeneficiaire(jtfid.getText());
+						viewbf.setVisible(true);
+					} else {
+						ViewValideur viewv = new ViewValideur(jtfid.getText());
+						viewv.setVisible(true);
+					}
+				} catch (UnexistingUserException excp) {
+					afficherErreurConnexion();
+				} 
+			}else {
+				afficherErreurConnexion();
 			}
 		}
 

@@ -10,13 +10,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Controller.MainController;
+import Controller.UnexistingUserException;
+
 public class ViewBenevole extends JFrame implements ActionListener{
 
+	MainController controller = new MainController();
 	
 	//Attributs
 	String idbenevole;
 	JLabel labtitre;
-	JButton btdeconnexion;
+	JButton btdeconnexion, btvalideur;
 	//peut voir ses annonces
 	
 	//Constructeur
@@ -40,6 +44,20 @@ public class ViewBenevole extends JFrame implements ActionListener{
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
 		
+		try {
+		if (controller.getTypeOfUser(idbenevole) == 2) {
+			btvalideur = new JButton("Accéder à votre profil Valideur");
+			btvalideur.setBounds(250,620,400,30);
+			btvalideur.setBackground(Color.white);
+			btvalideur.setFont(new Font("Arial",Font.BOLD,18));
+			btvalideur.setForeground(Color.black);
+			pan.add(btvalideur);
+			btvalideur.addActionListener(this);
+		}
+		} catch (UnexistingUserException excp) {
+			System.out.println("Erreur bouton valideur/bénévole");
+		}
+		
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(310,700,300,30);
 		btdeconnexion.setBackground(Color.white);
@@ -56,6 +74,11 @@ public class ViewBenevole extends JFrame implements ActionListener{
 			this.setVisible(false);
 			FormulaireConnexion fco = new FormulaireConnexion();
 			fco.setVisible(true);
+		}
+		if (e.getSource() == btvalideur) {
+			this.setVisible(false);
+			ViewValideur vva = new ViewValideur(idbenevole);
+			vva.setVisible(true);
 		}
 		
 	}
