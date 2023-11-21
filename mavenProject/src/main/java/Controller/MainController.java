@@ -336,8 +336,7 @@ public class MainController {
 		return information ;
 		
 	}
-	 
-	
+	 	
 	public static String getInfoOfUser(String idUser, String info) throws UnexistingInfoException, UnexistingUserException {
 		String information = "" ;
 		int column ;
@@ -484,7 +483,6 @@ public class MainController {
 		
 	}
 
-	
 	public static void setBenevoleOfDemand(int noDemande, String idBenevole) throws UnexistingDemandException {
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
@@ -500,9 +498,11 @@ public class MainController {
 		    if (!(res.next())) {
 		    	throw (new UnexistingDemandException("Destinataire inexistant"));
 		    } else {
-		    	 //Editer le bénévole de la demande dans la BDD
+		    	 //Editer le bénévole et le statut de la demande dans la BDD
 			    String commande = "UPDATE DemandeAide SET benevole = '"+idBenevole+"' WHERE num = '"+noDemande+"' ;";
 		    	state.executeUpdate(commande);
+		    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.REALISEE+"' WHERE num = '"+noDemande+"' ;";
+		    	state.executeUpdate(commande2);
 		    }
 		    
 		  //fermer la connexion avec la base de données
@@ -520,7 +520,7 @@ public class MainController {
 	}
 	
 	public static ArrayList<Integer> getListOfDemands(StatutDemande statut){
-		ArrayList<Integer> listTitles = new ArrayList<Integer>() ;
+		ArrayList<Integer> listDemands = new ArrayList<Integer>() ;
 		
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
@@ -533,7 +533,7 @@ public class MainController {
 		    /*On récupère dans la BDD les demandes dont le statut correspond à celui cherché*/
 		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE state = '"+statut+"';");
 		    while (res.next()) {
-		    	 listTitles.add(res.getInt(8)); 
+		    	 listDemands.add(res.getInt(8)); 
 		    } 
 		    
 		  //fermer la connexion avec la base de données
@@ -546,9 +546,39 @@ public class MainController {
 	    	    System.exit(0);
 	    }
 	
-		return listTitles ;
+		return listDemands ;
 	}
 
+	public static ArrayList<Integer> getDemandsOfBeneficiaire (String benef){
+		ArrayList<Integer> listDemands = new ArrayList<Integer>() ;
+		
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";
+		
+		try {
+		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
+		    Statement state = conn.createStatement();
+		    
+		    /*On récupère dans la BDD les demandes dont le bénéficiaire correspond à celui cherché*/
+		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE beneficiaire = '"+benef+"';");
+		    while (res.next()) {
+		    	 listDemands.add(res.getInt(8)); 
+		    }
+		    
+		  //fermer la connexion avec la base de données
+	        res.close();
+	        state.close();
+		
+		} catch (Exception exce){
+		    exce.printStackTrace();
+		    System.out.println("Erreur");
+	    	    System.exit(0);
+	    }
+	
+		return listDemands ;
+	}	
+	
 	public static ArrayList<Integer> getListOfAvis(String idBenevole){
 		ArrayList<Integer> listAvis = new ArrayList<Integer>() ;
 		
@@ -619,7 +649,7 @@ public class MainController {
 			System.out.println(getInfoOfAvis(3, "destinataire"));
 			System.out.println(getInfoOfAvis(5,"destinataire"));*/
 			
-			setBenevoleOfDemand(3, "maurice");
+			setBenevoleOfDemand(8, "pat");
 		
 			
 		/*} catch (BadLengthException exc2) {
