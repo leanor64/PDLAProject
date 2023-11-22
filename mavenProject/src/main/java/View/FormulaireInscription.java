@@ -55,7 +55,6 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labnom.setFont(new Font("Arial",Font.BOLD,18));
 		labnom.setForeground(Color.black);
 		pan.add(labnom);
-		
 		jtfnom = new JTextField();
 		jtfnom.setBounds(160,60,200,25);
 		jtfnom.addKeyListener(this);

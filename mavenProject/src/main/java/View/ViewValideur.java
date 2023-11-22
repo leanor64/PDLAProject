@@ -4,23 +4,28 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
+import Model.StatutDemande;
 
 public class ViewValideur extends JFrame implements ListSelectionListener, ActionListener{
 
+	MainController controller = new MainController();
 	
 	//Attributs
 	String idvalideur;
 	JLabel labtitre;
 	JButton btsuiv, btdeconnexion, btbene;
+	
 	JList liste = new JList();
+	DefaultListModel<String> listModel;
 	JLabel etiquette = new JLabel(" ");
-	String choix[] = {"Bénévole         Titre annonce"};
+	//ArrayList<String> choix = new ArrayList<String>(); //{"Titre de l'annonce    Bénéficiaire   Date    Ville"};
 
 	
 	//Constructeur
@@ -45,8 +50,23 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
 		
-		liste = new JList(choix);
-		liste.setBounds(300,200,300,110);
+		listModel = new DefaultListModel<String>();
+		//mettre plutot sous forme de JLabel pour pas que le benevole puisse cliquer sur cette ligne
+		listModel.addElement("Titre                                                        Beneficiaire                                 Date                                Ville");
+		for (int demande : controller.getListOfDemands(StatutDemande.EN_ATTENTE)){
+			
+			//try {
+			listModel.addElement(Integer.toString(demande)); /* + "                |                  " + controller.getInfoOfDemand(demande, "beneficiaire") + "                                 |                    " + 
+					controller.getInfoOfDemand(demande, "date") + "|" + controller.getInfoOfDemand(demande, "ville"));*/
+			//} catch (UnexistingInfoException exc1) {
+				//System.out.println("erreur getInfoOfDemand()");
+			//} catch (UnexistingDemandException exc2) {
+			//	System.out.println("erreur getInfoOfDemand()");
+			//}
+		}
+		
+		liste = new JList(listModel);
+		liste.setBounds(150,80,600,550);
 		liste.addListSelectionListener(this);
 		pan.add(etiquette);
 		pan.add(liste);
@@ -54,7 +74,7 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		etiquette.setText((String)liste.getSelectedValue());
 			
 		btsuiv = new JButton("Suivant");
-		btsuiv.setBounds(370,400,150,30);
+		btsuiv.setBounds(370,650,150,30);
 		btsuiv.setBackground(Color.white);
 		btsuiv.setFont(new Font("Arial",Font.BOLD,18));
 		btsuiv.setForeground(Color.black);
@@ -62,7 +82,7 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		btsuiv.addActionListener(this);
 		
 		btbene = new JButton("Accéder à votre profil bénévole");
-		btbene.setBounds(250,650,400,30);
+		btbene.setBounds(70,700,400,30);
 		btbene.setBackground(Color.white);
 		btbene.setFont(new Font("Arial",Font.BOLD,18));
 		btbene.setForeground(Color.black);
@@ -70,7 +90,7 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		btbene.addActionListener(this);
 		
 		btdeconnexion = new JButton("DECONNEXION");
-		btdeconnexion.setBounds(300,700,300,30);
+		btdeconnexion.setBounds(490,700,300,30);
 		btdeconnexion.setBackground(Color.white);
 		btdeconnexion.setFont(new Font("Arial",Font.BOLD,18));
 		btdeconnexion.setForeground(Color.black);
@@ -79,10 +99,14 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 	}
 	
 	//Méthodes
+	
+	public void valueChanged(ListSelectionEvent evt) { 
+		 etiquette.setText((String)liste.getSelectedValue());
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btsuiv) {
-			//System.out.println("vous avez cliqué sur le bouton Enregistrer");
-			ViewDemande vd = new ViewDemande();
+			ViewDemande vd = new ViewDemande(Integer.parseInt((String)liste.getSelectedValue()));
 			vd.setVisible(true);
 		}
 		if (e.getSource() == btdeconnexion) {
@@ -97,9 +121,6 @@ public class ViewValideur extends JFrame implements ListSelectionListener, Actio
 		}
 	}
 	
-	public void valueChanged(ListSelectionEvent evt) { 
-		 etiquette.setText((String)liste.getSelectedValue());
-	}
 	
 	public static void main(String[] args) {
 		String valideur;

@@ -4,16 +4,21 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import Controller.MainController;
-import Controller.UnexistingUserException;
+import Controller.*;
+import Model.StatutDemande;
 
-public class ViewBenevole extends JFrame implements ActionListener{
+public class ViewBenevole extends JFrame implements ActionListener, ListSelectionListener{
 
 	MainController controller = new MainController();
 	
@@ -21,7 +26,12 @@ public class ViewBenevole extends JFrame implements ActionListener{
 	String idbenevole;
 	JLabel labtitre;
 	JButton btdeconnexion, btvalideur;
-	//peut voir ses annonces
+	
+	JList liste = new JList();
+	DefaultListModel listModel;
+	JLabel etiquette = new JLabel(" ");
+	ArrayList<String> choix = new ArrayList<String>(); //{"Titre de l'annonce    Bénéficiaire   Date    Ville"};
+	
 	
 	//Constructeur
 	public ViewBenevole(String idbenevole) {
@@ -45,18 +55,43 @@ public class ViewBenevole extends JFrame implements ActionListener{
 		pan.add(labtitre);
 		
 		try {
-		if (controller.getTypeOfUser(idbenevole) == 2) {
-			btvalideur = new JButton("Accéder à votre profil Valideur");
-			btvalideur.setBounds(250,620,400,30);
-			btvalideur.setBackground(Color.white);
-			btvalideur.setFont(new Font("Arial",Font.BOLD,18));
-			btvalideur.setForeground(Color.black);
-			pan.add(btvalideur);
-			btvalideur.addActionListener(this);
-		}
+			if (controller.getTypeOfUser(idbenevole) == 2) {
+				btvalideur = new JButton("Accéder à votre profil Valideur");
+				btvalideur.setBounds(250,620,400,30);
+				btvalideur.setBackground(Color.white);
+				btvalideur.setFont(new Font("Arial",Font.BOLD,18));
+				btvalideur.setForeground(Color.black);
+				pan.add(btvalideur);
+				btvalideur.addActionListener(this);
+			}
 		} catch (UnexistingUserException excp) {
 			System.out.println("Erreur bouton valideur/bénévole");
 		}
+		
+		listModel = new DefaultListModel();
+		//mettre plutot sous forme de JLabel pour pas que le benevole puisse cliquer sur cette ligne
+		listModel.addElement("Titre                                                  Beneficiaire                                      Date                                    Ville");
+		for (int demande : controller.getListOfDemands(StatutDemande.VALIDEE)){
+			
+			try {
+			listModel.addElement(controller.getInfoOfDemand(demande, "titre") + controller.getInfoOfDemand(demande, "beneficiaire")/* + 
+					controller.getInfoOfDemand(demande, "date")*/ + controller.getInfoOfDemand(demande, "ville"));
+			} catch (UnexistingInfoException exc1) {
+				System.out.println("erreur getInfoOfDemand()");
+			} catch (UnexistingDemandException exc2) {
+				System.out.println("erreur getInfoOfDemand()");
+			}
+		}
+		
+		liste = new JList(listModel);
+		liste.setBounds(120,220,600,55);
+		liste.addListSelectionListener(this);
+		pan.add(etiquette);
+		pan.add(liste);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		etiquette.setText((String)liste.getSelectedValue());
+		
+		
 		
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(310,700,300,30);
@@ -69,6 +104,12 @@ public class ViewBenevole extends JFrame implements ActionListener{
 	
 	
 	//Méthodes
+	
+	public void valueChanged(ListSelectionEvent evt) { 
+		 etiquette.setText((String)liste.getSelectedValue());
+		 
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btdeconnexion) {
 			this.setVisible(false);
