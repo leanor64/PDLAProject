@@ -3,10 +3,10 @@ package Model;
 public enum StatutDemande { 
 	EN_ATTENTE, 
 	VALIDEE, 
-	REALISEE,
+	ACCEPTEE,
 	REFUSEE_EXPIREE, 
 	REFUSEE_INAPPROPRIEE, 
 	REFUSE_AUTRE,
-	ERREUR
+	TERMINEE,
 	}
 

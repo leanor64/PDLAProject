@@ -501,7 +501,7 @@ public class MainController {
 		    	 //Editer le bénévole et le statut de la demande dans la BDD
 			    String commande = "UPDATE DemandeAide SET benevole = '"+idBenevole+"' WHERE num = '"+noDemande+"' ;";
 		    	state.executeUpdate(commande);
-		    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.REALISEE+"' WHERE num = '"+noDemande+"' ;";
+		    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.ACCEPTEE+"' WHERE num = '"+noDemande+"' ;";
 		    	state.executeUpdate(commande2);
 		    }
 		    
@@ -511,6 +511,62 @@ public class MainController {
 		
 		} catch (UnexistingDemandException exc1) {
 			throw exc1 ;
+		} catch (Exception exce){
+		    exce.printStackTrace();
+		    System.out.println("Erreur");
+	    	    System.exit(0);
+	    }
+		
+	}
+	
+	public static void setInfoOfUser(String idUser, String info, String nvValeur) throws UnexistingInfoException{
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";
+		
+		try {
+		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
+		    Statement state = conn.createStatement();
+		    
+		    String column ;
+		    String commande ;
+		    if (info.equals("age")) {
+			    commande = "UPDATE Person SET age = '"+Integer.parseInt(nvValeur)+"' WHERE userName = '"+idUser+"' ;";
+		    } else {
+		    	
+			    if (info.equals("nom")) {
+					column = "lastName";
+				} else if (info.equals("prenom")) {
+					column = "firstName";
+				} else if (info.equals("age")) {
+					column = "age";
+				} else if (info.equals("email")) {
+					column = "email";
+				} else if (info.equals("telephone")) {
+					column = "phone";
+				} else if (info.equals("ville")) {
+					column = "city";
+				} else if (info.equals("adresse")) {
+					column = "adress";
+				} else if (info.equals("identifiant")) {
+					column = "userName";
+				} else if (info.equals("mot de passe")) {
+					column = "passwrd";
+				} else {
+					throw new UnexistingInfoException(info + " n'est pas un attribut d'une personne");
+				}
+			    
+			    commande = "UPDATE Person SET "+column+" = '"+nvValeur+"' WHERE userName = '"+idUser+"' ;";
+
+		    }
+		    
+	    	 //Editer la bonne information du User dans la BDD
+	    	state.executeUpdate(commande);
+	    			    
+		  //fermer la connexion avec la base de données
+	        state.close();
+		
+
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -622,10 +678,10 @@ public class MainController {
 			NewAvis ("Patoche il était top", "maurice", "albert", 5);
 			NewAvis ("AA il était top", "maurice", "albert", 4);
 			
-			*/NewDemande ("Besoin daide 1", "Besoin daide avec détails", "albert", "08/12/2023", "Paris");
+			NewDemande ("Besoin daide 1", "Besoin daide avec détails", "albert", "08/12/2023", "Paris");
 			NewDemande ("Besoin daide 2", "Besoin daide avec détails2", "albert", "08/12/2123", "Paris");
 			NewDemande ("Besoin daide 3", "Besoin daide avec détails", "albert", "03/12/2023", "Paris");
-			NewDemande ("Besoin daide 4", "Besoin daide avec détails", "albert", "08/13/2023", "Paris");/*
+			NewDemande ("Besoin daide 4", "Besoin daide avec détails", "albert", "08/13/2023", "Paris");
 			
 			System.out.println("excpected : 1, obtained : "+getTypeOfUser("maurice"));
 			System.out.println("excpected : 0, obtained : "+getTypeOfUser("albert"));
@@ -649,8 +705,12 @@ public class MainController {
 			System.out.println(getInfoOfAvis(3, "destinataire"));
 			System.out.println(getInfoOfAvis(5,"destinataire"));*/
 			
-			setBenevoleOfDemand(8, "pat");
-		
+			setInfoOfUser("pat", "age", "8");
+			setInfoOfUser("lolololo", "prenom", "patricia");
+			setInfoOfUser("lolololo", "nom", "maurice");
+			setInfoOfUser("oiu", "identifiant", "belinda");
+			setInfoOfUser("belinda", "email", "youpicamarche");
+
 			
 		/*} catch (BadLengthException exc2) {
 			System.out.println ("erreur length");*/
