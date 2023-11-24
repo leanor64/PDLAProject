@@ -2,7 +2,7 @@ package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLIntegrityConstraintViolationException;
+
 
 import javax.swing.*;
 
@@ -10,7 +10,6 @@ import Controller.*;
 
 public class FormulaireConnexion extends JFrame implements ActionListener {
 	
-	MainController controller = new MainController();
 
 	//Attributs
 		JLabel labtitre, labid, labpassword;
@@ -40,8 +39,6 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 			labtitre.setFont(new Font("Arial",Font.BOLD,22));
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
-
-
 
 			labid = new JLabel("Identifiant :"); //Vérifier que cet id n'existe pas déjà
 			labid.setBounds(20,60,300,30);
@@ -88,18 +85,17 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btajout) {
-				//System.out.println("vous avez cliqué sur le bouton se connecter");
-				connexionOK = controller.CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
+			if (e.getSource().equals(btajout)) {
+				connexionOK = MainController.CheckConnection(jtfid.getText(),toString(jpfpassword.getPassword()));
 						
 			}
 			if (connexionOK == true) {
 				this.setVisible(false);
 				try {
-					if (controller.getTypeOfUser(jtfid.getText())== 0) {
+					if (MainController.getTypeOfUser(jtfid.getText())== 0) {
 						ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
 						viewbn.setVisible(true);
-					} else if (controller.getTypeOfUser(jtfid.getText()) == 1) {
+					} else if (MainController.getTypeOfUser(jtfid.getText()) == 1) {
 						ViewBeneficiaire viewbf = new ViewBeneficiaire(jtfid.getText());
 						viewbf.setVisible(true);
 					} else {

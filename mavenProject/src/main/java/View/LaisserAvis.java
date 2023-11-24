@@ -11,25 +11,26 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
+import Model.StatutDemande;
 
 
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener, KeyListener{
 	
-	MainController controller = new MainController();
-	
+
 	//Attributs
+	int nodemande;
 	String idbenef;
 	String idbenev;
-	JLabel labtitre, labavis, labnote;
+	JLabel labtitre, labavis, labnote, etiquette;
 	JTextField jtfavis;
-	JList liste = new JList();
-	JLabel etiquette = new JLabel(" ");
+	JList<String> liste;
 	String choix[] = {"0", "1", "2", "3", "4", "5"};
 	JButton btajout;
 	boolean avisOK;
 	
 	//Constructeur
-	public LaisserAvis(String idbenef, String idbenev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
+	public LaisserAvis(int nodemande,String idbenef, String idbenev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
+		this.nodemande = nodemande;
 		this.idbenef = idbenef;
 		this.idbenev = idbenev;
 		
@@ -69,9 +70,10 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		labnote.setForeground(Color.black);
 		pan.add(labnote);
 		
-		liste = new JList(choix);
+		liste = new JList<>(choix);
 		liste.setBounds(220,200,300,110);
 		liste.addListSelectionListener(this);
+		etiquette = new JLabel(" ");
 		pan.add(etiquette);
 		pan.add(liste);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -117,12 +119,15 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		if (e.getSource() == btajout) {
 			System.out.println("vous avez cliqué sur le bouton Enregistrer");
 			try {
-			controller.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
+			MainController.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
 			avisOK = true;
+			MainController.setStatusOfDemand(nodemande, StatutDemande.TERMINEE_EVALUEE);
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());
 			} catch (UnexistingUserException exc2) {
 				System.out.println("Erreur connexion");
+			} catch (UnexistingDemandException exc3) {
+				System.out.println("Erreur demande inexistante");
 			}
 		}
 		if (avisOK == true) {
@@ -136,14 +141,16 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	}
 	
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String benev, benef;
+		int no;
 		benev = "benev";
 		benef = "benef";
+		no = 7;
 	    
-		LaisserAvis avis = new LaisserAvis(benef,benev);
+		LaisserAvis avis = new LaisserAvis(no,benef,benev);
 	    avis.setVisible(true);
-	}
+	}*/
 
 	
 

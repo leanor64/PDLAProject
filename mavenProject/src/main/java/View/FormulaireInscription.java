@@ -14,8 +14,7 @@ import java.awt.event.KeyListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener, KeyListener{
-	
-	MainController controller = new MainController();
+
 	
 	//Attributs
 	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword, labtype;
@@ -24,7 +23,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	JPasswordField jpfpassword;
 	JButton btajout;
 	
-	JList liste = new JList();
+	JList<String> liste = new JList<>();
 	JLabel etiquette = new JLabel(" ");
 	String choix[] = {"Bénévole", "Bénéficiaire", "Valideur"};
 	
@@ -32,6 +31,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	
 	//Constructeur
 	public FormulaireInscription(){
+		
 		this.setTitle("Inscription");
 		this.setSize(550,600);
 		this.setResizable(false);
@@ -55,6 +55,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labnom.setFont(new Font("Arial",Font.BOLD,18));
 		labnom.setForeground(Color.black);
 		pan.add(labnom);
+		
 		jtfnom = new JTextField();
 		jtfnom.setBounds(160,60,200,25);
 		jtfnom.addKeyListener(this);
@@ -154,14 +155,13 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labtype.setForeground(Color.black);
 		pan.add(labtype);
 		
-		liste = new JList(choix);
+		liste = new JList<>(choix);
 		liste.setBounds(320,420,200,55);
 		liste.addListSelectionListener(this);
 		pan.add(etiquette);
 		pan.add(liste);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		etiquette.setText((String)liste.getSelectedValue());
-		//Revoir le choix de la note
 		
 		btajout = new JButton("S'inscrire");
 		btajout.setBounds(175,520,150,30);
@@ -235,7 +235,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		if (e.getSource() == btajout) {
 			//System.out.println("vous avez cliqué sur le bouton s'inscrire");
 			try {
-				controller.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
+				MainController.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
 						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
 				inscriptionOK = true;

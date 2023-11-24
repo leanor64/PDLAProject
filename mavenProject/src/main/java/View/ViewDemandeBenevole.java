@@ -8,14 +8,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Controller.*;
 import Model.StatutDemande;
 
-public class ViewDemande extends JFrame implements ActionListener{
+public class ViewDemandeBenevole extends JFrame implements ActionListener{
 
 	
 	//Attributs
@@ -23,14 +22,14 @@ public class ViewDemande extends JFrame implements ActionListener{
 		JLabel labtitre, labtitredemande, labdemande, labbenef, labville;
 		JTextField jtfmotif;
 		JButton btoui, btnon;
-		int askmotif;
 		int numDemande;
-		String idvalideur;
+		String idbenevole;
 		
 		//Constructeur
-		public ViewDemande(String idvalideur, int numDemande) {
+		public ViewDemandeBenevole(String idbenevole,int numDemande) {
 			this.numDemande = numDemande;
-			this.idvalideur = idvalideur;
+			this.idbenevole = idbenevole;
+			
 			
 			this.setTitle("Bienvenue");
 			this.setSize(500,500);
@@ -43,7 +42,7 @@ public class ViewDemande extends JFrame implements ActionListener{
 			pan.setBackground(custom);
 			add(pan);
 			
-			labtitre = new JLabel("Voulez-vous valider cette annonce?");
+			labtitre = new JLabel("Voulez-vous aider ce bénéficiaire?");
 			labtitre.setBounds(50,10,600,70);
 			labtitre.setFont(new Font("Arial",Font.BOLD,22));
 			labtitre.setForeground(Color.black);
@@ -100,43 +99,29 @@ public class ViewDemande extends JFrame implements ActionListener{
 		//Méthodes
 			
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btoui) {
+			if (e.getSource().equals(btoui)) {
 				try {
-				MainController.setStatusOfDemand(numDemande,StatutDemande.VALIDEE);
+				MainController.setStatusOfDemand(numDemande,StatutDemande.ACCEPTEE);
+				this.setVisible(false);
+				ViewBenevole vb = new ViewBenevole(idbenevole);
+				vb.setVisible(true);
 				} catch (UnexistingDemandException exc) {
 					System.out.println("Erreur getStatusOfDemand");
 				}
-				this.setVisible(false);
-				ViewValideur vv = new ViewValideur(idvalideur);
-				vv.setVisible(true);
 			}
-			if (e.getSource() == btnon) {
-				//changer statut de l'annonce à refusée
-				String[] options = {"expirée", "inappropriée", "autre"};
-		        int motif = JOptionPane.showOptionDialog(null, "Pourquoi estimez-vous que cette annonce est invalidable?",
-		                "Choisissez un motif",
-		                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-		        try {
-		        	if (motif == 0) {
-		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSEE_EXPIREE);
-		        	} else if (motif == 1) {
-		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSEE_INAPPROPRIEE);
-		        	} else {
-		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSE_AUTRE);
-		        	}
-		        } catch (UnexistingDemandException exc) {
-					System.out.println("Erreur getStatusOfDemand");
-		        }
-		        this.setVisible(false);
+			if (e.getSource().equals(btnon)) {
+				this.setVisible(false);
+				ViewBenevole vb = new ViewBenevole(idbenevole);
+				vb.setVisible(true);
 			}
 			
 		}
 		
 		public static void main(String[] args) {
-			String valideur = "test2";
 			int num = 1;			
-			ViewDemande vde = new ViewDemande(valideur,1);
-		    vde.setVisible(true);
+			String bene = "test1";
+			ViewDemandeBenevole vdb = new ViewDemandeBenevole(bene,1);
+		    vdb.setVisible(true);
 			}
 
 }

@@ -1,37 +1,25 @@
 package View;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
+import javax.swing.*;
 import Controller.*;
 import Model.StatutDemande;
 
-public class ViewBenevole extends JFrame implements ActionListener, ListSelectionListener{
+public class ViewBenevole extends JFrame implements ActionListener, ItemListener{
 
-	MainController controller = new MainController();
 	
 	//Attributs
 	String idbenevole;
 	JLabel labtitre;
-	JButton btdeconnexion, btvalideur;
+	JButton btdeconnexion, btvalideur, btsuivant;
 	
-	JList liste = new JList();
-	DefaultListModel listModel;
-	JLabel etiquette = new JLabel(" ");
-	ArrayList<String> choix = new ArrayList<String>(); //{"Titre de l'annonce    Bénéficiaire   Date    Ville"};
-	
+	DefaultComboBoxModel<String> demandes;
+	JComboBox<String> choixDemande;
 	
 	//Constructeur
 	public ViewBenevole(String idbenevole) {
@@ -55,7 +43,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ListSelectio
 		pan.add(labtitre);
 		
 		try {
-			if (controller.getTypeOfUser(idbenevole) == 2) {
+			if (MainController.getTypeOfUser(idbenevole) == 2) {
 				btvalideur = new JButton("Accéder à votre profil Valideur");
 				btvalideur.setBounds(250,620,400,30);
 				btvalideur.setBackground(Color.white);
@@ -68,29 +56,37 @@ public class ViewBenevole extends JFrame implements ActionListener, ListSelectio
 			System.out.println("Erreur bouton valideur/bénévole");
 		}
 		
-		listModel = new DefaultListModel();
-		//mettre plutot sous forme de JLabel pour pas que le benevole puisse cliquer sur cette ligne
-		listModel.addElement("Titre                                                  Beneficiaire                                      Date                                    Ville");
-		for (int demande : controller.getListOfDemands(StatutDemande.VALIDEE)){
-			
+		demandes = new DefaultComboBoxModel<>();
+		
+		
+		for (int demande : MainController.getListOfDemands(StatutDemande.VALIDEE)){
 			try {
-			listModel.addElement(controller.getInfoOfDemand(demande, "titre") + controller.getInfoOfDemand(demande, "beneficiaire")/* + 
-					controller.getInfoOfDemand(demande, "date")*/ + controller.getInfoOfDemand(demande, "ville"));
+				demandes.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + MainController.getInfoOfDemand(demande, "beneficiaire")/* + 
+				controller.getInfoOfDemand(demande, "date")*/ + MainController.getInfoOfDemand(demande, "ville"));
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur getInfoOfDemand()");
 			} catch (UnexistingDemandException exc2) {
 				System.out.println("erreur getInfoOfDemand()");
-			}
+			} 
+		}
+		if (demandes.getSize() == 0) {
+			demandes.addElement("Aucune annonce");			
 		}
 		
-		liste = new JList(listModel);
-		liste.setBounds(120,220,600,55);
-		liste.addListSelectionListener(this);
-		pan.add(etiquette);
-		pan.add(liste);
+		choixDemande = new JComboBox<>(demandes);
+		pan.add(choixDemande);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		etiquette.setText((String)liste.getSelectedValue());
+		choixDemande.setSelectedIndex(0);
+		choixDemande.setBounds(270,270,420,30);
+		choixDemande.addItemListener(this);
 		
+		btsuivant = new JButton("SUIVANT");
+		btsuivant.setBounds(310,320,300,30);
+		btsuivant.setBackground(Color.white);
+		btsuivant.setFont(new Font("Arial",Font.BOLD,18));
+		btsuivant.setForeground(Color.black);
+		pan.add(btsuivant);
+		btsuivant.addActionListener(this);
 		
 		
 		btdeconnexion = new JButton("DECONNEXION");
@@ -105,23 +101,36 @@ public class ViewBenevole extends JFrame implements ActionListener, ListSelectio
 	
 	//Méthodes
 	
-	public void valueChanged(ListSelectionEvent evt) { 
-		 etiquette.setText((String)liste.getSelectedValue());
-		 
+	public void afficherAucuneAnnonce() {
+		JOptionPane.showMessageDialog(this, "Vous n'avez aucune annonce correspondante");
+	}
+	
+	public void itemStateChanged(ItemEvent i) {
+		//null
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btdeconnexion) {
-			this.setVisible(false);
-			FormulaireConnexion fco = new FormulaireConnexion();
-			fco.setVisible(true);
+		String[] word = ((String) choixDemande.getSelectedItem()).split(" ");
+		if (e.getSource().equals(btsuivant)) {
+			if ((String)choixDemande.getSelectedItem() == "Aucune annonce"){
+				afficherAucuneAnnonce();
+			} else {
+				this.setVisible(false);
+				ViewDemandeBenevole vdb = new ViewDemandeBenevole(idbenevole,Integer.parseInt(word[0]));
+				vdb.setVisible(true);
+			}
+		} else {
+			if (e.getSource().equals(btdeconnexion)) {
+				this.setVisible(false);
+				FormulaireConnexion fco = new FormulaireConnexion();
+				fco.setVisible(true);
+			}
+			if (e.getSource().equals(btvalideur)) {
+				this.setVisible(false);
+				ViewValideur vva = new ViewValideur(idbenevole);
+				vva.setVisible(true);
+			}
 		}
-		if (e.getSource() == btvalideur) {
-			this.setVisible(false);
-			ViewValideur vva = new ViewValideur(idbenevole);
-			vva.setVisible(true);
-		}
-		
 	}
 	
 	public static void main(String[] args) {
