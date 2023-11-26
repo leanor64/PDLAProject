@@ -17,7 +17,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 
 	
 	//Attributs
-	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword, labtype;
+	JLabel labtitre, labnom, labprenom, labage, labemail, labtelephone, labville, labadresse, labid, labpassword,labcar, labtype;
 	JTextField jtfnom,jtfprenom,jtfage, jtfemail, jtftelephone, jtfville, jtfadresse, jtfid;
 	int type;
 	JPasswordField jpfpassword;
@@ -148,6 +148,12 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		jpfpassword.setBounds(160,380,200,25);
 		jpfpassword.addKeyListener(this);
 		pan.add(jpfpassword);
+		
+		labcar = new JLabel("(9 caractères minimum)");
+		labcar.setBounds(380,380,300,30);
+		labcar.setFont(new Font("Arial",Font.BOLD,10));
+		labcar.setForeground(Color.black);
+		pan.add(labcar);
 		
 		labtype = new JLabel("Sélectionner un type de profil :");
 		labtype.setBounds(20,420,300,30);

@@ -15,8 +15,6 @@ import Model.StatutDemande;
 public class ViewValideur extends JFrame implements ItemListener, ActionListener{
 
 
-	MainController controller = new MainController();
-	
 	//Attributs
 	String idvalideur;
 	JLabel labtitre;

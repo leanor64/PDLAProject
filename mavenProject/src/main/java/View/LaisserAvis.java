@@ -29,7 +29,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	boolean avisOK;
 	
 	//Constructeur
-	public LaisserAvis(int nodemande,String idbenef, String idbenev) { //SUPPRIMER BENEV ET BENEF QUAND ON AURA FAIT LA FRAME DEMANDE ...
+	public LaisserAvis(int nodemande,String idbenef, String idbenev) {
 		this.nodemande = nodemande;
 		this.idbenef = idbenef;
 		this.idbenev = idbenev;
@@ -116,9 +116,12 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btajout) {
-			System.out.println("vous avez cliqué sur le bouton Enregistrer");
+		if (e.getSource().equals(btajout)) {
 			try {
+				System.out.println("avis :" + jtfavis.getText());
+				System.out.println("benev :" + idbenev);
+				System.out.println("benef :" + idbenef);
+				System.out.println("benef :" + (String)liste.getSelectedValue());
 			MainController.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
 			avisOK = true;
 			MainController.setStatusOfDemand(nodemande, StatutDemande.TERMINEE_EVALUEE);

@@ -27,11 +27,11 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 	//Attributs
 	
 	String idbeneficiaire, idbenevole;
-	JLabel labtitre, labaevaluer, labvalidee;
+	JLabel labtitre, labaevaluer, labacceptee;
 	JButton btposterannonce, btdonneravis, btdeconnexion, btterminee;
 	
-	DefaultComboBoxModel<String> demandesValidees;
-	JComboBox<String> choixDemandesValidees;
+	DefaultComboBoxModel<String> demandesAcceptees;
+	JComboBox<String> choixDemandesAcceptees;
 	
 	DefaultComboBoxModel<String> demandesAEvaluer;
 	JComboBox<String> choixDemandesAEvaluer;
@@ -65,36 +65,36 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 		pan.add(btposterannonce);
 		btposterannonce.addActionListener(this);
 		
-		labvalidee = new JLabel("Vos annonces en cours");
-		labvalidee.setBounds(60,300,300,30);
-		labvalidee.setFont(new Font("Arial",Font.BOLD,22));
-		labvalidee.setForeground(Color.black);
-		pan.add(labvalidee);
+		labacceptee = new JLabel("Vos annonces en cours");
+		labacceptee.setBounds(60,300,300,30);
+		labacceptee.setFont(new Font("Arial",Font.BOLD,22));
+		labacceptee.setForeground(Color.black);
+		pan.add(labacceptee);
 		
-		demandesValidees = new DefaultComboBoxModel<>();
+		demandesAcceptees = new DefaultComboBoxModel<>();
 				
 
 		for (int demande : MainController.getDemandsOfBeneficiaire(idbeneficiaire)){
 			try {
-				if (MainController.getInfoOfDemand(demande, "statut").equals("VALIDEE")) {
-					demandesValidees.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + "      " + MainController.getInfoOfDemand(demande, "benevole"));
+				if (MainController.getInfoOfDemand(demande, "statut").equals("ACCEPTEE")) {
+					demandesAcceptees.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + "      " + MainController.getInfoOfDemand(demande, "benevole"));
 				}
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur getInfoOfDemand()");
 			} catch (UnexistingDemandException exc2) {
 				System.out.println("erreur getInfoOfDemand()");				} 
 		}
-		if (demandesValidees.getSize() == 0) {
-			demandesValidees.addElement("Aucune annonce");
+		if (demandesAcceptees.getSize() == 0) {
+			demandesAcceptees.addElement("Aucune annonce");
 		}
 	
 			
-		choixDemandesValidees = new JComboBox<>(demandesValidees);
-		pan.add(choixDemandesValidees);
+		choixDemandesAcceptees = new JComboBox<>(demandesAcceptees);
+		pan.add(choixDemandesAcceptees);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		choixDemandesValidees.setSelectedIndex(0);
-		choixDemandesValidees.setBounds(100,400,200,30);
-		choixDemandesValidees.addItemListener(this);
+		choixDemandesAcceptees.setSelectedIndex(0);
+		choixDemandesAcceptees.setBounds(100,400,200,30);
+		choixDemandesAcceptees.addItemListener(this);
 		
 		btterminee = new JButton("MARQUER COMME TERMINEE");
 		btterminee.setBounds(10,500,340,50);
@@ -169,20 +169,33 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 		
 		try {
 			String[] wordAE = ((String) choixDemandesAEvaluer.getSelectedItem()).split(" ");
-			String[] wordV = ((String) choixDemandesValidees.getSelectedItem()).split(" ");
+			String[] wordAC = ((String) choixDemandesAcceptees.getSelectedItem()).split(" ");
 			if (e.getSource().equals(btdonneravis)) {
 				if ((String)choixDemandesAEvaluer.getSelectedItem() == "Aucune annonce"){
 					afficherAucuneAnnonce();
 				} else {
+					System.out.println("benev : " + MainController.getInfoOfDemand(Integer.parseInt(wordAE[0]),"benevole"));
 					LaisserAvis la = new LaisserAvis(Integer.parseInt(wordAE[0]),idbeneficiaire,MainController.getInfoOfDemand(Integer.parseInt(wordAE[0]),"benevole"));
 					la.setVisible(true);
 				}
 			}
 			if (e.getSource().equals(btterminee)) {
-				if ((String)choixDemandesValidees.getSelectedItem() == "Aucune annonce"){
+				if ((String)choixDemandesAcceptees.getSelectedItem() == "Aucune annonce"){
 					afficherAucuneAnnonce();
 				} else {
-					MainController.setStatusOfDemand(Integer.parseInt((String)choixDemandesValidees.getSelectedItem()), StatutDemande.TERMINEE_PAS_EVALUEE);
+					String[] options = {"oui", "non"};
+			        int validation = JOptionPane.showOptionDialog(null, "Êtes vous sûr de vouloir mettre cette annonce comme terminée?",
+			                "Confirmation",
+			                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			        try {
+			        	if (validation == 0) {
+			        		MainController.setStatusOfDemand(Integer.parseInt(wordAC[0]), StatutDemande.TERMINEE_PAS_EVALUEE);
+			        	} else {
+			        		//on ne fait rien
+			        	}
+			        } catch (UnexistingDemandException exc) {
+						System.out.println("Erreur getStatusOfDemand");
+			        }
 				}
 			}
 		

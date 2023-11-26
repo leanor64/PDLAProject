@@ -44,32 +44,32 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			
 			labtitre = new JLabel("Voulez-vous aider ce bénéficiaire?");
 			labtitre.setBounds(50,10,600,70);
-			labtitre.setFont(new Font("Arial",Font.BOLD,22));
+			labtitre.setFont(new Font("Arial",Font.BOLD,18));
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
 			
 			try {
 			labtitredemande = new JLabel("Titre : " + MainController.getInfoOfDemand(numDemande, "titre"));
 			labtitredemande.setBounds(100,50,600,70);
-			labtitredemande.setFont(new Font("Arial",Font.BOLD,22));
+			labtitredemande.setFont(new Font("Arial",Font.BOLD,18));
 			labtitredemande.setForeground(Color.black);
 			pan.add(labtitredemande);
 			
 			labdemande = new JLabel("Détail : " + MainController.getInfoOfDemand(numDemande, "explication"));
-			labdemande.setBounds(100,30,100,200);
-			labdemande.setFont(new Font("Arial",Font.BOLD,22));
+			labdemande.setBounds(100,30,300,200);
+			labdemande.setFont(new Font("Arial",Font.BOLD,18));
 			labdemande.setForeground(Color.black);
 			pan.add(labdemande);
 			
 			labbenef = new JLabel("Bénéficiaire : " + MainController.getInfoOfDemand(numDemande, "beneficiaire"));
-			labbenef.setBounds(150,250,600,30);
-			labbenef.setFont(new Font("Arial",Font.BOLD,22));
+			labbenef.setBounds(100,250,600,30);
+			labbenef.setFont(new Font("Arial",Font.BOLD,18));
 			labbenef.setForeground(Color.black);
 			pan.add(labbenef);
 			
 			labville = new JLabel("Ville : " + MainController.getInfoOfDemand(numDemande, "ville"));
-			labville.setBounds(150,290,600,30);
-			labville.setFont(new Font("Arial",Font.BOLD,22));
+			labville.setBounds(100,290,600,30);
+			labville.setFont(new Font("Arial",Font.BOLD,18));
 			labville.setForeground(Color.black);
 			pan.add(labville);
 			} catch (UnexistingInfoException exc1) {
@@ -101,12 +101,16 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(btoui)) {
 				try {
+				MainController.setBenevoleOfDemand(numDemande,idbenevole);
+				MainController.getInfoOfDemand(numDemande,"benevole");
 				MainController.setStatusOfDemand(numDemande,StatutDemande.ACCEPTEE);
 				this.setVisible(false);
 				ViewBenevole vb = new ViewBenevole(idbenevole);
 				vb.setVisible(true);
 				} catch (UnexistingDemandException exc) {
 					System.out.println("Erreur getStatusOfDemand");
+				} catch (UnexistingInfoException exc2) {
+					System.out.println("Erreur Info Inexistante");
 				}
 			}
 			if (e.getSource().equals(btnon)) {

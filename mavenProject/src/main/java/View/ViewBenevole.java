@@ -16,7 +16,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 	//Attributs
 	String idbenevole;
 	JLabel labtitre;
-	JButton btdeconnexion, btvalideur, btsuivant;
+	JButton btdeconnexion, btvalideur, btsuivant, btavis;
 	
 	DefaultComboBoxModel<String> demandes;
 	JComboBox<String> choixDemande;
@@ -88,6 +88,14 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		pan.add(btsuivant);
 		btsuivant.addActionListener(this);
 		
+		btavis = new JButton("VOIR MES AVIS");
+		btavis.setBounds(310,500,300,30);
+		btavis.setBackground(Color.white);
+		btavis.setFont(new Font("Arial",Font.BOLD,18));
+		btavis.setForeground(Color.black);
+		pan.add(btavis);
+		btavis.addActionListener(this);
+		
 		
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(310,700,300,30);
@@ -130,12 +138,17 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 				ViewValideur vva = new ViewValideur(idbenevole);
 				vva.setVisible(true);
 			}
+			if (e.getSource().equals(btavis)) {
+				this.setVisible(false);
+				ViewAvis va = new ViewAvis(idbenevole);
+				va.setVisible(true);
+			}
 		}
 	}
 	
 	public static void main(String[] args) {
 		String benevole;
-		benevole = "benev";
+		benevole = "test0";
 		
 		ViewBenevole vbn = new ViewBenevole(benevole);
 	    vbn.setVisible(true);

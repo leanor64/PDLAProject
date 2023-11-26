@@ -45,34 +45,37 @@ public class ViewDemande extends JFrame implements ActionListener{
 			
 			labtitre = new JLabel("Voulez-vous valider cette annonce?");
 			labtitre.setBounds(50,10,600,70);
-			labtitre.setFont(new Font("Arial",Font.BOLD,22));
+			labtitre.setFont(new Font("Arial",Font.BOLD,18));
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
 			
 			try {
-			labtitredemande = new JLabel("Titre : " + MainController.getInfoOfDemand(numDemande, "titre"));
-			labtitredemande.setBounds(100,50,600,70);
-			labtitredemande.setFont(new Font("Arial",Font.BOLD,22));
-			labtitredemande.setForeground(Color.black);
-			pan.add(labtitredemande);
+				labtitredemande = new JLabel("Titre : " + MainController.getInfoOfDemand(numDemande, "titre"));
+				labtitredemande.setBounds(100, 100, 400, 30);
+				labtitredemande.setFont(new Font("Arial", Font.BOLD, 18));
+				labtitredemande.setForeground(Color.black);
+				pan.add(labtitredemande);
+
+				labdemande = new JLabel("Détail : " + MainController.getInfoOfDemand(numDemande, "explication"));
+				labdemande.setBounds(100, 150, 400, 200);
+				labdemande.setFont(new Font("Arial", Font.BOLD, 18));
+				labdemande.setForeground(Color.black);
+				labdemande.setHorizontalAlignment(JLabel.LEFT); // Alignement à gauche
+				labdemande.setVerticalAlignment(JLabel.TOP); // Alignement en haut
+				labdemande.setVerticalTextPosition(JLabel.TOP); // Position du texte en haut
+				pan.add(labdemande);
 			
-			labdemande = new JLabel("Détail : " + MainController.getInfoOfDemand(numDemande, "explication"));
-			labdemande.setBounds(100,30,100,200);
-			labdemande.setFont(new Font("Arial",Font.BOLD,22));
-			labdemande.setForeground(Color.black);
-			pan.add(labdemande);
+				labbenef = new JLabel("Bénéficiaire : " + MainController.getInfoOfDemand(numDemande, "beneficiaire"));
+				labbenef.setBounds(100,250,600,30);
+				labbenef.setFont(new Font("Arial",Font.BOLD,18));
+				labbenef.setForeground(Color.black);
+				pan.add(labbenef);
 			
-			labbenef = new JLabel("Bénéficiaire : " + MainController.getInfoOfDemand(numDemande, "beneficiaire"));
-			labbenef.setBounds(150,250,600,30);
-			labbenef.setFont(new Font("Arial",Font.BOLD,22));
-			labbenef.setForeground(Color.black);
-			pan.add(labbenef);
-			
-			labville = new JLabel("Ville : " + MainController.getInfoOfDemand(numDemande, "ville"));
-			labville.setBounds(150,290,600,30);
-			labville.setFont(new Font("Arial",Font.BOLD,22));
-			labville.setForeground(Color.black);
-			pan.add(labville);
+				labville = new JLabel("Ville : " + MainController.getInfoOfDemand(numDemande, "ville"));
+				labville.setBounds(100,300,600,30);
+				labville.setFont(new Font("Arial",Font.BOLD,18));
+				labville.setForeground(Color.black);
+				pan.add(labville);
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur getInfoOfDemand()");
 			} catch (UnexistingDemandException exc2) {
@@ -100,7 +103,7 @@ public class ViewDemande extends JFrame implements ActionListener{
 		//Méthodes
 			
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == btoui) {
+			if (e.getSource().equals(btoui)) {
 				try {
 				MainController.setStatusOfDemand(numDemande,StatutDemande.VALIDEE);
 				} catch (UnexistingDemandException exc) {
@@ -110,8 +113,7 @@ public class ViewDemande extends JFrame implements ActionListener{
 				ViewValideur vv = new ViewValideur(idvalideur);
 				vv.setVisible(true);
 			}
-			if (e.getSource() == btnon) {
-				//changer statut de l'annonce à refusée
+			if (e.getSource().equals(btnon)) {
 				String[] options = {"expirée", "inappropriée", "autre"};
 		        int motif = JOptionPane.showOptionDialog(null, "Pourquoi estimez-vous que cette annonce est invalidable?",
 		                "Choisissez un motif",
