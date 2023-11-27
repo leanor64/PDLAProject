@@ -19,6 +19,61 @@ public class MainController {
       
 	public MainController(){}
 	
+	public static boolean ExistsInDB (String table, String primaryKey){
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";
+		boolean res = false ; 
+		
+		try {
+		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
+		    Statement state = conn.createStatement();
+		    String commande = "";
+
+		    if (table.equals("Avis")){
+			    commande = "SELECT COUNT(*) FROM Avis WHERE num = "+primaryKey+";";
+		    } else if (table.equals("Person")){
+			    commande = "SELECT COUNT(*) FROM Person WHERE userName = '"+primaryKey+"';";
+		    } else if (table.equals("DemandeAide")){
+			    commande = "SELECT COUNT(*) FROM DemandeAide WHERE num = "+primaryKey+";";
+		    }
+
+		    ResultSet result = state.executeQuery(commande);
+		    if (result.next() && result.getInt(1) == 1) {
+		    	res = true ; 
+		    } 
+		    result.close();
+		    state.close();
+
+		    
+		} catch (Exception exce){
+		    exce.printStackTrace();
+		    System.out.println("Erreur");
+	    	    System.exit(0);
+	    }
+		
+		return res ;
+	}
+	
+	public static void EmptyDB (String table)  {
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";
+		
+		try {
+		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
+		    Statement state = conn.createStatement();
+		    String commande = "TRUNCATE "+ table +";";
+		    state.executeUpdate(commande);
+		    state.close();
+        
+		} catch (Exception exce){
+		    exce.printStackTrace();
+		    System.out.println("Erreur");
+	    	    System.exit(0);
+	    }
+	}
+	
 	public static void NewUser (String idUser, String password, String nom, String prenom, int age, String email, String telephone, String ville, String adresse, int type) throws SQLIntegrityConstraintViolationException, BadLengthException{
 		/* Benevole : 0 | Beneficiaire : 1 | Valideur : 2 */
 		
@@ -90,6 +145,13 @@ public class MainController {
 			throw new BadLengthException ("Emetteur");
 		}	
 		
+		/*Vérification de l'existence de l'emetteur et du destinataire"*/
+		if (!ExistsInDB("Person", destinataire)) {
+	    	throw (new UnexistingUserException("Destinataire inexistant"));
+	    } else if (!ExistsInDB("Person", emetteur)) {
+	    	throw (new UnexistingUserException("Emetteur inexistant"));
+	    } 
+		
 		int noAvis = 1 ;
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
@@ -99,22 +161,17 @@ public class MainController {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 		    
-
-		    /*On vérifie si le destinataire existe bien dans la base de données*/
+	    	 //mise à jour de la note du destinataire
 		    ResultSet result2 = state.executeQuery("SELECT * FROM Person WHERE userName = '"+destinataire+"';");
-		    if (!(result2.next())) {
-		    	throw (new UnexistingUserException("Destinataire inexistant"));
-		    } else {
-		    	 //mise à jour de la note du destinataire
-			    int oldNbAvis = result2.getInt(12) ;
-			    float newNote = note ;
-			    if (!(oldNbAvis == 0)) {
-			    	float oldNote = result2.getFloat(10) ;
-					newNote = (oldNote * oldNbAvis + note)/(oldNbAvis+1);
-			    }
-			    String commande2 = "UPDATE Person SET nbAvis = '" +(oldNbAvis+1)+ "', note = '"+newNote+"' WHERE userName = '"+destinataire+"' ;";
-			    state.executeUpdate(commande2);
+		    int oldNbAvis = result2.getInt(12) ;
+		    float newNote = note ;
+		    if (!(oldNbAvis == 0)) {
+		    	float oldNote = result2.getFloat(10) ;
+				newNote = (oldNote * oldNbAvis + note)/(oldNbAvis+1);
 		    }
+		    String commande2 = "UPDATE Person SET nbAvis = '" +(oldNbAvis+1)+ "', note = '"+newNote+"' WHERE userName = '"+destinataire+"' ;";
+		    state.executeUpdate(commande2);
+		    
 
 		    //réaliser la commande dans la database et récupérer le nombre de lignes trouvées
 		    ResultSet result = state.executeQuery("SELECT MAX(num) FROM Avis ;");
@@ -147,8 +204,6 @@ public class MainController {
 	        res.close();
 	        state.close();
 	        
-		} catch (UnexistingUserException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -157,7 +212,7 @@ public class MainController {
 		
 	}
 	
-	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException{
+	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException, UnexistingUserException{
 		
 		int noDemande = 1 ; 
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
@@ -176,6 +231,11 @@ public class MainController {
 		} else if ((ville.length() > 30) || (ville.length()==0)){
 			throw new BadLengthException ("Ville");
 		}  
+		
+		/*Vérification de l'existence du demandeur*/
+		if (!ExistsInDB("Person", demandeur)) {
+	    	throw (new UnexistingUserException("Destinataire inexistant"));
+	    } 
 		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
@@ -258,26 +318,24 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence du User*/
+		if (!ExistsInDB("Person", idUser)) {
+	    	throw (new UnexistingUserException("User inexistant"));
+	    } 
+		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 		    
 
-		    /*On récupère la ligne correspondant à idUser dans la base de données*/
+		    /*On récupère la ligne correspondant à idUser dans la base de données pour obtenir son type (0, 1 ou 2)*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Person WHERE userName = '"+idUser+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingUserException("Destinataire inexistant"));
-		    } else {
-		    	 //récupération du type de User (0, 1 ou 2)
-			    type = res.getInt(5) ;
-		    }
+		    type = res.getInt(5) ;
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
 		
-		} catch (UnexistingUserException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -294,6 +352,13 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence de la demande*/
+		if (!ExistsInDB("DemandeAide", Integer.toString(noDemande))) {
+	    	throw (new UnexistingDemandException("Demande inexistante"));
+	    } 
+		
+	
+		/*Vérification de l'existence de l'info*/
 		if (info.equals("titre")) {
 			column = 1;
 		} else if (info.equals("explication")) {
@@ -317,21 +382,15 @@ public class MainController {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 
-		    /*On récupère la ligne correspondant au title dans la base de données*/
+		    /*On récupère la ligne correspondant au numero de la demande dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE num = '"+noDemande+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingDemandException("Destinataire inexistant"));
-		    } else {
-		    	 //récupération de l'info de la demande
-			    information = res.getString(column) ;
-		    }
+		    information = res.getString(column) ;
+		    
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
 		
-		} catch (UnexistingDemandException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -349,6 +408,13 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence du User*/
+		if (!ExistsInDB("Person", idUser)){
+	    	throw (new UnexistingUserException("User inexistant"));
+	    } 
+		
+		
+		/*Vérification de l'existance de l'information*/
 		if (info.equals("nom")) {
 			column = 2;
 		} else if (info.equals("prenom")) {
@@ -380,21 +446,14 @@ public class MainController {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 
-		    /*On récupère la ligne correspondant au title dans la base de données*/
+		    /*On récupère la ligne correspondant à l'id dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Person WHERE userName = '"+idUser+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingUserException("User inexistant"));
-		    } else {
-		    	 //récupération de l'info de User
-			    information = res.getString(column) ;
-		    }
-		    
+			information = res.getString(column) ;
+		    		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
 		
-		} catch (UnexistingUserException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -412,6 +471,13 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence de l'avis*/
+		if (!ExistsInDB("Avis", Integer.toString(noAvis))) {
+	    	throw (new UnexistingAvisException("Avis inexistant"));
+	    } 
+		
+		
+		/*Vérification de l'existence de l'info*/
 		if (info.equals("destinataire")) {
 			column = 2;
 		} else if (info.equals("emetteur")) {
@@ -431,19 +497,12 @@ public class MainController {
 
 		    /*On récupère la ligne correspondant au title dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Avis WHERE num = '"+noAvis+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingAvisException("Avis inexistant"));
-		    } else {
-		    	 //récupération de l'info de User
-			    information = res.getString(column) ;
-		    }
+			information = res.getString(column) ;
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
 		
-		} catch (UnexistingAvisException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -459,27 +518,23 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence de la demande*/
+		if (!ExistsInDB("DemandeAide", Integer.toString(noDemande))) {
+	    	throw (new UnexistingDemandException("Demande inexistante"));
+	    } 
+		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 		    
-
-		    /*On récupère la ligne correspondant à idUser dans la base de données*/
-		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE num = '"+noDemande+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingDemandException("Destinataire inexistant"));
-		    } else {
-		    	 //Editer l'etat de la demande dans la BDD
-			    String commande = "UPDATE DemandeAide SET state = '"+nvStatut+"' WHERE num = '"+noDemande+"' ;";
-		    	state.executeUpdate(commande);
-		    }
+	    	 //Editer l'etat de la demande dans la BDD
+		    String commande = "UPDATE DemandeAide SET state = '"+nvStatut+"' WHERE num = '"+noDemande+"' ;";
+	    	state.executeUpdate(commande);
+		    
 		    
 		  //fermer la connexion avec la base de données
-	        res.close();
 	        state.close();
 		
-		} catch (UnexistingDemandException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -493,29 +548,30 @@ public class MainController {
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
 		
+		/*Vérification de l'existence de la demande et du benevole*/
+		if (!ExistsInDB("DemandeAide", Integer.toString(noDemande))) {
+	    	throw (new UnexistingDemandException("Demande inexistante"));
+	    } else if (!ExistsInDB("Person", idBenevole)) {
+	    	throw (new UnexistingDemandException("Benevole inexistant"));
+	    } 
+		
+		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 		    
 
-		    /*On récupère la ligne correspondant au numero de la demande dans la base de données*/
-		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE num = '"+noDemande+"';");
-		    if (!(res.next())) {
-		    	throw (new UnexistingDemandException("Destinataire inexistant"));
-		    } else {
-		    	 //Editer le bénévole et le statut de la demande dans la BDD
-			    String commande = "UPDATE DemandeAide SET benevole = '"+idBenevole+"' WHERE num = '"+noDemande+"' ;";
-		    	state.executeUpdate(commande);
-		    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.ACCEPTEE+"' WHERE num = '"+noDemande+"' ;";
-		    	state.executeUpdate(commande2);
-		    }
+		   
+	    	 //Editer le bénévole et le statut de la demande dans la BDD
+		    String commande = "UPDATE DemandeAide SET benevole = '"+idBenevole+"' WHERE num = '"+noDemande+"' ;";
+	    	state.executeUpdate(commande);
+	    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.ACCEPTEE+"' WHERE num = '"+noDemande+"' ;";
+	    	state.executeUpdate(commande2);
+		    
 		    
 		  //fermer la connexion avec la base de données
-	        res.close();
 	        state.close();
 		
-		} catch (UnexistingDemandException exc1) {
-			throw exc1 ;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -610,12 +666,17 @@ public class MainController {
 		return listDemands ;
 	}
 
-	public static ArrayList<Integer> getDemandsOfBeneficiaire (String benef){
+	public static ArrayList<Integer> getDemandsOfBeneficiaire (String benef) throws UnexistingUserException{
 		ArrayList<Integer> listDemands = new ArrayList<Integer>() ;
 		
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
+		
+		/*Vérification de l'existence du beneficiaire*/
+		if (!ExistsInDB("Person", benef)) {
+	    	throw (new UnexistingUserException("Benevole inexistant"));
+	    } 
 		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
@@ -640,12 +701,17 @@ public class MainController {
 		return listDemands ;
 	}	
 	
-	public static ArrayList<Integer> getListOfAvis(String idBenevole){
+	public static ArrayList<Integer> getListOfAvis(String idBenevole) throws UnexistingUserException{
 		ArrayList<Integer> listAvis = new ArrayList<Integer>() ;
 		
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
+		
+		/*Vérification de l'existence du beneficiaire*/
+		if (!ExistsInDB("Person", idBenevole)) {
+	    	throw (new UnexistingUserException("Benevole inexistant"));
+	    } 
 		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
@@ -653,7 +719,9 @@ public class MainController {
 		    
 		    /*On récupère dans la BDD les demandes dont le statut correspond à celui cherché*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Avis WHERE destinataire = '"+idBenevole+"';");
-		    while (res.next()) {
+		    
+		    System.out.println("pas erreur commande");
+		    if (res.next()) {
 		    	 listAvis.add(res.getInt(1)); 
 		    } 
 		    
@@ -710,12 +778,14 @@ public class MainController {
 			System.out.println(getInfoOfAvis(3, "destinataire"));
 			System.out.println(getInfoOfAvis(5,"destinataire"));*/
 			
-			setInfoOfUser("pat", "age", "8");
+			/*setInfoOfUser("pat", "age", "8");
 			setInfoOfUser("lolololo", "prenom", "patricia");
 			setInfoOfUser("lolololo", "nom", "maurice");
 			setInfoOfUser("oiu", "identifiant", "belinda");
-			setInfoOfUser("belinda", "email", "youpicamarche");
+			setInfoOfUser("belinda", "email", "youpicamarche");*/
 
+			ExistsInDB("Person", "test0");
+			
 			
 		/*} catch (BadLengthException exc2) {
 			System.out.println ("erreur length");*/
