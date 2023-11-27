@@ -580,7 +580,7 @@ public class MainController {
 		
 	}
 	
-	public static ArrayList<Integer> getListOfDemands(StatutDemande statut){
+	public static ArrayList<Integer> getDemandsofStatus(StatutDemande statut){
 		ArrayList<Integer> listDemands = new ArrayList<Integer>() ;
 		
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";

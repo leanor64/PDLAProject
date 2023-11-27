@@ -62,7 +62,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		demandes = new DefaultComboBoxModel<>();
 		
 		
-		for (int demande : MainController.getListOfDemands(StatutDemande.VALIDEE)){
+		for (int demande : MainController.getDemandsofStatus(StatutDemande.VALIDEE)){
 			try {
 				demandes.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + MainController.getInfoOfDemand(demande, "beneficiaire")/* + 
 				controller.getInfoOfDemand(demande, "date")*/ + MainController.getInfoOfDemand(demande, "ville"));

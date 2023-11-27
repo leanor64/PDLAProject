@@ -49,7 +49,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		demandes = new DefaultComboBoxModel<>();
 		
 		
-		for (int demande : MainController.getListOfDemands(StatutDemande.EN_ATTENTE)){
+		for (int demande : MainController.getDemandsofStatus(StatutDemande.EN_ATTENTE)){
 			demandes.addElement(Integer.toString(demande)); 
 		}
 		if (demandes.getSize() == 0) {
