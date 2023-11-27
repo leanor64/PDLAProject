@@ -32,53 +32,49 @@ public class ViewAvis extends JFrame implements ActionListener{
 		this.idbenevole = idbenevole;
 				
 		this.setTitle("Bienvenue " + idbenevole);
-		this.setSize(700,700);
+		this.setSize(600,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-				
-		Color custom = new Color(204, 153, 255);
+
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(custom);
+		pan.setBackground(Color.white);
 		add(pan);
 				
 		labtitre = new JLabel("Vos avis");
-		labtitre.setBounds(300,10,600,70);
-		labtitre.setFont(new Font("Arial",Font.BOLD,18));
+		labtitre.setBounds(250,10,600,70);
+		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
 				
 		avis = new DefaultTableModel();
 
-        // Ajout des colonnes au modèle
+        // Ajout des colonnes au modèle avis
         avis.addColumn("Emetteur");
         avis.addColumn("Commentaire");
         avis.addColumn("Note");
 
-        //TODO erreur info exception - comprendre pq il ne rentre pas dans le try alors qu'il a deja un avis
         for (int noavis : MainController.getListOfAvis(idbenevole)) {
-        	
-    		System.out.println("ok");
         	try {
-        		System.out.println("emetteur : " + MainController.getInfoOfAvis(noavis,"Emetteur"));
-        		System.out.println("com : " + MainController.getInfoOfAvis(noavis,"Commentaire"));
-        		System.out.println("note : " + MainController.getInfoOfAvis(noavis,"Note"));
-				avis.addRow(new String[]{MainController.getInfoOfAvis(noavis,"Emetteur"),MainController.getInfoOfAvis(noavis,"Commentaire"),MainController.getInfoOfAvis(noavis,"Note")});
+				avis.addRow(new String[]{MainController.getInfoOfAvis(noavis,"emetteur"),MainController.getInfoOfAvis(noavis,"commentaire"),MainController.getInfoOfAvis(noavis,"note")});
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("Erreur Info inexistante");
 			} catch (UnexistingAvisException exc2 ) {
 				System.out.println("Erreur Avis inexistant");
 			}
         }
+        if ((avis).getRowCount() == 0) {
+			avis.addRow(new String[]{"Aucun avis","pour","le moment"});
+		}
         
         tableavis = new JTable(avis);
-        tableavis.setBounds(140,150,450,70);
+        tableavis.setBounds(70,250,450,70);
         scrollPane = new JScrollPane(tableavis);
-        scrollPane.setBounds(140, 150, 450, 70);  // Ajustez les coordonnées et la taille selon vos besoins
+        scrollPane.setBounds(70,250,450,70);
         pan.add(scrollPane);
 				
 		btretour = new JButton("RETOUR");
-		btretour.setBounds(310,350,150,30);
+		btretour.setBounds(220,500,150,30);
 		btretour.setBackground(Color.white);
 		btretour.setFont(new Font("Arial",Font.BOLD,18));
 		btretour.setForeground(Color.black);
@@ -93,7 +89,7 @@ public class ViewAvis extends JFrame implements ActionListener{
 				
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btretour)) {
-			this.setVisible(false);
+			this.setVisible(false);			
 		}
 	}
 			

@@ -11,6 +11,8 @@ import javax.swing.*;
 
 import Controller.*;
 import Model.StatutDemande;
+import Model.UnexistingDemandException;
+import Model.UnexistingInfoException;
 
 public class ViewValideur extends JFrame implements ItemListener, ActionListener{
 
@@ -30,18 +32,17 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		this.idvalideur = idvalideur;
 		
 		this.setTitle("Bienvenue " + idvalideur);
-		this.setSize(900,800);
+		this.setSize(600,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		
-		Color custom = new Color(204, 153, 255);
+
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(custom);
+		pan.setBackground(Color.white);
 		add(pan);
 		
 		labtitre = new JLabel("Sélectionnez une annonce");
-		labtitre.setBounds(320,10,300,30);
+		labtitre.setBounds(150,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
@@ -50,7 +51,16 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		
 		
 		for (int demande : MainController.getDemandsofStatus(StatutDemande.EN_ATTENTE)){
-			demandes.addElement(Integer.toString(demande)); 
+			try {
+				demandes.addElement(Integer.toString(demande) + "          " +
+				MainController.getInfoOfDemand(demande, "titre") + "          " +
+				MainController.getInfoOfDemand(demande, "beneficiaire") + "          " +
+				MainController.getInfoOfDemand(demande, "jour"));
+			} catch (UnexistingInfoException exc1) {
+				System.out.println("erreur Info Inexistante");
+			} catch (UnexistingDemandException exc2) {
+				System.out.println("erreur demande Inexistante");
+			}
 		}
 		if (demandes.getSize() == 0) {
 			demandes.addElement("Aucune annonce");			
@@ -60,12 +70,12 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		pan.add(choixDemande);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		choixDemande.setSelectedIndex(0);
-		choixDemande.setBounds(270,270,420,30);
+		choixDemande.setBounds(90,230,420,30);
 		choixDemande.addItemListener(this);
 		
 		
 		btsuiv = new JButton("Suivant");
-		btsuiv.setBounds(370,400,150,30);
+		btsuiv.setBounds(230,270,150,30);
 		btsuiv.setBackground(Color.white);
 		btsuiv.setFont(new Font("Arial",Font.BOLD,18));
 		btsuiv.setForeground(Color.black);
@@ -73,7 +83,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		btsuiv.addActionListener(this);
 		
 		btbene = new JButton("Accéder à votre profil bénévole");
-		btbene.setBounds(70,700,400,30);
+		btbene.setBounds(100,400,400,30);
 		btbene.setBackground(Color.white);
 		btbene.setFont(new Font("Arial",Font.BOLD,18));
 		btbene.setForeground(Color.black);
@@ -81,7 +91,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		btbene.addActionListener(this);
 		
 		btdeconnexion = new JButton("DECONNEXION");
-		btdeconnexion.setBounds(490,700,300,30);
+		btdeconnexion.setBounds(150,500,300,30);
 		btdeconnexion.setBackground(Color.white);
 		btdeconnexion.setFont(new Font("Arial",Font.BOLD,18));
 		btdeconnexion.setForeground(Color.black);
@@ -92,7 +102,21 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 	//Méthodes
 	
 	public void afficherAucuneAnnonce() {
-		JOptionPane.showMessageDialog(this, "Vous n'avez aucune annonce correspondante");
+		JOptionPane.showMessageDialog(null, "Vous n'avez aucune annonce correspondante");
+	}
+	
+	public void confirmationDeconnexion() {
+		String[] options = {"oui", "non"};
+		int choix = JOptionPane.showOptionDialog(null, "Voulez-vous vraiment vous déconnecter?",
+            "Confiramation Déconnexion",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    	if (choix == 0) {
+    		this.setVisible(false);
+			FormulaireConnexion fco = new FormulaireConnexion();
+			fco.setVisible(true);
+    	} else if (choix == 1) {
+    		//on ne fait rien
+    	}
 	}
 	
 	public void itemStateChanged(ItemEvent i) {
@@ -100,19 +124,18 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		String[] word = ((String) choixDemande.getSelectedItem()).split("          ");
 		if (e.getSource().equals(btsuiv)) {
-			if ((String)choixDemande.getSelectedItem() == "Aucune annonce"){
+			if (((String)choixDemande.getSelectedItem()).equals("Aucune annonce")){
 				afficherAucuneAnnonce();
 			} else {
 				this.setVisible(false);
-				ViewDemande vd = new ViewDemande(idvalideur, Integer.parseInt((String)choixDemande.getSelectedItem()));
+				ViewDemande vd = new ViewDemande(idvalideur, Integer.parseInt(word[0]));
 				vd.setVisible(true);
 			}
 		}
 		if (e.getSource().equals(btdeconnexion)) {
-			this.setVisible(false);
-			FormulaireConnexion fco = new FormulaireConnexion();
-			fco.setVisible(true);
+			confirmationDeconnexion();
 		}
 		if (e.getSource().equals(btbene)) {
 			this.setVisible(false);
@@ -125,7 +148,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 	
 	public static void main(String[] args) {
 		String valideur;
-		valideur = "valid";
+		valideur = "test3";
 		
 		ViewValideur vva = new ViewValideur(valideur);
 	    vva.setVisible(true);

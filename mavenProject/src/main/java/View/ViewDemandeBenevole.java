@@ -33,44 +33,43 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			this.idbenevole = idbenevole;
 			
 			
-			this.setTitle("Bienvenue");
-			this.setSize(500,500);
+			this.setTitle("Demande n° " + numDemande);
+			this.setSize(600,600);
 			this.setResizable(false);
 			this.setLocationRelativeTo(null);
-			
-			Color custom = new Color(204, 153, 255);
+
 			JPanel pan = new JPanel();
 			pan.setLayout(null);
-			pan.setBackground(custom);
+			pan.setBackground(Color.white);
 			add(pan);
 			
 			labtitre = new JLabel("Voulez-vous aider ce bénéficiaire?");
-			labtitre.setBounds(50,10,600,70);
-			labtitre.setFont(new Font("Arial",Font.BOLD,18));
+			labtitre.setBounds(120,20,600,70);
+			labtitre.setFont(new Font("Arial",Font.BOLD,22));
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
 			
 			try {
 			labtitredemande = new JLabel("Titre : " + MainController.getInfoOfDemand(numDemande, "titre"));
-			labtitredemande.setBounds(100,50,600,70);
+			labtitredemande.setBounds(100,100,600,70);
 			labtitredemande.setFont(new Font("Arial",Font.BOLD,18));
 			labtitredemande.setForeground(Color.black);
 			pan.add(labtitredemande);
 			
 			labdemande = new JLabel("Détail : " + MainController.getInfoOfDemand(numDemande, "explication"));
-			labdemande.setBounds(100,30,300,200);
+			labdemande.setBounds(100,150,300,200);
 			labdemande.setFont(new Font("Arial",Font.BOLD,18));
 			labdemande.setForeground(Color.black);
 			pan.add(labdemande);
 			
 			labbenef = new JLabel("Bénéficiaire : " + MainController.getInfoOfDemand(numDemande, "beneficiaire"));
-			labbenef.setBounds(100,250,600,30);
+			labbenef.setBounds(100,300,600,30);
 			labbenef.setFont(new Font("Arial",Font.BOLD,18));
 			labbenef.setForeground(Color.black);
 			pan.add(labbenef);
 			
 			labville = new JLabel("Ville : " + MainController.getInfoOfDemand(numDemande, "ville"));
-			labville.setBounds(100,290,600,30);
+			labville.setBounds(100,350,400,30);
 			labville.setFont(new Font("Arial",Font.BOLD,18));
 			labville.setForeground(Color.black);
 			pan.add(labville);
@@ -81,7 +80,7 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			}
 			
 			btoui = new JButton("OUI");
-			btoui.setBounds(310,350,150,30);
+			btoui.setBounds(330,500,150,30);
 			btoui.setBackground(Color.white);
 			btoui.setFont(new Font("Arial",Font.BOLD,18));
 			btoui.setForeground(Color.black);
@@ -89,7 +88,7 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			btoui.addActionListener(this);
 			
 			btnon = new JButton("NON");
-			btnon.setBounds(20,350,150,30);
+			btnon.setBounds(40,500,150,30);
 			btnon.setBackground(Color.white);
 			btnon.setFont(new Font("Arial",Font.BOLD,18));
 			btnon.setForeground(Color.black);
@@ -123,8 +122,7 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			
 		}
 		
-		public static void main(String[] args) {
-			int num = 1;			
+		public static void main(String[] args) {			
 			String bene = "test1";
 			ViewDemandeBenevole vdb = new ViewDemandeBenevole(bene,1);
 		    vdb.setVisible(true);

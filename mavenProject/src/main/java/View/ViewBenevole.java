@@ -29,18 +29,17 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		this.idbenevole = idbenevole;
 		
 		this.setTitle("Bienvenue " + idbenevole);
-		this.setSize(900,800);
+		this.setSize(600,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
-		
-		Color custom = new Color(204, 153, 255);
+
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(custom);
+		pan.setBackground(Color.white);
 		add(pan);
 		
 		labtitre = new JLabel("Votre compte");
-		labtitre.setBounds(370,10,300,30);
+		labtitre.setBounds(220,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
@@ -48,7 +47,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		try {
 			if (MainController.getTypeOfUser(idbenevole) == 2) {
 				btvalideur = new JButton("Accéder à votre profil Valideur");
-				btvalideur.setBounds(250,620,400,30);
+				btvalideur.setBounds(110,450,400,30);
 				btvalideur.setBackground(Color.white);
 				btvalideur.setFont(new Font("Arial",Font.BOLD,18));
 				btvalideur.setForeground(Color.black);
@@ -64,8 +63,11 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		
 		for (int demande : MainController.getDemandsofStatus(StatutDemande.VALIDEE)){
 			try {
-				demandes.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + MainController.getInfoOfDemand(demande, "beneficiaire")/* + 
-				controller.getInfoOfDemand(demande, "date")*/ + MainController.getInfoOfDemand(demande, "ville"));
+				demandes.addElement(demande + "          " + 
+				MainController.getInfoOfDemand(demande, "titre") + "          " +
+				MainController.getInfoOfDemand(demande, "beneficiaire") + "          " + 
+				MainController.getInfoOfDemand(demande, "jour") + "          " +
+				MainController.getInfoOfDemand(demande, "ville"));
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur getInfoOfDemand()");
 			} catch (UnexistingDemandException exc2) {
@@ -80,11 +82,11 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		pan.add(choixDemande);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		choixDemande.setSelectedIndex(0);
-		choixDemande.setBounds(270,270,420,30);
+		choixDemande.setBounds(100,150,400,30);
 		choixDemande.addItemListener(this);
 		
 		btsuivant = new JButton("SUIVANT");
-		btsuivant.setBounds(310,320,300,30);
+		btsuivant.setBounds(200,190,200,30);
 		btsuivant.setBackground(Color.white);
 		btsuivant.setFont(new Font("Arial",Font.BOLD,18));
 		btsuivant.setForeground(Color.black);
@@ -92,7 +94,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		btsuivant.addActionListener(this);
 		
 		btavis = new JButton("VOIR MES AVIS");
-		btavis.setBounds(310,500,300,30);
+		btavis.setBounds(200,350,200,30);
 		btavis.setBackground(Color.white);
 		btavis.setFont(new Font("Arial",Font.BOLD,18));
 		btavis.setForeground(Color.black);
@@ -101,7 +103,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		
 		
 		btdeconnexion = new JButton("DECONNEXION");
-		btdeconnexion.setBounds(310,700,300,30);
+		btdeconnexion.setBounds(200,500,200,30);
 		btdeconnexion.setBackground(Color.white);
 		btdeconnexion.setFont(new Font("Arial",Font.BOLD,18));
 		btdeconnexion.setForeground(Color.black);
@@ -114,6 +116,20 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 	
 	public void afficherAucuneAnnonce() {
 		JOptionPane.showMessageDialog(this, "Vous n'avez aucune annonce correspondante");
+	}
+	
+	public void confirmationDeconnexion() {
+		String[] options = {"oui", "non"};
+		int choix = JOptionPane.showOptionDialog(null, "Voulez-vous vraiment vous déconnecter?",
+            "Confiramation Déconnexion",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    	if (choix == 0) {
+    		this.setVisible(false);
+			FormulaireConnexion fco = new FormulaireConnexion();
+			fco.setVisible(true);
+    	} else if (choix == 1) {
+    		//on ne fait rien
+    	}
 	}
 	
 	public void itemStateChanged(ItemEvent i) {
@@ -132,9 +148,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 			}
 		} else {
 			if (e.getSource().equals(btdeconnexion)) {
-				this.setVisible(false);
-				FormulaireConnexion fco = new FormulaireConnexion();
-				fco.setVisible(true);
+				confirmationDeconnexion();
 			}
 			if (e.getSource().equals(btvalideur)) {
 				this.setVisible(false);
@@ -142,7 +156,6 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 				vva.setVisible(true);
 			}
 			if (e.getSource().equals(btavis)) {
-				this.setVisible(false);
 				ViewAvis va = new ViewAvis(idbenevole);
 				va.setVisible(true);
 			}

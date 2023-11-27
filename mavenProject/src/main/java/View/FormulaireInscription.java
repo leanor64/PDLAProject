@@ -5,6 +5,8 @@ import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
 import Model.BadLengthException;
+import Model.StatutDemande;
+import Model.UnexistingDemandException;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -24,8 +26,8 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	JPasswordField jpfpassword;
 	JButton btajout;
 	
-	JList<String> liste = new JList<>();
-	JLabel etiquette = new JLabel(" ");
+	JList<String> liste;
+	JLabel etiquette;
 	String choix[] = {"Bénévole", "Bénéficiaire", "Valideur"};
 	
 	boolean inscriptionOK;
@@ -34,19 +36,18 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	public FormulaireInscription(){
 		
 		this.setTitle("Inscription");
-		this.setSize(550,600);
+		this.setSize(600,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		inscriptionOK = false;
 		
-		Color custom = new Color(204, 153, 255);
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(custom);
+		pan.setBackground(Color.white);
 		add(pan);
 		
 		labtitre = new JLabel("Formulaire d'inscription");
-		labtitre.setBounds(150,10,300,30);
+		labtitre.setBounds(170,10,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
@@ -165,13 +166,14 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		liste = new JList<>(choix);
 		liste.setBounds(320,420,200,55);
 		liste.addListSelectionListener(this);
+		etiquette = new JLabel(" ");
 		pan.add(etiquette);
 		pan.add(liste);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		etiquette.setText((String)liste.getSelectedValue());
 		
 		btajout = new JButton("S'inscrire");
-		btajout.setBounds(175,520,150,30);
+		btajout.setBounds(225,520,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -192,6 +194,11 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	public void afficherAgeNonValide() {
 		JOptionPane.showMessageDialog(this, "Age invalide, veuillez rentrer un nombre entier");
 	}
+	
+	public void afficherPasOption() {
+		JOptionPane.showMessageDialog(this, "Veuillez choisir un rôle : bénévole, bénéficiaire ou valideur");
+	}
+    
 	
 	public String toString(char[] password) {
 		String result = "";
@@ -240,18 +247,21 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btajout) {
-			//System.out.println("vous avez cliqué sur le bouton s'inscrire");
-			try {
-				MainController.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
-						jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
-						jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
-				inscriptionOK = true;
-			} catch (SQLIntegrityConstraintViolationException exc1) {
+			if (liste.isSelectionEmpty()) {
+				afficherPasOption();
+			} else {
+				try {
+					MainController.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
+					jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
+					jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
+					inscriptionOK = true;
+				} catch (SQLIntegrityConstraintViolationException exc1) {
 				afficherIDDejaUtilise();
-			} catch (BadLengthException exc2) {
-				afficherTailleNonValide(exc2.getMessage());
-			} catch (NumberFormatException exc3) {
-				afficherAgeNonValide();
+				} catch (BadLengthException exc2) {
+					afficherTailleNonValide(exc2.getMessage());
+				} catch (NumberFormatException exc3) {
+					afficherAgeNonValide();
+				}
 			}
 		}
 		if (inscriptionOK == true) {

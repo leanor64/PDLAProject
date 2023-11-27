@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -40,41 +39,40 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		avisOK = false;
 		
 		this.setTitle("Votre retour d'expérience") /* à " + benev.getPrenom())*/;
-		this.setSize(600,500);
+		this.setSize(600,600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
-		Color custom = new Color(204, 153, 255);
 		JPanel pan = new JPanel();
 		pan.setLayout(null);
-		pan.setBackground(custom);
-		add(pan, BorderLayout.CENTER);
+		pan.setBackground(Color.white);
+		add(pan);
 		
 		labtitre = new JLabel("Laisser un avis à " + idbenev);
-		labtitre.setBounds(150,10,300,30);
+		labtitre.setBounds(170,30,300,30);
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre, BorderLayout.CENTER);
 		
 		labavis = new JLabel("Laissez votre avis :");
-		labavis.setBounds(20,60,300,30);
+		labavis.setBounds(20,150,300,30);
 		labavis.setFont(new Font("Arial",Font.BOLD,18));
 		labavis.setForeground(Color.black);
 		pan.add(labavis);
 		
 		jtfavis = new JTextField();
-		jtfavis.setBounds(220,60,300,100);
+		jtfavis.setBounds(220,150,300,100);
 		jtfavis.addKeyListener(this);
 		pan.add(jtfavis);
 		
 		labnote = new JLabel("Laissez une note :");
-		labnote.setBounds(20,200,300,30);
+		labnote.setBounds(20,350,300,30);
 		labnote.setFont(new Font("Arial",Font.BOLD,18));
 		labnote.setForeground(Color.black);
 		pan.add(labnote);
 		
 		liste = new JList<>(choix);
-		liste.setBounds(220,200,300,110);
+		liste.setBounds(220,350,300,110);
 		liste.addListSelectionListener(this);
 		etiquette = new JLabel(" ");
 		pan.add(etiquette);
@@ -83,7 +81,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		etiquette.setText((String)liste.getSelectedValue());
 			
 		btajout = new JButton("Enregistrer");
-		btajout.setBounds(200,370,150,30);
+		btajout.setBounds(200,500,150,30);
 		btajout.setBackground(Color.white);
 		btajout.setFont(new Font("Arial",Font.BOLD,18));
 		btajout.setForeground(Color.black);
@@ -147,16 +145,16 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	}
 	
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		String benev, benef;
 		int no;
-		benev = "benev";
-		benef = "benef";
+		benev = "test0";
+		benef = "test1";
 		no = 7;
 	    
 		LaisserAvis avis = new LaisserAvis(no,benef,benev);
 	    avis.setVisible(true);
-	}*/
+	}
 
 	
 

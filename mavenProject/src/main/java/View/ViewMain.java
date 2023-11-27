@@ -17,25 +17,24 @@ public class ViewMain extends JFrame implements ActionListener {
 		public ViewMain(){
 
 			
-			this.setTitle("Bienvenue sur HelpMe");
-			this.setSize(700,500);
+			this.setTitle("Bienvenue sur l'application d'entraide");
+			this.setSize(600,600);
 			this.setResizable(false);
 			this.setLocationRelativeTo(null);
-			
-			Color custom = new Color(204, 153, 255);
+
 			JPanel pan = new JPanel();
 			pan.setLayout(null);
-			pan.setBackground(custom);
+			pan.setBackground(Color.white);
 			add(pan);
 
 			labtitre = new JLabel("Bonjour, que désirez-vous faire sur l'application?");
-			labtitre.setBounds(70,30,600,30);
-			labtitre.setFont(new Font("Arial",Font.BOLD,22));
+			labtitre.setBounds(70,50,600,30);
+			labtitre.setFont(new Font("Arial",Font.BOLD,18));
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
 
 			btinscr = new JButton("S'inscrire");
-			btinscr.setBounds(60,220,250,50);
+			btinscr.setBounds(60,250,200,30);
 			btinscr.setBackground(Color.white);
 			btinscr.setFont(new Font("Arial",Font.BOLD,18));
 			btinscr.setForeground(Color.black);
@@ -43,7 +42,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			btinscr.addActionListener(this);
 			
 			btconnex = new JButton("Se connecter");
-			btconnex.setBounds(350,220,250,50);
+			btconnex.setBounds(330,250,200,30);
 			btconnex.setBackground(Color.white);
 			btconnex.setFont(new Font("Arial",Font.BOLD,18));
 			btconnex.setForeground(Color.black);
