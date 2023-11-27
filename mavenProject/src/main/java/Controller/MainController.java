@@ -134,7 +134,7 @@ public class MainController {
 		
 	}
 	
-	public static void NewAvis(String message, String destinataire, String emetteur, int note) throws BadLengthException, UnexistingUserException{
+	public static void NewAvis(String message, String destinataire, String emetteur, int note) throws SQLIntegrityConstraintViolationException, BadLengthException, UnexistingUserException{
 		
 		/*vérification taille des arguments*/
 		if (message.length() > 300) {
@@ -204,6 +204,8 @@ public class MainController {
 	        res.close();
 	        state.close();
 	        
+		} catch (SQLIntegrityConstraintViolationException exc) {
+			throw exc;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -212,7 +214,7 @@ public class MainController {
 		
 	}
 	
-	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException, UnexistingUserException{
+	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws SQLIntegrityConstraintViolationException, BadLengthException, UnexistingUserException{
 		
 		int noDemande = 1 ; 
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
@@ -273,6 +275,8 @@ public class MainController {
 	        state.close();
 	        
 	        
+		} catch (SQLIntegrityConstraintViolationException exc) {
+			throw exc;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -474,8 +478,7 @@ public class MainController {
 		/*Vérification de l'existence de l'avis*/
 		if (!ExistsInDB("Avis", Integer.toString(noAvis))) {
 	    	throw (new UnexistingAvisException("Avis inexistant"));
-	    } 
-		
+	    }
 		
 		/*Vérification de l'existence de l'info*/
 		if (info.equals("destinataire")) {
@@ -543,7 +546,7 @@ public class MainController {
 		
 	}
 
-	public static void setBenevoleOfDemand(int noDemande, String idBenevole) throws UnexistingDemandException {
+	public static void setBenevoleOfDemand(int noDemande, String idBenevole) throws UnexistingDemandException, UnexistingUserException {
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
@@ -552,7 +555,7 @@ public class MainController {
 		if (!ExistsInDB("DemandeAide", Integer.toString(noDemande))) {
 	    	throw (new UnexistingDemandException("Demande inexistante"));
 	    } else if (!ExistsInDB("Person", idBenevole)) {
-	    	throw (new UnexistingDemandException("Benevole inexistant"));
+	    	throw (new UnexistingUserException("Benevole inexistant"));
 	    } 
 		
 		
@@ -580,10 +583,15 @@ public class MainController {
 		
 	}
 	
-	public static void setInfoOfUser(String idUser, String info, String nvValeur) throws UnexistingInfoException{
+	public static void setInfoOfUser(String idUser, String info, String nvValeur) throws UnexistingInfoException,UnexistingUserException {
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
+		
+		/*Vérification de l'existence du User*/
+		if (!ExistsInDB("Person", idUser)) {
+	    	throw (new UnexistingUserException("Benevole inexistant"));
+	    } 
 		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
