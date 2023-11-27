@@ -9,5 +9,5 @@ public enum StatutDemande {
 	REFUSE_AUTRE,
 	TERMINEE_PAS_EVALUEE,
 	TERMINEE_EVALUEE
-	}
+}
 
