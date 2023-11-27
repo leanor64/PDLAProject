@@ -4,11 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.*;
 
 import Controller.*;
 import Model.BadLengthException;
+import Model.UnexistingUserException;
 
 public class FormulaireDemande extends JFrame implements ActionListener, KeyListener{
 	
@@ -135,6 +137,10 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 				demandeOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());
+			} catch (SQLIntegrityConstraintViolationException exc2) {
+				System.out.println("Erreur SQLIntegrityConstraintViolationException");
+			} catch (UnexistingUserException exc3) {
+				System.out.println("Erreur User inconnus");
 			}
 		}
 		if (demandeOK == true) {

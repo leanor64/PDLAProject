@@ -15,6 +15,7 @@ import Controller.*;
 import Model.StatutDemande;
 import Model.UnexistingDemandException;
 import Model.UnexistingInfoException;
+import Model.UnexistingUserException;
 
 public class ViewDemandeBenevole extends JFrame implements ActionListener{
 
@@ -112,6 +113,8 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 					System.out.println("Erreur getStatusOfDemand");
 				} catch (UnexistingInfoException exc2) {
 					System.out.println("Erreur Info Inexistante");
+				} catch (UnexistingUserException exc3) {
+					System.out.println("Erreur User Inexistant");
 				}
 			}
 			if (e.getSource().equals(btnon)) {

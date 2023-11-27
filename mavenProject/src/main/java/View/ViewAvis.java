@@ -12,6 +12,7 @@ import Controller.MainController;
 import Model.StatutDemande;
 import Model.UnexistingAvisException;
 import Model.UnexistingInfoException;
+import Model.UnexistingUserException;
 
 public class ViewAvis extends JFrame implements ActionListener{
 	
@@ -54,15 +55,19 @@ public class ViewAvis extends JFrame implements ActionListener{
         avis.addColumn("Commentaire");
         avis.addColumn("Note");
 
-        for (int noavis : MainController.getListOfAvis(idbenevole)) {
-        	try {
-				avis.addRow(new String[]{MainController.getInfoOfAvis(noavis,"emetteur"),MainController.getInfoOfAvis(noavis,"commentaire"),MainController.getInfoOfAvis(noavis,"note")});
-			} catch (UnexistingInfoException exc1) {
-				System.out.println("Erreur Info inexistante");
-			} catch (UnexistingAvisException exc2 ) {
-				System.out.println("Erreur Avis inexistant");
+        try {
+			for (int noavis : MainController.getListOfAvis(idbenevole)) {
+				try {
+					avis.addRow(new String[]{MainController.getInfoOfAvis(noavis,"emetteur"),MainController.getInfoOfAvis(noavis,"commentaire"),MainController.getInfoOfAvis(noavis,"note")});
+				} catch (UnexistingInfoException exc1) {
+					System.out.println("Erreur Info inexistante");
+				} catch (UnexistingAvisException exc2 ) {
+					System.out.println("Erreur Avis inexistant");
+				}
 			}
-        }
+		} catch (UnexistingUserException exc) {
+			System.out.println("Erreur User inconnu");
+		}
         if ((avis).getRowCount() == 0) {
 			avis.addRow(new String[]{"Aucun avis","pour","le moment"});
 		}

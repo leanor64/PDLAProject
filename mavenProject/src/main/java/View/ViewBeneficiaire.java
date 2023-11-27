@@ -23,6 +23,7 @@ import Controller.MainController;
 import Model.StatutDemande;
 import Model.UnexistingDemandException;
 import Model.UnexistingInfoException;
+import Model.UnexistingUserException;
 
 public class ViewBeneficiaire extends JFrame implements ActionListener, ItemListener, ListSelectionListener {
 
@@ -99,15 +100,18 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 		demandesAcceptees = new DefaultComboBoxModel<>();
 				
 
-		for (int demande : MainController.getDemandsOfBeneficiaire(idbeneficiaire)){
-			try {
-				if (MainController.getInfoOfDemand(demande, "statut").equals("ACCEPTEE")) {
-					demandesAcceptees.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + "      " + MainController.getInfoOfDemand(demande, "benevole"));
-				}
-			} catch (UnexistingInfoException exc1) {
-				System.out.println("erreur getInfoOfDemand()");
-			} catch (UnexistingDemandException exc2) {
-				System.out.println("erreur getInfoOfDemand()");				} 
+		try {
+			for (int demande : MainController.getDemandsOfBeneficiaire(idbeneficiaire)){
+					if (MainController.getInfoOfDemand(demande, "statut").equals("ACCEPTEE")) {
+						demandesAcceptees.addElement(demande + " " + MainController.getInfoOfDemand(demande, "titre") + "      " + MainController.getInfoOfDemand(demande, "benevole"));
+					} 
+			}
+		} catch (UnexistingUserException exc1) {
+			System.out.println("erreur User Inexistant");	
+		} catch (UnexistingInfoException exc2) {
+			System.out.println("erreur getInfoOfDemand()");
+		} catch (UnexistingDemandException exc3) {
+			System.out.println("erreur getInfoOfDemand()");	
 		}
 		if (demandesAcceptees.getSize() == 0) {
 			demandesAcceptees.addElement("Aucune annonce");
@@ -152,20 +156,21 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 		labaevaluer.setVisible(false);
 		
 		demandesAEvaluer = new DefaultComboBoxModel<>();
-		
-		for (int demande : MainController.getDemandsOfBeneficiaire(idbeneficiaire)){
-			try {
+		try {
+			for (int demande : MainController.getDemandsOfBeneficiaire(idbeneficiaire)){
 				if (MainController.getInfoOfDemand(demande, "statut").equals("TERMINEE_PAS_EVALUEE")) {
 					demandesAEvaluer.addElement(demande + "          " + 
 					MainController.getInfoOfDemand(demande, "titre") + "          " + 
 					MainController.getInfoOfDemand(demande, "benevole") + "          " + 
 					MainController.getInfoOfDemand(demande, "jour"));
 				}
-			} catch (UnexistingInfoException exc1) {
+			}
+		} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur getInfoOfDemand()");
-			} catch (UnexistingDemandException exc2) {
+		} catch (UnexistingDemandException exc2) {
 				System.out.println("erreur getInfoOfDemand()");
-			} 
+		} catch (UnexistingUserException exc3){
+			System.out.println("erreur User inconnu");
 		}
 		if (demandesAEvaluer.getSize() == 0) {
 			demandesAEvaluer.addElement("Aucune annonce");			
