@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 
 import Controller.*;
 import Model.StatutDemande;
+import Model.UnexistingDemandException;
+import Model.UnexistingInfoException;
 
 public class ViewDemandeBenevole extends JFrame implements ActionListener{
 

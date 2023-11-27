@@ -9,9 +9,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.MainController;
-import Controller.UnexistingAvisException;
-import Controller.UnexistingInfoException;
 import Model.StatutDemande;
+import Model.UnexistingAvisException;
+import Model.UnexistingInfoException;
 
 public class ViewAvis extends JFrame implements ActionListener{
 	

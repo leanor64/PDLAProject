@@ -8,7 +8,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.*;
 
+import Model.BadLengthException;
 import Model.StatutDemande;
+import Model.UnexistingAvisException;
+import Model.UnexistingDemandException;
+import Model.UnexistingInfoException;
+import Model.UnexistingUserException;
 
 public class MainController {
       

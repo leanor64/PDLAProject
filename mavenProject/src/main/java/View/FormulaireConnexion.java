@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import Controller.*;
+import Model.UnexistingUserException;
 
 public class FormulaireConnexion extends JFrame implements ActionListener {
 	

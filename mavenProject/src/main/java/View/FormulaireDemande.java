@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import javax.swing.*;
 
 import Controller.*;
+import Model.BadLengthException;
 
 public class FormulaireDemande extends JFrame implements ActionListener, KeyListener{
 	

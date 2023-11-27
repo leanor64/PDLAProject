@@ -9,6 +9,9 @@ import java.awt.event.ItemListener;
 import javax.swing.*;
 import Controller.*;
 import Model.StatutDemande;
+import Model.UnexistingDemandException;
+import Model.UnexistingInfoException;
+import Model.UnexistingUserException;
 
 public class ViewBenevole extends JFrame implements ActionListener, ItemListener{
 

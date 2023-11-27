@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import Controller.MainController;
-import Controller.UnexistingDemandException;
-import Controller.UnexistingInfoException;
 import Model.StatutDemande;
+import Model.UnexistingDemandException;
+import Model.UnexistingInfoException;
 
 public class ViewBeneficiaire extends JFrame implements ActionListener, ItemListener {
 

@@ -11,7 +11,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
+import Model.BadLengthException;
 import Model.StatutDemande;
+import Model.UnexistingDemandException;
+import Model.UnexistingUserException;
 
 
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener, KeyListener{

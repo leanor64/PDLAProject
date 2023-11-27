@@ -4,6 +4,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Controller.*;
+import Model.BadLengthException;
 
 import java.awt.Color;
 import java.awt.Font;
