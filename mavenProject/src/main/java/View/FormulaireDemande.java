@@ -137,8 +137,6 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 				demandeOK = true;
 			} catch (BadLengthException exc1) {
 				afficherTailleNonValide(exc1.getMessage());
-			} catch (SQLIntegrityConstraintViolationException exc2) {
-				System.out.println("Erreur SQLIntegrityConstraintViolationException");
 			} catch (UnexistingUserException exc3) {
 				System.out.println("Erreur User inconnus");
 			}

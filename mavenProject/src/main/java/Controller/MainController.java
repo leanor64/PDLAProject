@@ -19,6 +19,36 @@ public class MainController {
       
 	public MainController(){}
 	
+	public static void PrintDB (String table) {
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";
+		try {
+			Connection conn = DriverManager.getConnection(url, user, passwd);            	    
+		    Statement state = conn.createStatement();
+		    
+	        ResultSet res = state.executeQuery("SELECT * FROM "+ table);
+	        ResultSetMetaData resultMeta = res.getMetaData();                                     
+	        System.out.println("\n****************************************************************************");
+	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
+	            System.out.print("  " + resultMeta.getColumnName(i).toUpperCase() + " ");
+	        System.out.println("\n****************************************************************************");
+	        while(res.next()){
+	            for(int i = 1; i <= resultMeta.getColumnCount(); i++)
+	                System.out.print("      " + res.getObject(i).toString() + "      ");
+	            System.out.println("\n---------------------------------------------------------------------------");
+	        } 
+	        res.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		    System.out.println("Erreur");
+	    	System.exit(0);
+		}
+		
+		
+		
+	}
+	
 	public static boolean ExistsInDB (String table, String primaryKey){
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
@@ -108,20 +138,7 @@ public class MainController {
 			String commande = "INSERT into Person VALUES ('" +idUser+"','" +nom+ "','" +prenom+ "','" +age+"','" +type+ "','" +email+"','" +telephone+"','" +ville+"','" +adresse+"','" +0.0+"','" +password+"','" +0+"');";
 		    state.executeUpdate(commande);
 	        
-	        //Print la database
-	        ResultSet result = state.executeQuery("SELECT * FROM Person");
-	        ResultSetMetaData resultMeta = result.getMetaData();                                     
-	        System.out.println("\n****************************************************************************");
-	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	            System.out.print("  " + resultMeta.getColumnName(i).toUpperCase() + " ");
-	        System.out.println("\n****************************************************************************");
-	        while(result.next()){
-	            for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	                System.out.print("      " + result.getObject(i).toString() + "      ");
-	            System.out.println("\n---------------------------------------------------------------------------");
-	        }                    
 	        //fermer la connexion avec la base de données
-	        result.close();
 	        state.close();
 	        
 		} catch (SQLIntegrityConstraintViolationException exc) {
@@ -134,7 +151,11 @@ public class MainController {
 		
 	}
 	
-	public static void NewAvis(String message, String destinataire, String emetteur, int note) throws SQLIntegrityConstraintViolationException, BadLengthException, UnexistingUserException{
+	public static void NewAvis(String message, String destinataire, String emetteur, int note) throws BadLengthException, UnexistingUserException{
+		int noAvis = 1 ;
+		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
+		String user = "projet_gei_014";
+		String passwd = "Rei4wie9";		
 		
 		/*vérification taille des arguments*/
 		if (message.length() > 300) {
@@ -152,17 +173,14 @@ public class MainController {
 	    	throw (new UnexistingUserException("Emetteur inexistant"));
 	    } 
 		
-		int noAvis = 1 ;
-		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
-		String user = "projet_gei_014";
-		String passwd = "Rei4wie9";
-		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
 		    
+
 	    	 //mise à jour de la note du destinataire
 		    ResultSet result2 = state.executeQuery("SELECT * FROM Person WHERE userName = '"+destinataire+"';");
+		    result2.next();
 		    int oldNbAvis = result2.getInt(12) ;
 		    float newNote = note ;
 		    if (!(oldNbAvis == 0)) {
@@ -171,7 +189,7 @@ public class MainController {
 		    }
 		    String commande2 = "UPDATE Person SET nbAvis = '" +(oldNbAvis+1)+ "', note = '"+newNote+"' WHERE userName = '"+destinataire+"' ;";
 		    state.executeUpdate(commande2);
-		    
+
 
 		    //réaliser la commande dans la database et récupérer le nombre de lignes trouvées
 		    ResultSet result = state.executeQuery("SELECT MAX(num) FROM Avis ;");
@@ -180,32 +198,17 @@ public class MainController {
 		    if (result.next()) {
 		    	noAvis =result.getInt(1)+1;
 		    }
+
 		    
 			//insérer l'avis dans la database
 			String commande = "INSERT into Avis VALUES ('" +noAvis+"','"+destinataire+"','" +emetteur+ "','" +message+ "','" +note+"');";
-		    state.executeUpdate(commande);
-		    		    
-		    //Print la database Avis
-	        ResultSet res = state.executeQuery("SELECT * FROM Avis");
-	        ResultSetMetaData resultMeta = res.getMetaData();                                     
-	        System.out.println("\n****************************************************************************");
-	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	            System.out.print("  " + resultMeta.getColumnName(i).toUpperCase() + " ");
-	        System.out.println("\n****************************************************************************");
-	        while(res.next()){
-	            for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	                System.out.print("      " + res.getObject(i).toString() + "      ");
-	            System.out.println("\n---------------------------------------------------------------------------");
-	        }                
-		   
-	        //fermer la connexion avec la base de données
+			state.executeUpdate(commande);
+		    	
 	        result.close();
 	        result2.close();
-	        res.close();
 	        state.close();
 	        
-		} catch (SQLIntegrityConstraintViolationException exc) {
-			throw exc;
+	        
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -214,7 +217,8 @@ public class MainController {
 		
 	}
 	
-	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws SQLIntegrityConstraintViolationException, BadLengthException, UnexistingUserException{
+	
+	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException, UnexistingUserException{
 		
 		int noDemande = 1 ; 
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
@@ -255,28 +259,9 @@ public class MainController {
 			//insérer l'avis dans la database
 			String commande = "INSERT into DemandeAide VALUES ('"+title+"','"+explication+"','"+demandeur+"','EN_ATTENTE','"+jour+"','"+ville+"','',"+noDemande+");";
 		    state.executeUpdate(commande);
-		    
-		    
-		    //Print la database
-	        ResultSet res = state.executeQuery("SELECT * FROM DemandeAide");
-	        ResultSetMetaData resultMeta = res.getMetaData();                                     
-	        System.out.println("\n****************************************************************************");
-	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	            System.out.print("  " + resultMeta.getColumnName(i).toUpperCase() + " ");
-	        System.out.println("\n****************************************************************************");
-	        while(res.next()){
-	            for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	                System.out.print("      " + res.getObject(i).toString() + "      ");
-	            System.out.println("\n---------------------------------------------------------------------------");
-	        }                
-		   
-	        //fermer la connexion avec la base de données
-	        res.close();
+		  
 	        state.close();
 	        
-	        
-		} catch (SQLIntegrityConstraintViolationException exc) {
-			throw exc;
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
@@ -750,14 +735,14 @@ public class MainController {
 	public static void main(String[] args) {
 		
 		try {
-		/*	NewUser ("maurice", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 1);
+			NewUser ("maurice", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 1);
 			NewUser ("albert", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 0);
 			NewUser ("pat", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 2);
 		
 			NewAvis ("Maurice il était top", "maurice", "albert", 5);
 			NewAvis ("Jean il était top", "maurice", "albert", 4);
 			NewAvis ("Patoche il était top", "maurice", "albert", 5);
-			NewAvis ("AA il était top", "maurice", "albert", 4);
+			NewAvis ("AA il était top", "maurice", "albert", 4);/*
 			
 			NewDemande ("Besoin daide 1", "Besoin daide avec détails", "albert", "08/12/2023", "Paris");
 			NewDemande ("Besoin daide 2", "Besoin daide avec détails2", "albert", "08/12/2123", "Paris");

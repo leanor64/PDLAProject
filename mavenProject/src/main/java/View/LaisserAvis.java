@@ -133,8 +133,6 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 				System.out.println("Erreur connexion");
 			} catch (UnexistingDemandException exc3) {
 				System.out.println("Erreur demande inexistante");
-			} catch (SQLIntegrityConstraintViolationException exc4) {
-				System.out.println("Erreur SQLIntegrityConstraintViolationException");
 			} catch (NumberFormatException exc5) {
 				System.out.println("Erreur NumberFormatException");
 			}
