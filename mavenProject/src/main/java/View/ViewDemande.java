@@ -130,7 +130,7 @@ public class ViewDemande extends JFrame implements ActionListener{
 			}
 			if (e.getSource().equals(btnon)) { //si refus
 				//affichage d'un pop up de confimation et demande du motif du refus
-				String[] options = {"expirée", "inappropriée", "autre"};
+				String[] options = {"expirée", "inappropriée", "autre", "retour"};
 		        int motif = JOptionPane.showOptionDialog(null, "Pourquoi estimez-vous que cette annonce est invalidable?",
 		                "Choisissez un motif",
 		                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -140,14 +140,18 @@ public class ViewDemande extends JFrame implements ActionListener{
 		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSEE_EXPIREE);
 		        	} else if (motif == 1) {
 		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSEE_INAPPROPRIEE);
-		        	} else {
+		        	} else if (motif == 2) {
 		        		MainController.setStatusOfDemand(numDemande,StatutDemande.REFUSE_AUTRE);
+		        	} else {
+		        		//on ne fait rien
 		        	}
 		        } catch (UnexistingDemandException exc) {
 					System.out.println("Erreur " + exc.getMessage());
 					dispose();
 		        }
 		        //retour au profil du valideur
+		        ViewValideur vv = new ViewValideur(idvalideur);
+				vv.setVisible(true);
 		        dispose();
 			}
 			
