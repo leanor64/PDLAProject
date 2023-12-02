@@ -14,6 +14,7 @@ import Model.StatutDemande;
 import Model.UnexistingDemandException;
 import Model.UnexistingInfoException;
 
+//interface du profil principal d'un valideur
 public class ViewValideur extends JFrame implements ItemListener, ActionListener{
 
 
@@ -34,6 +35,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		this.setTitle("Bienvenue " + idvalideur);
 		this.setSize(600,600);
 		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
 		JPanel pan = new JPanel();
@@ -49,7 +51,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		
 		demandes = new DefaultComboBoxModel<>();
 		
-		
+		//liste des annonces en attente de validation
 		for (int demande : MainController.getDemandsofStatus(StatutDemande.EN_ATTENTE)){
 			try {
 				demandes.addElement(Integer.toString(demande) + "          " +
@@ -57,23 +59,25 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 				MainController.getInfoOfDemand(demande, "beneficiaire") + "          " +
 				MainController.getInfoOfDemand(demande, "jour"));
 			} catch (UnexistingInfoException exc1) {
-				System.out.println("erreur Info Inexistante");
+				System.out.println("erreur " + exc1.getMessage());
+				dispose();
 			} catch (UnexistingDemandException exc2) {
-				System.out.println("erreur demande Inexistante");
+				System.out.println("erreur " + exc2.getMessage());
+				dispose();
 			}
 		}
-		if (demandes.getSize() == 0) {
+		if (demandes.getSize() == 0) { //si aucune annonce
 			demandes.addElement("Aucune annonce");			
 		}
 		
+		//affichage des demandes en attente
 		choixDemande = new JComboBox<>(demandes);
 		pan.add(choixDemande);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		choixDemande.setSelectedIndex(0);
 		choixDemande.setBounds(90,230,420,30);
 		choixDemande.addItemListener(this);
 		
-		
+		//bouton pour voir une annonce plus en détail et la valider ou non
 		btsuiv = new JButton("Suivant");
 		btsuiv.setBounds(230,270,150,30);
 		btsuiv.setBackground(Color.white);
@@ -82,6 +86,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		pan.add(btsuiv);
 		btsuiv.addActionListener(this);
 		
+		//bouton pour que le valideur puisse accéder à son profil bénévole
 		btbene = new JButton("Accéder à votre profil bénévole");
 		btbene.setBounds(100,400,400,30);
 		btbene.setBackground(Color.white);
@@ -90,6 +95,7 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		pan.add(btbene);
 		btbene.addActionListener(this);
 		
+		//bouton pour la déconnexion
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(150,500,300,30);
 		btdeconnexion.setBackground(Color.white);
@@ -105,47 +111,52 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		JOptionPane.showMessageDialog(null, "Vous n'avez aucune annonce correspondante");
 	}
 	
+	//méthode pour confirmer la déconnexion (affichage pop up)
 	public void confirmationDeconnexion() {
 		String[] options = {"oui", "non"};
 		int choix = JOptionPane.showOptionDialog(null, "Voulez-vous vraiment vous déconnecter?",
-            "Confiramation Déconnexion",
+            "Confirmation Déconnexion",
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     	if (choix == 0) {
-    		this.setVisible(false);
 			FormulaireConnexion fco = new FormulaireConnexion();
 			fco.setVisible(true);
+			dispose();
     	} else if (choix == 1) {
     		//on ne fait rien
     	}
 	}
 	
+	//méthode gérant ItemListener
 	public void itemStateChanged(ItemEvent i) {
 		//null
 	}
 	
+	//méthode gérant les différents boutons
 	public void actionPerformed(ActionEvent e) {
+		//récupération du numéro de la demande
 		String[] word = ((String) choixDemande.getSelectedItem()).split("          ");
 		if (e.getSource().equals(btsuiv)) {
 			if (((String)choixDemande.getSelectedItem()).equals("Aucune annonce")){
-				afficherAucuneAnnonce();
+				afficherAucuneAnnonce();// affichage pop up si aucune annonce sélectionnée
 			} else {
-				this.setVisible(false);
+				//affichage de la demande plus en détail
 				ViewDemande vd = new ViewDemande(idvalideur, Integer.parseInt(word[0]));
 				vd.setVisible(true);
+				dispose();
 			}
 		}
 		if (e.getSource().equals(btdeconnexion)) {
-			confirmationDeconnexion();
+			confirmationDeconnexion();//confirmation déconnexion
 		}
 		if (e.getSource().equals(btbene)) {
-			this.setVisible(false);
+			//affichage interface du profil bénévole 
 			ViewBenevole vbene = new ViewBenevole(idvalideur);
 			vbene.setVisible(true);
+			dispose();
 		}
 		
 	}
-	
-	
+	//TODO : a enlever
 	public static void main(String[] args) {
 		String valideur;
 		valideur = "test3";

@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLIntegrityConstraintViolationException;
 
+//Interface pour l'inscription d'un nouvel utilisateur vient un formulaire
 public class FormulaireInscription  extends JFrame implements ActionListener, ListSelectionListener, KeyListener{
 
 	
@@ -38,6 +39,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		this.setTitle("Inscription");
 		this.setSize(600,600);
 		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		inscriptionOK = false;
 		
@@ -58,6 +60,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labnom.setForeground(Color.black);
 		pan.add(labnom);
 		
+		//Champ pour que l'utilisateur rentre son nom
 		jtfnom = new JTextField();
 		jtfnom.setBounds(160,60,200,25);
 		jtfnom.addKeyListener(this);
@@ -69,6 +72,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labprenom.setForeground(Color.black);
 		pan.add(labprenom);
 		
+		//Champ pour que l'utilisateur rentre son prénom
 		jtfprenom = new JTextField();
 		jtfprenom.setBounds(160,100,200,25);
 		jtfprenom.addKeyListener(this);
@@ -80,6 +84,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labage.setForeground(Color.black);
 		pan.add(labage);
 		
+		//Champ pour que l'utilisateur rentre son age
 		jtfage=new JTextField();
 		jtfage.setBounds(160,140,200,25);
 		jtfage.addKeyListener(this);
@@ -91,6 +96,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labemail.setForeground(Color.black);
 		pan.add(labemail);
 		
+		//Champ pour que l'utilisateur rentre son email
 		jtfemail = new JTextField();
 		jtfemail.setBounds(160,180,200,25);
 		jtfemail.addKeyListener(this);
@@ -102,6 +108,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labtelephone.setForeground(Color.black);
 		pan.add(labtelephone);
 		
+		//Champ pour que l'utilisateur rentre son telephone
 		jtftelephone = new JTextField();
 		jtftelephone.setBounds(160,220,200,25);
 		jtftelephone.addKeyListener(this);
@@ -113,6 +120,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labville.setForeground(Color.black);
 		pan.add(labville);
 		
+		//Champ pour que l'utilisateur rentre sa ville
 		jtfville = new JTextField();
 		jtfville.setBounds(160,260,200,25);
 		jtfville.addKeyListener(this);
@@ -124,6 +132,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labadresse.setForeground(Color.black);
 		pan.add(labadresse);
 		
+		//Champ pour que l'utilisateur rentre son adresse
 		jtfadresse = new JTextField();
 		jtfadresse.setBounds(160,300,200,25);
 		jtfadresse.addKeyListener(this);
@@ -135,17 +144,19 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labid.setForeground(Color.black);
 		pan.add(labid);
 		
+		//Champ pour que l'utilisateur rentre son identifiant
 		jtfid = new JTextField();
 		jtfid.setBounds(160,340,200,25);
 		jtfid.addKeyListener(this);
 		pan.add(jtfid);
 		
-		labpassword = new JLabel("Mot de passe :"); //Vérifier que cet id n'existe pas déjà
+		labpassword = new JLabel("Mot de passe :");
 		labpassword.setBounds(20,380,300,30);
 		labpassword.setFont(new Font("Arial",Font.BOLD,18));
 		labpassword.setForeground(Color.black);
 		pan.add(labpassword);
 		
+		//Champ pour que l'utilisateur rentre son mot de passe (caché pour plus de sécurité) 
 		jpfpassword = new JPasswordField();
 		jpfpassword.setBounds(160,380,200,25);
 		jpfpassword.addKeyListener(this);
@@ -163,15 +174,16 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		labtype.setForeground(Color.black);
 		pan.add(labtype);
 		
+		//L'utilisateur peut choisir son profil : bénévole, bénéficiaiare ou valideur
 		liste = new JList<>(choix);
 		liste.setBounds(320,420,200,55);
 		liste.addListSelectionListener(this);
 		etiquette = new JLabel(" ");
 		pan.add(etiquette);
 		pan.add(liste);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		etiquette.setText((String)liste.getSelectedValue());
 		
+		//bouton pour valider ses informations
 		btajout = new JButton("S'inscrire");
 		btajout.setBounds(225,520,150,30);
 		btajout.setBackground(Color.white);
@@ -183,23 +195,27 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 		
 	//Méthodes
 	
+	//s'affiche si l'identifiant saisi est déjà utilisé
 	public void afficherIDDejaUtilise() {
 		JOptionPane.showMessageDialog(this, "Identifiant déjà utilisé, veuillez en saisir un nouveau");
 	}
 	
+	//s'affiche si la chaîne de caractères saisie n'a pas une taille valide
 	public void afficherTailleNonValide(String info) {
 		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
 	}
 	
+	//s'affiche si l'age saisi n'est pas un int
 	public void afficherAgeNonValide() {
 		JOptionPane.showMessageDialog(this, "Age invalide, veuillez rentrer un nombre entier");
 	}
 	
+	//s'affiche si aucune option de profil n'est selectionnée
 	public void afficherPasOption() {
 		JOptionPane.showMessageDialog(this, "Veuillez choisir un rôle : bénévole, bénéficiaire ou valideur");
 	}
     
-	
+	//pour convertir le mdp en String
 	public String toString(char[] password) {
 		String result = "";
 		for (int i = 0;i<password.length;i++) {
@@ -212,27 +228,26 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 	public boolean isCaractereAutorise(char c) {
 	    return c != '"' && c != '\'' && c != '`' && c != '\\';
 	}
-	
 	public void keyTyped(KeyEvent k) {
         if (!isCaractereAutorise(k.getKeyChar())) {
             k.consume();
         }
     }	
-	
 	public void keyPressed(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
 	}
-	
 	public void keyReleased(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
 	}
 	
 	
-	/*
+	/* Correspondance des types
 	 * 0 : Bénévole
 	 * 1 : Bénéficiaire
 	 * 2 : Valideur
 	*/
+	
+	//pour obtenir le type de profil selectionné par l'utilisateur
 	public void valueChanged(ListSelectionEvent evt) { 
 		 etiquette.setText((String)liste.getSelectedValue());
 		 if ((String)liste.getSelectedValue() == "Bénévole"){
@@ -244,13 +259,15 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 			 type = 2;
 		 }
 	}
-		
+	
+	//pour gérer les différents boutons
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btajout) {
+		if (e.getSource().equals(btajout)) {
 			if (liste.isSelectionEmpty()) {
 				afficherPasOption();
 			} else {
 				try {
+					//création du nouvel utilisateur dans la database
 					MainController.NewUser(jtfid.getText(), toString(jpfpassword.getPassword()), jtfnom.getText(),
 					jtfprenom.getText(), Integer.parseInt(jtfage.getText()), jtfemail.getText(),
 					jtftelephone.getText(), jtfville.getText(), jtfadresse.getText(), type);
@@ -265,7 +282,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 			}
 		}
 		if (inscriptionOK == true) {
-			this.setVisible(false);
+			//affichage de la vue correspondant au type de profil de l'utilisateur
 			if (type == 0) {
 				ViewBenevole viewbn = new ViewBenevole(jtfid.getText());
 				viewbn.setVisible(true);
@@ -276,10 +293,11 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 				ViewValideur viewv = new ViewValideur(jtfid.getText());
 				viewv.setVisible(true);
 			}
+			dispose();
 		}
 	}
 	
-
+//TODO : a enlever
 	public static void main(String[] args) {
 		
      FormulaireInscription form = new FormulaireInscription();

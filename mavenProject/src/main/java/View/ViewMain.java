@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+//Interface principale de l'application
 public class ViewMain extends JFrame implements ActionListener {
 	
 
@@ -20,6 +21,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			this.setTitle("Bienvenue sur l'application d'entraide");
 			this.setSize(600,600);
 			this.setResizable(false);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setLocationRelativeTo(null);
 
 			JPanel pan = new JPanel();
@@ -33,6 +35,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			labtitre.setForeground(Color.black);
 			pan.add(labtitre);
 
+			//bouton pour s'inscrire à l'application
 			btinscr = new JButton("S'inscrire");
 			btinscr.setBounds(60,250,200,30);
 			btinscr.setBackground(Color.white);
@@ -41,6 +44,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			pan.add(btinscr);
 			btinscr.addActionListener(this);
 			
+			//bouton pour se connecter à l'application
 			btconnex = new JButton("Se connecter");
 			btconnex.setBounds(330,250,200,30);
 			btconnex.setBackground(Color.white);
@@ -53,15 +57,18 @@ public class ViewMain extends JFrame implements ActionListener {
 		
 		//Méthodes
 		
+		//méthode pour gérer les différents boutons
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(btinscr)) {
-				this.setVisible(false);
+				//affichage de l'interface d'inscription
 				FormulaireInscription fi = new FormulaireInscription();
 				fi.setVisible(true);
+				dispose();
 			} else if (e.getSource().equals(btconnex)) {
-				this.setVisible(false);
+				//affichage de l'interface de la connexion
 				FormulaireConnexion fc = new FormulaireConnexion();
 				fc.setVisible(true);
+				dispose();
 			}
 		}
 

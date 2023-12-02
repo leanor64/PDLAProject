@@ -16,7 +16,7 @@ import Model.StatutDemande;
 import Model.UnexistingDemandException;
 import Model.UnexistingUserException;
 
-
+//interface via laquelle un bénéficiare peut laisser un avis à un bénéficiaire
 public class LaisserAvis extends JFrame implements ListSelectionListener, ActionListener, KeyListener{
 	
 
@@ -39,9 +39,10 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		
 		avisOK = false;
 		
-		this.setTitle("Votre retour d'expérience") /* à " + benev.getPrenom())*/;
+		this.setTitle("Votre retour d'experience");
 		this.setSize(600,600);
 		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
 		JPanel pan = new JPanel();
@@ -61,6 +62,7 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		labavis.setForeground(Color.black);
 		pan.add(labavis);
 		
+		//zone de texte pour saisir l'avis
 		jtfavis = new JTextField();
 		jtfavis.setBounds(220,150,300,100);
 		jtfavis.addKeyListener(this);
@@ -72,15 +74,16 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		labnote.setForeground(Color.black);
 		pan.add(labnote);
 		
+		//le bénévole peut sélectionner une note entre 0 et 5
 		liste = new JList<>(choix);
 		liste.setBounds(220,350,300,110);
 		liste.addListSelectionListener(this);
 		etiquette = new JLabel(" ");
 		pan.add(etiquette);
 		pan.add(liste);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		etiquette.setText((String)liste.getSelectedValue());
 			
+		//bouton pour enregistrer l'avis
 		btajout = new JButton("Enregistrer");
 		btajout.setBounds(200,500,150,30);
 		btajout.setBackground(Color.white);
@@ -99,55 +102,55 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		JOptionPane.showMessageDialog(this,info + " invalide, attention à respecter le nombre de caractères");
 	}
 	
+	//méthodes pour interdire la saisie de certains caractères spéciaux
 	public boolean isCaractereAutorise(char c) {
 	    return c != '"' && c != '\'' && c != '`' && c != '\\';
 	}
-	
 	public void keyTyped(KeyEvent k) {
         if (!isCaractereAutorise(k.getKeyChar())) {
             k.consume();
         }
     }	
-	
 	public void keyPressed(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
 	}
-	
 	public void keyReleased(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
 	}
 	
+	//méthode pour gérer le bouton "enregistrer"
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btajout)) {
 			try {
-				System.out.println("avis :" + jtfavis.getText());
-				System.out.println("benev :" + idbenev);
-				System.out.println("benef :" + idbenef);
-				System.out.println("benef :" + (String)liste.getSelectedValue());
-			MainController.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
-			avisOK = true;
-			MainController.setStatusOfDemand(nodemande, StatutDemande.TERMINEE_EVALUEE);
+				//ajout de l'avis dans la database
+				MainController.NewAvis(jtfavis.getText(),idbenev,idbenef,Integer.parseInt(((String)liste.getSelectedValue())));
+				avisOK = true;
+				//changement de l'état de la demande dans la database
+				MainController.setStatusOfDemand(nodemande, StatutDemande.TERMINEE_EVALUEE);
 			} catch (BadLengthException exc1) {
-				afficherTailleNonValide(exc1.getMessage());
+					afficherTailleNonValide(exc1.getMessage());
 			} catch (UnexistingUserException exc2) {
-				System.out.println("Erreur connexion");
+				System.out.println("Erreur " + exc2.getMessage());
+				dispose();
 			} catch (UnexistingDemandException exc3) {
-				System.out.println("Erreur demande inexistante");
-			} catch (NumberFormatException exc5) {
-				System.out.println("Erreur NumberFormatException");
+				System.out.println("Erreur " + exc3.getMessage());
+				dispose();
+			} catch (NumberFormatException exc4) {
+				System.out.println("Erreur " + exc4.getMessage());
+				dispose();
 			}
 		}
 		if (avisOK == true) {
-			this.setVisible(false);
-		
+			//retour au profil principal du bénéficiaire
+			dispose();
 		}
 	}
 	
+	//méthode pour gérer la note sélectionnée par le bénéficiaire
 	public void valueChanged(ListSelectionEvent evt) { 
 		 etiquette.setText((String)liste.getSelectedValue());
 	}
-	
-	
+	//TODO :  a enlever
 	public static void main(String[] args) {
 		String benev, benef;
 		int no;
@@ -158,7 +161,4 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 		LaisserAvis avis = new LaisserAvis(no,benef,benev);
 	    avis.setVisible(true);
 	}
-
-	
-
 }

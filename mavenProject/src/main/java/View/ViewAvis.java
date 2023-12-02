@@ -14,6 +14,7 @@ import Model.UnexistingAvisException;
 import Model.UnexistingInfoException;
 import Model.UnexistingUserException;
 
+//Interface pour afficher les avis antérieur d'un utilisateur
 public class ViewAvis extends JFrame implements ActionListener{
 	
 	//Attributs
@@ -21,7 +22,7 @@ public class ViewAvis extends JFrame implements ActionListener{
 	JLabel labtitre, labtitredemande, labdemande, labbenef, labville;
 	JTextField jtfmotif;
 	JButton btretour;
-	String idbenevole;
+	String id;
 	
 	DefaultTableModel avis;
 	JTable tableavis;
@@ -29,12 +30,13 @@ public class ViewAvis extends JFrame implements ActionListener{
 	
 			
 	//Constructeur
-	public ViewAvis(String idbenevole) {
-		this.idbenevole = idbenevole;
+	public ViewAvis(String id) {
+		this.id = id;
 				
-		this.setTitle("Bienvenue " + idbenevole);
+		this.setTitle("Bienvenue " + id);
 		this.setSize(600,600);
 		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
 		JPanel pan = new JPanel();
@@ -56,28 +58,34 @@ public class ViewAvis extends JFrame implements ActionListener{
         avis.addColumn("Note");
 
         try {
-			for (int noavis : MainController.getListOfAvis(idbenevole)) {
+        	//création du tableau présentant les avis du user "id"
+			for (int noavis : MainController.getListOfAvis(id)) {
 				try {
 					avis.addRow(new String[]{MainController.getInfoOfAvis(noavis,"emetteur"),MainController.getInfoOfAvis(noavis,"commentaire"),MainController.getInfoOfAvis(noavis,"note")});
 				} catch (UnexistingInfoException exc1) {
-					System.out.println("Erreur Info inexistante");
+					System.out.println("Erreur " + exc1.getMessage());
+					dispose();
 				} catch (UnexistingAvisException exc2 ) {
-					System.out.println("Erreur Avis inexistant");
+					System.out.println("Erreur " + exc2.getMessage());
+					dispose();
 				}
 			}
 		} catch (UnexistingUserException exc) {
-			System.out.println("Erreur User inconnu");
+			System.out.println("Erreur " + exc.getMessage());
+			dispose();
 		}
-        if ((avis).getRowCount() == 0) {
+        if ((avis).getRowCount() == 0) { //si aucun avis pour le moment
 			avis.addRow(new String[]{"Aucun avis","pour","le moment"});
 		}
         
+        //affichage de la table d'avis
         tableavis = new JTable(avis);
         tableavis.setBounds(70,250,450,70);
         scrollPane = new JScrollPane(tableavis);
         scrollPane.setBounds(70,250,450,70);
         pan.add(scrollPane);
 				
+        //bouton pour revenir au profil principal de l'utilisateur
 		btretour = new JButton("RETOUR");
 		btretour.setBounds(220,500,150,30);
 		btretour.setBackground(Color.white);
@@ -92,14 +100,17 @@ public class ViewAvis extends JFrame implements ActionListener{
 			
 	//Méthodes
 				
+	//méthode pour gérer le bouton "retour"
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btretour)) {
-			this.setVisible(false);			
+			//retour sur le profil principal de l'utilisateur
+			dispose();		
 		}
 	}
 			
+	//TODO : a enlever
 	public static void main(String[] args) {
-		String benevole = "test0";		
+		String benevole = "albert";		
 		ViewAvis va = new ViewAvis(benevole);
 		va.setVisible(true);
 	}

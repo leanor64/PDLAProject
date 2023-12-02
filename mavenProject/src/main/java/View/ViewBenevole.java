@@ -13,13 +13,14 @@ import Model.UnexistingDemandException;
 import Model.UnexistingInfoException;
 import Model.UnexistingUserException;
 
+//interface du profil d'un bénévole
 public class ViewBenevole extends JFrame implements ActionListener, ItemListener{
 
 	
 	//Attributs
 	String idbenevole;
 	JLabel labtitre;
-	JButton btdeconnexion, btvalideur, btsuivant, btavis;
+	JButton btdeconnexion, btvalideur, btsuivant, btavis, btchangerinfos;
 	
 	DefaultComboBoxModel<String> demandes;
 	JComboBox<String> choixDemande;
@@ -31,6 +32,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		this.setTitle("Bienvenue " + idbenevole);
 		this.setSize(600,600);
 		this.setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
 		JPanel pan = new JPanel();
@@ -45,6 +47,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		pan.add(labtitre);
 		
 		try {
+			//Si utilisateur est un valideur il peut également avoir un profil bénévole
 			if (MainController.getTypeOfUser(idbenevole) == 2) {
 				btvalideur = new JButton("Accéder à votre profil Valideur");
 				btvalideur.setBounds(110,450,400,30);
@@ -55,12 +58,13 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 				btvalideur.addActionListener(this);
 			}
 		} catch (UnexistingUserException excp) {
-			System.out.println("Erreur bouton valideur/bénévole");
+			System.out.println("Erreur " + excp.getMessage());
+			dispose();
 		}
 		
 		demandes = new DefaultComboBoxModel<>();
 		
-		
+		//liste des demandes disponibles
 		for (int demande : MainController.getDemandsofStatus(StatutDemande.VALIDEE)){
 			try {
 				demandes.addElement(demande + "          " + 
@@ -69,22 +73,25 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 				MainController.getInfoOfDemand(demande, "jour") + "          " +
 				MainController.getInfoOfDemand(demande, "ville"));
 			} catch (UnexistingInfoException exc1) {
-				System.out.println("erreur getInfoOfDemand()");
+				System.out.println("erreur " + exc1.getMessage());
+				dispose();
 			} catch (UnexistingDemandException exc2) {
-				System.out.println("erreur getInfoOfDemand()");
+				System.out.println("erreur " + exc2.getMessage());
+				dispose();
 			} 
 		}
-		if (demandes.getSize() == 0) {
+		if (demandes.getSize() == 0) {//si aucune demande disponible
 			demandes.addElement("Aucune annonce");			
 		}
 		
+		//affichage des annonces dispo
 		choixDemande = new JComboBox<>(demandes);
 		pan.add(choixDemande);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		choixDemande.setSelectedIndex(0);
 		choixDemande.setBounds(100,150,400,30);
 		choixDemande.addItemListener(this);
 		
+		//bouton pour valider la selection d'une annonce
 		btsuivant = new JButton("SUIVANT");
 		btsuivant.setBounds(200,190,200,30);
 		btsuivant.setBackground(Color.white);
@@ -93,6 +100,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		pan.add(btsuivant);
 		btsuivant.addActionListener(this);
 		
+		//bouton pour que le bénévole accède à ses avis
 		btavis = new JButton("VOIR MES AVIS");
 		btavis.setBounds(200,350,200,30);
 		btavis.setBackground(Color.white);
@@ -101,7 +109,16 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		pan.add(btavis);
 		btavis.addActionListener(this);
 		
+		//bouton pour que le bénévole puisse changer ses infos personnelles
+		btchangerinfos = new JButton("CHANGER VOS INFOS PERSONNELLES");
+		btchangerinfos.setBounds(150,450,300,30);
+		btchangerinfos.setBackground(Color.white);
+		btchangerinfos.setFont(new Font("Arial",Font.BOLD,13));
+		btchangerinfos.setForeground(Color.black);
+		pan.add(btchangerinfos);
+		btchangerinfos.addActionListener(this);		
 		
+		//bouton de déconnexion
 		btdeconnexion = new JButton("DECONNEXION");
 		btdeconnexion.setBounds(200,500,200,30);
 		btdeconnexion.setBackground(Color.white);
@@ -118,50 +135,63 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		JOptionPane.showMessageDialog(this, "Vous n'avez aucune annonce correspondante");
 	}
 	
+	//méthode pour affichant pop up pour confirmer la déconnexion
 	public void confirmationDeconnexion() {
 		String[] options = {"oui", "non"};
 		int choix = JOptionPane.showOptionDialog(null, "Voulez-vous vraiment vous déconnecter?",
             "Confiramation Déconnexion",
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     	if (choix == 0) {
-    		this.setVisible(false);
 			FormulaireConnexion fco = new FormulaireConnexion();
 			fco.setVisible(true);
+			dispose();
     	} else if (choix == 1) {
     		//on ne fait rien
     	}
 	}
 	
+	//gestion ItemListener
 	public void itemStateChanged(ItemEvent i) {
 		//null
 	}
 	
+	//gestion des différents boutons
 	public void actionPerformed(ActionEvent e) {
+		//pour récupérer le numéro de la demande dans la chaine de caractères
 		String[] word = ((String) choixDemande.getSelectedItem()).split(" ");
 		if (e.getSource().equals(btsuivant)) {
 			if ((String)choixDemande.getSelectedItem() == "Aucune annonce"){
-				afficherAucuneAnnonce();
+				afficherAucuneAnnonce(); //pop up pour signaler au bénévole qu'aucune annonce n'a été sélectionné
 			} else {
-				this.setVisible(false);
+				//affichage de l'annonce plus en détails
 				ViewDemandeBenevole vdb = new ViewDemandeBenevole(idbenevole,Integer.parseInt(word[0]));
 				vdb.setVisible(true);
+				dispose();
 			}
 		} else {
 			if (e.getSource().equals(btdeconnexion)) {
-				confirmationDeconnexion();
+				confirmationDeconnexion(); //confiamation de la deconnexion
 			}
 			if (e.getSource().equals(btvalideur)) {
-				this.setVisible(false);
+				//affichage du profil valideur du bénévole
 				ViewValideur vva = new ViewValideur(idbenevole);
 				vva.setVisible(true);
+				dispose();
 			}
 			if (e.getSource().equals(btavis)) {
+				//affichage de l'interface ViewAvis
 				ViewAvis va = new ViewAvis(idbenevole);
 				va.setVisible(true);
+			}
+			if (e.getSource().equals(btchangerinfos)) {
+				//affichage de l'interface ChangementInfos
+				ChangementInfos ci = new ChangementInfos(idbenevole);
+				ci.setVisible(true);
 			}
 		}
 	}
 	
+	//TODO : a enlever
 	public static void main(String[] args) {
 		String benevole;
 		benevole = "test0";

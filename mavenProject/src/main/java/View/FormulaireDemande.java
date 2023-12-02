@@ -12,6 +12,7 @@ import Controller.*;
 import Model.BadLengthException;
 import Model.UnexistingUserException;
 
+//Interface pour que le bénéficiaire puisse décrire et soumettre une annonce/demande d'aide
 public class FormulaireDemande extends JFrame implements ActionListener, KeyListener{
 	
 	//Attributs
@@ -51,6 +52,7 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 		labtitredemande.setForeground(Color.black);
 		pan.add(labtitredemande);
 		
+		//zone de texte pour saisir le titre de l'annonce
 		jtftitredemande = new JTextField();
 		jtftitredemande.setBounds(280,90,300,30);
 		jtftitredemande.addKeyListener(this);
@@ -62,6 +64,7 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 		labdemande.setForeground(Color.black);
 		pan.add(labdemande, BorderLayout.CENTER);
 		
+		//zone de texte pour saisir précisément la demande
 		jtfdemande = new JTextField();
 		jtfdemande.setBounds(280,130,300,100);
 		jtfdemande.addKeyListener(this);
@@ -73,6 +76,7 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 		labdate.setForeground(Color.black);
 		pan.add(labdate);
 		
+		//zone de texte pour saisir la date
 		jtfdate = new JTextField();
 		jtfdate.setBounds(280,270,300,25);
 		jtfdate.addKeyListener(this);
@@ -84,12 +88,13 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 		labville.setForeground(Color.black);
 		pan.add(labville);
 		
+		//zone de texte pour saisir la ville
 		jtfville = new JTextField();
 		jtfville.setBounds(280,310,300,25);
 		jtfville.addKeyListener(this);
 		pan.add(jtfville);
 		
-		
+		//bouton pour enregistrer et soumettre l'annonce
 		btajout = new JButton("Enregistrer");
 		btajout.setBounds(220,450,150,30);
 		btajout.setBackground(Color.white);
@@ -111,41 +116,44 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 		JOptionPane.showMessageDialog(this, info + " invalide, veuillez rentrer votre " + info);
 	}
 	
+	//méthodes pour interdire certains caractères spéciaux
 	public boolean isCaractereAutorise(char c) {
 	    return c != '"' && c != '\'' && c != '`' && c != '\\';
 	}
-	
 	public void keyTyped(KeyEvent k) {
         if (!isCaractereAutorise(k.getKeyChar())) {
             k.consume();
         }
     }	
-	
 	public void keyPressed(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyPressed
 	}
-	
 	public void keyReleased(KeyEvent e) {
 	    // Ne rien faire ici, car nous n'utilisons pas keyReleased
 	}
 	
+	//méthode pour gérer le bouton
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btajout) {
-			//System.out.println("vous avez cliqué sur le bouton Enregistrer");
+		if (e.getSource().equals(btajout)) {//si l'utilisateur appuie sur le bonton "enregistrer"
 			try {
+				//on ajoute sa demande à la base de données
 				MainController.NewDemande(jtftitredemande.getText(),jtfdemande.getText(),idbenef,jtfdate.getText(), jtfville.getText());
 				demandeOK = true;
 			} catch (BadLengthException exc1) {
-				afficherTailleNonValide(exc1.getMessage());
-			} catch (UnexistingUserException exc3) {
-				System.out.println("Erreur User inconnus");
+				afficherTailleNonValide("Erreur " + exc1.getMessage());
+				dispose();
+			} catch (UnexistingUserException exc2) {
+				System.out.println("Erreur " + exc2.getMessage());
+				dispose();
 			}
 		}
 		if (demandeOK == true) {
-			this.setVisible(false);
+			//on revient sur le profil principal du bénéficiaire
+			dispose();
 		}
 	}
 	
+	//TODO : a enlever
 	public static void main(String[] args) {
 		String beneficiaire;
 		beneficiaire = "test1";
