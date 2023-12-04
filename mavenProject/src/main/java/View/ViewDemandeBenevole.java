@@ -73,8 +73,6 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 				labbenef.setFont(new Font("Arial",Font.BOLD,18));
 				labbenef.setForeground(Color.black);
 				pan.add(labbenef);
-				
-				//TODO : la date
 			
 				//localisation de la demande
 				labville = new JLabel("Ville : " + MainController.getInfoOfDemand(numDemande, "ville"));
@@ -121,8 +119,7 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 					MainController.setStatusOfDemand(numDemande,StatutDemande.ACCEPTEE);
 					//retour sur le profil principal du bénévole
 					this.setVisible(false);
-					ViewBenevole vb = new ViewBenevole(idbenevole);
-					vb.setVisible(true);
+					dispose();
 				} catch (UnexistingDemandException exc) {
 					System.out.println("Erreur " + exc.getMessage());
 					dispose();
@@ -142,11 +139,5 @@ public class ViewDemandeBenevole extends JFrame implements ActionListener{
 			}
 			
 		}
-		//TODO : a enlever
-		public static void main(String[] args) {			
-			String bene = "test1";
-			ViewDemandeBenevole vdb = new ViewDemandeBenevole(bene,1);
-		    vdb.setVisible(true);
-			}
 
 }

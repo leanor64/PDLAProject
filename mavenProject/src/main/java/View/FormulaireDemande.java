@@ -152,16 +152,6 @@ public class FormulaireDemande extends JFrame implements ActionListener, KeyList
 			dispose();
 		}
 	}
-	
-	//TODO : a enlever
-	public static void main(String[] args) {
-		String beneficiaire;
-		beneficiaire = "test1";
-	    
-		FormulaireDemande demande = new FormulaireDemande(beneficiaire);
-	    demande.setVisible(true);
-		}
 
-	
 
 }

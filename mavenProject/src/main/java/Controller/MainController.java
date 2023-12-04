@@ -319,7 +319,9 @@ public class MainController {
 
 		    /*On récupère la ligne correspondant à idUser dans la base de données pour obtenir son type (0, 1 ou 2)*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Person WHERE userName = '"+idUser+"';");
-		    type = res.getInt(5) ;
+		    if (res.next()) {
+		    	type = res.getInt(5) ;
+		    }
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
@@ -373,7 +375,9 @@ public class MainController {
 
 		    /*On récupère la ligne correspondant au numero de la demande dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE num = '"+noDemande+"';");
+		    if (res.next()) {
 		    information = res.getString(column) ;
+		    }
 		    
 		    
 		  //fermer la connexion avec la base de données
@@ -427,7 +431,7 @@ public class MainController {
 		} else if (info.equals("nbAvis")) {
 			column = 12;
 		} else {
-			throw new UnexistingInfoException(info + "n'est pas un attribut d'une personne");
+			throw new UnexistingInfoException(info + " n'est pas un attribut d'une personne");
 		}
 		
 		
@@ -437,11 +441,14 @@ public class MainController {
 
 		    /*On récupère la ligne correspondant à l'id dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Person WHERE userName = '"+idUser+"';");
+		    if (res.next()) {
 			information = res.getString(column) ;
+		    
 		    		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+		    }
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
@@ -485,11 +492,13 @@ public class MainController {
 
 		    /*On récupère la ligne correspondant au title dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Avis WHERE num = '"+noAvis+"';");
+		    if (res.next()) {
 			information = res.getString(column) ;
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+		    }
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();

@@ -30,9 +30,6 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 	
 	//Constructeur
 	public ChangementInfos(String idUser){
-		
-		updateFields(); // TODO : a voir si ok OU NON
-		
 		this.idUser = idUser;
 		
 		this.setTitle("Modifier vos informations personnelles");
@@ -168,7 +165,8 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 		pan.add(btajout);
 		btajout.addActionListener(this);
 		
-		
+		//ajout des infos de l'utilisateur dans les zones de texte
+		updateFields();
 		
 	}
 		
@@ -196,10 +194,11 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 				MainController.setInfoOfUser(idUser,"nom",jtfnom.getText());
 				MainController.setInfoOfUser(idUser,"prenom",jtfprenom.getText());
 				MainController.setInfoOfUser(idUser,"age",jtfage.getText());
+				MainController.setInfoOfUser(idUser,"email",jtfemail.getText());
 				MainController.setInfoOfUser(idUser,"adresse",jtfadresse.getText());
 				MainController.setInfoOfUser(idUser,"ville",jtfville.getText());
 				MainController.setInfoOfUser(idUser,"telephone",jtftelephone.getText());
-				MainController.setInfoOfUser(idUser,"motdepasse",toString(jpfpassword.getPassword()));
+				MainController.setInfoOfUser(idUser,"mot de passe",toString(jpfpassword.getPassword()));
 				dispose();
 			} catch (UnexistingInfoException exc1) {
 				System.out.println("erreur " + exc1.getMessage());
@@ -236,10 +235,19 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 		}
 		return result;
 	}
-	//pour mettre à jour les zone de texte avec ses infos déjà enregistrées dans la database
+	
+	//pour mettre à jour les zones de texte avec les infos du user déjà enregistrées dans la database
 	private void updateFields() {
 		try {
+			System.out.println("nom : " + MainController.getInfoOfUser(idUser,"nom"));
 			jtfnom.setText(MainController.getInfoOfUser(idUser,"nom"));
+			jtfprenom.setText(MainController.getInfoOfUser(idUser,"prenom"));
+			jtfage.setText(MainController.getInfoOfUser(idUser,"age")); 
+			jtfemail.setText(MainController.getInfoOfUser(idUser,"email"));
+			jtfadresse.setText(MainController.getInfoOfUser(idUser,"adresse"));
+			jtftelephone.setText(MainController.getInfoOfUser(idUser,"telephone"));
+			jtfville.setText(MainController.getInfoOfUser(idUser,"ville"));
+			jpfpassword.setText(MainController.getInfoOfUser(idUser,"mot de passe"));
 		} catch (UnexistingInfoException exc1) {
 			System.out.println("erreur " + exc1.getMessage());
 			dispose();
@@ -249,10 +257,10 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 		}
 	}
 	public void insertUpdate(DocumentEvent e) {
-        updateFields();
+        //updateFields();
     }
     public void removeUpdate(DocumentEvent e) {
-        updateFields();
+        //updateFields();
     }
     public void changedUpdate(DocumentEvent e) {
         //Ne rien faire
@@ -282,14 +290,6 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 		if (e.getSource().equals(btannuler)) {
 			afficherValidationAnnuler();
 		}	
-	}
-	
-//TODO : a enlever
-	public static void main(String[] args) {
-		String user = "kkkk";
-		
-		ChangementInfos cf = new ChangementInfos(user);
-		cf.setVisible(true);
 	}
 
 }

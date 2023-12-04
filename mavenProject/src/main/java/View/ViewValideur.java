@@ -118,8 +118,8 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
             "Confirmation Déconnexion",
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     	if (choix == 0) {
-			FormulaireConnexion fco = new FormulaireConnexion();
-			fco.setVisible(true);
+			ViewMain vm = new ViewMain();
+			vm.setVisible(true);
 			dispose();
     	} else if (choix == 1) {
     		//on ne fait rien
@@ -142,7 +142,10 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 				//affichage de la demande plus en détail
 				ViewDemande vd = new ViewDemande(idvalideur, Integer.parseInt(word[0]));
 				vd.setVisible(true);
-				dispose();
+				demandes.removeElement(choixDemande.getSelectedItem());
+        		if (demandes.getSize() == 0) {//si aucune annonce 
+        			demandes.addElement("Aucune annonce");
+        		}
 			}
 		}
 		if (e.getSource().equals(btdeconnexion)) {
@@ -156,13 +159,5 @@ public class ViewValideur extends JFrame implements ItemListener, ActionListener
 		}
 		
 	}
-	//TODO : a enlever
-	public static void main(String[] args) {
-		String valideur;
-		valideur = "test3";
-		
-		ViewValideur vva = new ViewValideur(valideur);
-	    vva.setVisible(true);
-		}
 
 }

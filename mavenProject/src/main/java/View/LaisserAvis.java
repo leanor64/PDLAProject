@@ -150,15 +150,5 @@ public class LaisserAvis extends JFrame implements ListSelectionListener, Action
 	public void valueChanged(ListSelectionEvent evt) { 
 		 etiquette.setText((String)liste.getSelectedValue());
 	}
-	//TODO :  a enlever
-	public static void main(String[] args) {
-		String benev, benef;
-		int no;
-		benev = "test0";
-		benef = "test1";
-		no = 7;
-	    
-		LaisserAvis avis = new LaisserAvis(no,benef,benev);
-	    avis.setVisible(true);
-	}
+
 }

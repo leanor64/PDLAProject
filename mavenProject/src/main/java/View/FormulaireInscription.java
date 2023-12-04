@@ -296,13 +296,7 @@ public class FormulaireInscription  extends JFrame implements ActionListener, Li
 			dispose();
 		}
 	}
-	
-//TODO : a enlever
-	public static void main(String[] args) {
-		
-     FormulaireInscription form = new FormulaireInscription();
-     form.setVisible(true);
-	}
+
 
 }
 

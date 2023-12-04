@@ -36,7 +36,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			pan.add(labtitre);
 
 			//bouton pour s'inscrire à l'application
-			btinscr = new JButton("S'inscrire");
+			btinscr = new JButton("M'inscrire");
 			btinscr.setBounds(60,250,200,30);
 			btinscr.setBackground(Color.white);
 			btinscr.setFont(new Font("Arial",Font.BOLD,18));
@@ -45,7 +45,7 @@ public class ViewMain extends JFrame implements ActionListener {
 			btinscr.addActionListener(this);
 			
 			//bouton pour se connecter à l'application
-			btconnex = new JButton("Se connecter");
+			btconnex = new JButton("Me connecter");
 			btconnex.setBounds(330,250,200,30);
 			btconnex.setBackground(Color.white);
 			btconnex.setFont(new Font("Arial",Font.BOLD,18));

@@ -150,18 +150,9 @@ public class ViewDemande extends JFrame implements ActionListener{
 					dispose();
 		        }
 		        //retour au profil du valideur
-		        ViewValideur vv = new ViewValideur(idvalideur);
-				vv.setVisible(true);
 		        dispose();
 			}
 			
 		}
-		//TODO :  a enlever
-		public static void main(String[] args) {
-			String valideur = "test2";
-			int num = 1;			
-			ViewDemande vde = new ViewDemande(valideur,1);
-		    vde.setVisible(true);
-			}
 
 }

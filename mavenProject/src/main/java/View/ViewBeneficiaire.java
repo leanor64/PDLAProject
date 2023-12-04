@@ -28,7 +28,6 @@ import Model.UnexistingUserException;
 //interface du profil d'un bénéficiaire
 public class ViewBeneficiaire extends JFrame implements ActionListener, ItemListener, ListSelectionListener {
 
-	//TODO : bouton actualiser pour actualiser lors d'un changement de statut
 	//Attributs
 	
 	String idbeneficiaire, idbenevole;
@@ -244,6 +243,7 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 		JOptionPane.showMessageDialog(this, "Vous n'avez selectionné aucune option");
 	}
 	
+	
 	//Si le bénéficiaire appuie sur le bouton déconnexion, un pop up s'affiche pour qu'il confirme sa volonté de se déconnecter
 	//si confirmation on le déconnecte
 	//sinon on ne fait rien
@@ -253,8 +253,8 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
             "Confirmation déconnexion",
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     	if (choix == 0) {
-			FormulaireConnexion fco = new FormulaireConnexion();
-			fco.setVisible(true);
+			ViewMain vm = new ViewMain();
+			vm.setVisible(true);
 			dispose();
     	} else if (choix == 1) {
     		//on ne fait rien
@@ -308,9 +308,12 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 					afficherAucuneAnnonce(); //affichage d'un pop up pour signaler au bénéficiaire qu'il n'a sélectionné aucune action
 				} else {
 					//affichage de l'interface LaisserAvis
-					System.out.println("benev : " + MainController.getInfoOfDemand(Integer.parseInt(wordAE[0]),"benevole"));
 					LaisserAvis la = new LaisserAvis(Integer.parseInt(wordAE[0]),idbeneficiaire,MainController.getInfoOfDemand(Integer.parseInt(wordAE[0]),"benevole"));
 					la.setVisible(true);
+					demandesAEvaluer.removeElement(choixDemandesAEvaluer.getSelectedItem());
+	        		if (demandesAEvaluer.getSize() == 0) {//si aucune annonce 
+	        			demandesAEvaluer.addElement("Aucune annonce");
+	        		}
 				}
 			}
 			if (e.getSource().equals(btvoiravis)) {
@@ -355,6 +358,10 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 			        	if (validation == 0) {
 			        		//changement du statut de l'annonce dans la database
 			        		MainController.setStatusOfDemand(Integer.parseInt(wordAC[0]), StatutDemande.TERMINEE_PAS_EVALUEE);
+			        		demandesAcceptees.removeElement(choixDemandesAcceptees.getSelectedItem());
+			        		if (demandesAcceptees.getSize() == 0) {//si aucune annonce 
+			        			demandesAcceptees.addElement("Aucune annonce");
+			        		}
 			        	} else {
 			        		//on ne fait rien
 			        	}
@@ -383,12 +390,5 @@ public class ViewBeneficiaire extends JFrame implements ActionListener, ItemList
 			confirmationDeconnexion();
 		}
 	}
-	//TODO :  a enlever
-	public static void main(String[] args) {
-		String beneficiaire;
-		beneficiaire = "benef";
-		
-		ViewBeneficiaire vbf = new ViewBeneficiaire(beneficiaire);
-	    vbf.setVisible(true);
-		}
+
 }

@@ -33,7 +33,7 @@ public class ViewAvis extends JFrame implements ActionListener{
 	public ViewAvis(String id) {
 		this.id = id;
 				
-		this.setTitle("Bienvenue " + id);
+		this.setTitle("Avis de " + id);
 		this.setSize(600,600);
 		this.setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,13 +107,5 @@ public class ViewAvis extends JFrame implements ActionListener{
 			dispose();		
 		}
 	}
-			
-	//TODO : a enlever
-	public static void main(String[] args) {
-		String benevole = "albert";		
-		ViewAvis va = new ViewAvis(benevole);
-		va.setVisible(true);
-	}
-
 
 }

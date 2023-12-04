@@ -119,11 +119,6 @@ public class FormulaireConnexion extends JFrame implements ActionListener {
 				afficherErreurConnexion();
 			}
 		}
-//TODO : a enlever
-		public static void main(String[] args) {
 
-	     FormulaireConnexion connex = new FormulaireConnexion();
-	     connex.setVisible(true);
-		}
 
 }

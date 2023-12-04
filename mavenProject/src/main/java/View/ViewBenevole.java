@@ -19,7 +19,7 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 	
 	//Attributs
 	String idbenevole;
-	JLabel labtitre;
+	JLabel labtitre, labannonce;
 	JButton btdeconnexion, btvalideur, btsuivant, btavis, btchangerinfos;
 	
 	DefaultComboBoxModel<String> demandes;
@@ -45,6 +45,12 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 		labtitre.setFont(new Font("Arial",Font.BOLD,22));
 		labtitre.setForeground(Color.black);
 		pan.add(labtitre);
+		
+		labannonce = new JLabel("Annonces en attente de bénévole");
+		labannonce.setBounds(120,100,400,30);
+		labannonce.setFont(new Font("Arial",Font.BOLD,22));
+		labannonce.setForeground(Color.black);
+		pan.add(labannonce);
 		
 		try {
 			//Si utilisateur est un valideur il peut également avoir un profil bénévole
@@ -139,11 +145,11 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 	public void confirmationDeconnexion() {
 		String[] options = {"oui", "non"};
 		int choix = JOptionPane.showOptionDialog(null, "Voulez-vous vraiment vous déconnecter?",
-            "Confiramation Déconnexion",
+            "Confirmation Déconnexion",
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     	if (choix == 0) {
-			FormulaireConnexion fco = new FormulaireConnexion();
-			fco.setVisible(true);
+			ViewMain vm = new ViewMain();
+			vm.setVisible(true);
 			dispose();
     	} else if (choix == 1) {
     		//on ne fait rien
@@ -166,7 +172,10 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 				//affichage de l'annonce plus en détails
 				ViewDemandeBenevole vdb = new ViewDemandeBenevole(idbenevole,Integer.parseInt(word[0]));
 				vdb.setVisible(true);
-				dispose();
+				demandes.removeElement(choixDemande.getSelectedItem());
+        		if (demandes.getSize() == 0) {//si aucune annonce 
+        			demandes.addElement("Aucune annonce");
+        		}
 			}
 		} else {
 			if (e.getSource().equals(btdeconnexion)) {
@@ -190,13 +199,5 @@ public class ViewBenevole extends JFrame implements ActionListener, ItemListener
 			}
 		}
 	}
-	
-	//TODO : a enlever
-	public static void main(String[] args) {
-		String benevole;
-		benevole = "test0";
-		
-		ViewBenevole vbn = new ViewBenevole(benevole);
-	    vbn.setVisible(true);
-		}
+
 }
