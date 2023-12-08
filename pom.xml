@@ -21,7 +21,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  	</dependency>
  	<dependency>
     	<groupId>mysql</groupId>
-    	<artifactId>com.mysql-connector-java</artifactId>
+    	<artifactId>mysql-connector-java</artifactId>
     	<version>8.0.33</version>
     	<scope>compile</scope>
 	</dependency>
