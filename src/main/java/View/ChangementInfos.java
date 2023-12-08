@@ -239,7 +239,6 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 	//pour mettre à jour les zones de texte avec les infos du user déjà enregistrées dans la database
 	private void updateFields() {
 		try {
-			System.out.println("nom : " + MainController.getInfoOfUser(idUser,"nom"));
 			jtfnom.setText(MainController.getInfoOfUser(idUser,"nom"));
 			jtfprenom.setText(MainController.getInfoOfUser(idUser,"prenom"));
 			jtfage.setText(MainController.getInfoOfUser(idUser,"age")); 
