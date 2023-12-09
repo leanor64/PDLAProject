@@ -548,21 +548,17 @@ public class MainController {
 	    	throw (new UnexistingDemandException("Demande inexistante"));
 	    } else if (!ExistsInDB("Person", idBenevole)) {
 	    	throw (new UnexistingUserException("Benevole inexistant"));
-	    } 
-		
+	    }
 		
 		try {
 		    Connection conn = DriverManager.getConnection(url, user, passwd);            	    
 		    Statement state = conn.createStatement();
-		    
 
-		   
 	    	 //Editer le bénévole et le statut de la demande dans la BDD
 		    String commande = "UPDATE DemandeAide SET benevole = '"+idBenevole+"' WHERE num = '"+noDemande+"' ;";
 	    	state.executeUpdate(commande);
 	    	String commande2 = "UPDATE DemandeAide SET state = '"+StatutDemande.ACCEPTEE+"' WHERE num = '"+noDemande+"' ;";
 	    	state.executeUpdate(commande2);
-		    
 		    
 		  //fermer la connexion avec la base de données
 	        state.close();
@@ -599,8 +595,6 @@ public class MainController {
 					column = "lastName";
 				} else if (info.equals("prenom")) {
 					column = "firstName";
-				} else if (info.equals("age")) {
-					column = "age";
 				} else if (info.equals("email")) {
 					column = "email";
 				} else if (info.equals("telephone")) {
@@ -609,8 +603,6 @@ public class MainController {
 					column = "city";
 				} else if (info.equals("adresse")) {
 					column = "adress";
-				} else if (info.equals("identifiant")) {
-					column = "userName";
 				} else if (info.equals("mot de passe")) {
 					column = "passwrd";
 				} else {
@@ -628,7 +620,7 @@ public class MainController {
 	        state.close();
 		
 
-		} catch (Exception exce){
+		} catch (java.sql.SQLException exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
 	    	    System.exit(0);

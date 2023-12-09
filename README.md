@@ -19,4 +19,4 @@ To **run** the project, you need to be in `YOUR-DIRECTORY/PDLAProject/` :
 - `java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`
 
 To **compile and run** :
-- `mvn package && java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`
+- `mvn compile && java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`

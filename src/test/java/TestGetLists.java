@@ -3,12 +3,12 @@ import org.junit.jupiter.api.Test;
 public class TestGetLists {
 
 	@Test
-	void testListDemandesStatus() {
+	void testListDemandsStatus() {
 		//TODO
 	}
 	
 	@Test
-	void testListDemandesBeneficiaire() {
+	void testListDemandsBeneficiary() {
 		//TODO
 	}
 	
