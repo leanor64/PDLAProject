@@ -1,22 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
- 						https://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
  <modelVersion>4.0.0</modelVersion>
- <groupId>fr.insa.maven.demo</groupId>
+ <groupId>fr.insa.maven</groupId>
  <artifactId>pdlaProject</artifactId>
- <version>0.0.1-SNAPSHOT</version>
+ <version>0.1-SNAPSHOT</version>
  
 <properties>
 	<maven.compiler.source>17</maven.compiler.source>
 	<maven.compiler.target>17</maven.compiler.target>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 </properties>
 
 <dependencies>
 	<dependency>
  		<groupId>org.junit.jupiter</groupId>
 		<artifactId>junit-jupiter-api</artifactId>
-		<version>5.10.0</version>
+		<version>5.10.1</version>
 		<scope>test</scope>
  	</dependency>
  	<dependency>
@@ -44,6 +44,14 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 			</archive>
 	 		</configuration>
 	 	</plugin>
+		<plugin>
+               		<artifactId>maven-surefire-plugin</artifactId>
+               		<version>3.1.2</version>
+            	</plugin>
+           	<plugin>
+                	<artifactId>maven-failsafe-plugin</artifactId>
+               		<version>3.1.2</version>
+            	</plugin>
 	</plugins>
  </build>
  
