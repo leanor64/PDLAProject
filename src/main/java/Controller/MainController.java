@@ -217,7 +217,6 @@ public class MainController {
 		
 	}
 	
-	
 	public static void NewDemande(String title, String explication, String demandeur, String jour, String ville) throws BadLengthException, UnexistingUserException{
 		
 		int noDemande = 1 ; 
@@ -271,6 +270,7 @@ public class MainController {
 	}	
 	
 	public static boolean CheckConnection (String id, String password) {
+		/*Pour vérifier que l'identifiant et le mot de passe rentrés existent bien dans la database*/
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014" ;
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
@@ -414,8 +414,6 @@ public class MainController {
 			column = 3;
 		} else if (info.equals("age")) {
 			column = 4;
-		} else if (info.equals("type")) {
-			column = 5;
 		} else if (info.equals("email")) {
 			column = 6;
 		} else if (info.equals("telephone")) {

@@ -10,6 +10,9 @@ To **test** the core functions of the project :
 - `mvn test`
 
 To **compile** the project :
+- `mvn compile`
+
+To **compile and test** the project :
 - `mvn package`
 
 To **run** the project, you need to be in `YOUR-DIRECTORY/PDLAProject/` :

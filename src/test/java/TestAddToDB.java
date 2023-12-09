@@ -1,13 +1,10 @@
-package mavenProject;
-
 import Controller.MainController;
 import Model.BadLengthException;
 import Model.UnexistingUserException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class TestAddToDB {
 	
@@ -17,7 +14,6 @@ public class TestAddToDB {
 		MainController.EmptyDB("DemandeAide");
 		MainController.EmptyDB("Person");
 	}
-	
 	
 	@Test
 	void testAddUserDB() throws SQLIntegrityConstraintViolationException, BadLengthException {
