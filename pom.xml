@@ -44,14 +44,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 			</archive>
 	 		</configuration>
 	 	</plugin>
-		<plugin>
-               		<artifactId>maven-surefire-plugin</artifactId>
-               		<version>3.1.2</version>
-            	</plugin>
-           	<plugin>
-                	<artifactId>maven-failsafe-plugin</artifactId>
-               		<version>3.1.2</version>
-            	</plugin>
 	</plugins>
  </build>
  
