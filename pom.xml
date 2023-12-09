@@ -39,7 +39,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 				<manifest>
 	 					<addClasspath>true</addClasspath>
 	 
-	 					<mainClass>View.ViewMain</mainClass>
+	 					<mainClass>Controller.MainController</mainClass>
 					</manifest>
 	 			</archive>
 	 		</configuration>
