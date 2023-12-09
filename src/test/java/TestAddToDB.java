@@ -54,7 +54,6 @@ public class TestAddToDB {
 			System.out.println("Erreur add User");
 		}
 
-		
 		/*add a Demand -> not supposed to throw an exception*/
 		MainController.NewDemande ("Besoin daide 1", "Détails de la demande", "identifiant", "08/12/2023", "Paris");
 		assert MainController.ExistsInDB("DemandeAide", "1");
@@ -72,7 +71,7 @@ public class TestAddToDB {
 			assert (!MainController.ExistsInDB("DemandeAide", "3"));
 		}
 		
-		/*add a Demand with an date too long (primary_key = 3) -> supposed to catch an BadLengthException*/
+		/*add a Demand with a date too long (primary_key = 3) -> supposed to catch an BadLengthException*/
 		try {
 			assert (!MainController.ExistsInDB("DemandeAide", "3"));
 			MainController.NewDemande ("Besoin daide 3", "Détails de la demande 3", "identifiant", "078/12/2023", "Paris");

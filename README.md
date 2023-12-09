@@ -16,7 +16,7 @@ To **compile and test** the project :
 - `mvn package`
 
 To **run** the project, you need to be in `YOUR-DIRECTORY/PDLAProject/` :
-- `java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`
+- `java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar Controller.MainController`
 
 To **compile and run** :
-- `mvn compile && java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`
+- `mvn compile && java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar Controller.MainController`

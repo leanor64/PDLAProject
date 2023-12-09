@@ -14,6 +14,7 @@ import Model.UnexistingAvisException;
 import Model.UnexistingDemandException;
 import Model.UnexistingInfoException;
 import Model.UnexistingUserException;
+import View.ViewMain;
 
 public class MainController {
       
@@ -108,19 +109,19 @@ public class MainController {
 		/* Benevole : 0 | Beneficiaire : 1 | Valideur : 2 */
 		
 		/*vérification taille des arguments*/
-		if ((nom.length() > 20) || (nom.length()==0)) {
+		if ((nom.length() > 20) || (nom.isEmpty())) {
 			throw new BadLengthException ("Nom");
-		} else if ((prenom.length() > 20) || (prenom.length()==0)) {
+		} else if ((prenom.length() > 20) || (prenom.isEmpty())) {
 			throw new BadLengthException ("Prenom");
-		} else if ((email.length() > 50) || (email.length()==0)) {
+		} else if ((email.length() > 50) || (email.isEmpty())) {
 			throw new BadLengthException ("Email");
-		} else if ((telephone.length() > 10) || (telephone.length()==0)) {
+		} else if ((telephone.length() > 10) || (telephone.isEmpty())) {
 			throw new BadLengthException ("Téléphone");
-		} else if ((ville.length() > 30) || (ville.length()==0)) {
+		} else if ((ville.length() > 30) || (ville.isEmpty())) {
 			throw new BadLengthException ("Ville");
-		} else if ((adresse.length() > 100) || (adresse.length()==0)) {
+		} else if ((adresse.length() > 100) || (adresse.isEmpty())) {
 			throw new BadLengthException ("Adresse");
-		} else if ((idUser.length() > 20) || (idUser.length()==0)) {
+		} else if ((idUser.length() > 20) || (idUser.isEmpty())) {
 			throw new BadLengthException ("Identifiant");
 		} else if ((password.length() > 20) || (password.length()<8)) {
 			throw new BadLengthException ("Mot de passe");
@@ -571,7 +572,7 @@ public class MainController {
 		
 	}
 	
-	public static void setInfoOfUser(String idUser, String info, String nvValeur) throws UnexistingInfoException,UnexistingUserException {
+	public static void setInfoOfUser(String idUser, String info, String nvValeur) throws UnexistingInfoException, UnexistingUserException, BadLengthException {
 		String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_014";
 		String user = "projet_gei_014";
 		String passwd = "Rei4wie9";
@@ -593,18 +594,39 @@ public class MainController {
 		    	
 			    if (info.equals("nom")) {
 					column = "lastName";
+					if ((nvValeur.length() > 20) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Nom");
+					}
 				} else if (info.equals("prenom")) {
 					column = "firstName";
+					if ((nvValeur.length() > 20) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Prenom");
+					}
 				} else if (info.equals("email")) {
 					column = "email";
+					if ((nvValeur.length() > 50) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Email");
+					}
 				} else if (info.equals("telephone")) {
 					column = "phone";
+					if ((nvValeur.length() > 10) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Téléphone");
+					}
 				} else if (info.equals("ville")) {
 					column = "city";
+					if ((nvValeur.length() > 30) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Ville");
+					}
 				} else if (info.equals("adresse")) {
 					column = "adress";
+					if ((nvValeur.length() > 100) || nvValeur.isEmpty()) {
+						throw new BadLengthException("Adresse");
+					}
 				} else if (info.equals("mot de passe")) {
 					column = "passwrd";
+					if ((nvValeur.length() > 50) || (nvValeur.length()<8)) {
+						throw new BadLengthException("Mot de passe");
+					}
 				} else {
 					throw new UnexistingInfoException(info + " n'est pas un attribut d'une personne");
 				}
@@ -712,10 +734,9 @@ public class MainController {
 		    /*On récupère dans la BDD les demandes dont le statut correspond à celui cherché*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Avis WHERE destinataire = '"+idBenevole+"';");
 		    
-		    System.out.println("pas erreur commande");
-		    if (res.next()) {
-		    	 listAvis.add(res.getInt(1)); 
-		    } 
+		    while (res.next()) {
+		    	 listAvis.add(res.getInt(1));
+			}
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
@@ -732,64 +753,9 @@ public class MainController {
 	}
 	
 	public static void main(String[] args) {
-		
-		try {
-			NewUser ("maurice", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 1);
-			NewUser ("albert", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 0);
-			NewUser ("pat", "abracadabra", "Camus", "Albert", 28, "blabla@gmail.com", "0123456789", "Toulouse", "8 allée des sc appliquees", 2);
-		
-			NewAvis ("Maurice il était top", "maurice", "albert", 5);
-			NewAvis ("Jean il était top", "maurice", "albert", 4);
-			NewAvis ("Patoche il était top", "maurice", "albert", 5);
-			NewAvis ("AA il était top", "maurice", "albert", 4);/*
-			
-			NewDemande ("Besoin daide 1", "Besoin daide avec détails", "albert", "08/12/2023", "Paris");
-			NewDemande ("Besoin daide 2", "Besoin daide avec détails2", "albert", "08/12/2123", "Paris");
-			NewDemande ("Besoin daide 3", "Besoin daide avec détails", "albert", "03/12/2023", "Paris");
-			NewDemande ("Besoin daide 4", "Besoin daide avec détails", "albert", "08/13/2023", "Paris");
-			
-			System.out.println("excpected : 1, obtained : "+getTypeOfUser("maurice"));
-			System.out.println("excpected : 0, obtained : "+getTypeOfUser("albert"));
-			System.out.println("excpected : 2, obtained : "+getTypeOfUser("pat"));
 
-			setStatusOfDemand("Besoin daide 1", StatutDemande.VALIDEE);
-			setStatusOfDemand("Besoin daide 2", StatutDemande.REFUSEE_INAPPROPRIEE);
-			
-			System.out.println(getListOfDemands(StatutDemande.EN_ATTENTE));
-			System.out.println(getListOfDemands(StatutDemande.VALIDEE));
-
-			System.out.println(getInfoOfDemand(6, "explication"));
-			System.out.println(getInfoOfDemand(1, "voisin"));
-			
-			System.out.println(getInfoOfUser("maurice", "prenom"));
-			System.out.println(getInfoOfUser("pat", "email"));
-			System.out.println(getInfoOfUser("albert", "telephone"));
-			System.out.println(getInfoOfUser("maurice", "nomdefamille"));
-			
-			System.out.println(getInfoOfAvis(2, "commentaire"));
-			System.out.println(getInfoOfAvis(3, "destinataire"));
-			System.out.println(getInfoOfAvis(5,"destinataire"));*/
-			
-			/*setInfoOfUser("pat", "age", "8");
-			setInfoOfUser("lolololo", "prenom", "patricia");
-			setInfoOfUser("lolololo", "nom", "maurice");
-			setInfoOfUser("oiu", "identifiant", "belinda");
-			setInfoOfUser("belinda", "email", "youpicamarche");*/
-
-			ExistsInDB("Person", "test0");
-			
-			
-		/*} catch (BadLengthException exc2) {
-			System.out.println ("erreur length");*/
-		/*} catch (UnexistingUserException exc3) {
-			System.out.println ("erreur user inexistant");*/
-		/*} catch (UnexistingAvisException exc4) {
-			System.out.println ("erreur avis inexistant");
-		} catch (UnexistingInfoException exc4) {
-			System.out.println ("erreur information inexistante");*/
-		}catch (Exception exc) {
-			System.out.println ("erreur");
-		}
+		ViewMain main = new ViewMain();
+		main.setVisible(true);
 		
 	}
 

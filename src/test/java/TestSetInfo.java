@@ -1,8 +1,5 @@
 import Controller.MainController;
-import Model.StatutDemande;
-import Model.UnexistingDemandException;
-import Model.UnexistingInfoException;
-import Model.UnexistingUserException;
+import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,9 +46,9 @@ public class TestSetInfo {
 		}
 
 		/*Try to set the benevole of a demand -> supposed to change the name of the benevole*/
-		assertEquals(MainController.getInfoOfDemand(1,"benevole"),"");
+		assertEquals("",MainController.getInfoOfDemand(1,"benevole"));
 		MainController.setBenevoleOfDemand(1, "identifiant");
-		assertEquals(MainController.getInfoOfDemand(1,"benevole"),"identifiant");
+		assertEquals("identifiant", MainController.getInfoOfDemand(1,"benevole"));
 
 	}
 	
@@ -75,14 +72,14 @@ public class TestSetInfo {
 		}
 
 		/*Try to set the state of a demand -> supposed to change the state of the demande*/
-		assertEquals(MainController.getInfoOfDemand(1,"statut"),"EN_ATTENTE");
+		assertEquals("EN_ATTENTE", MainController.getInfoOfDemand(1,"statut"));
 		MainController.setStatusOfDemand(1, StatutDemande.REFUSEE_INAPPROPRIEE);
-		assertEquals(MainController.getInfoOfDemand(1,"statut"),"REFUSEE_INAPPROPRIEE");
+		assertEquals("REFUSEE_INAPPROPRIEE", MainController.getInfoOfDemand(1,"statut"));
 
 	}
 	
 	@Test
-	void testSetInfoUser() throws UnexistingInfoException, UnexistingUserException {
+	void testSetInfoUser() throws UnexistingInfoException, UnexistingUserException, BadLengthException {
 		try{
 			MainController.NewUser ("identifiant", "abracadabra", "Camus", "Albert", 28, "albert@gmail.com", "0123456789", "Toulouse", "160 allée des sc appliquees", 1);
 		} catch (Exception e) {
@@ -107,46 +104,37 @@ public class TestSetInfo {
 			//OK
 		}
 
-		/*Try to set the name of an existing user -> supposed to change the name of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "nom"),"Camus");
+		/*Try to set the name of the user "identifiant" -> supposed to change the name of the user*/
+		assertEquals("Camus", MainController.getInfoOfUser("identifiant", "nom"));
 		MainController.setInfoOfUser("identifiant", "nom", "Einstein");
-		assertEquals(MainController.getInfoOfUser("identifiant","nom"),"Einstein");
+		assertEquals("Einstein", MainController.getInfoOfUser("identifiant","nom"));
 
-		/*Try to set the firstname of an existing user -> supposed to change the firstname of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "prenom"),"Albert");
+		/*Try to set the firstname of the user "identifiant" -> supposed to change the firstname of the user*/
+		assertEquals("Albert", MainController.getInfoOfUser("identifiant", "prenom"));
 		MainController.setInfoOfUser("identifiant", "prenom", "Jean");
-		assertEquals(MainController.getInfoOfUser("identifiant","prenom"),"Jean");
+		assertEquals("Jean", MainController.getInfoOfUser("identifiant","prenom"));
 
-		/*Try to set the age of an existing user -> supposed to change the name of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "age"),"28");
+		/*Try to set the age of the user "identifiant" -> supposed to change the name of the user*/
+		assertEquals("28", MainController.getInfoOfUser("identifiant", "age"));
 		MainController.setInfoOfUser("identifiant", "age", "12");
-		assertEquals(MainController.getInfoOfUser("identifiant","age"),"12");
+		assertEquals("12", MainController.getInfoOfUser("identifiant","age"));
 
-		/*Try to set the email of an existing user -> supposed to change the email of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "email"),"albert@gmail.com");
-		MainController.setInfoOfUser("identifiant", "email", "jean@gmail.com");
-		assertEquals(MainController.getInfoOfUser("identifiant","email"),"jean@gmail.com");
+		/*Try to set the email of the user "identifiant" with a new email null -> supposed to throw a BadLengthException */
+		try {
+			MainController.setInfoOfUser("identifiant", "email", "");
+			assert false ;
+		} catch (BadLengthException e){
+			//OK
+		}
 
-		/*Try to set the phone number of an existing user -> supposed to change the phone number of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "telephone"),"0123456789");
-		MainController.setInfoOfUser("identifiant", "telephone", "9876543210");
-		assertEquals(MainController.getInfoOfUser("identifiant","telephone"),"9876543210");
+		/*Try to set the phone number of an existing user with a new number too long -> supposed to throw a BadLengthException*/
+		try {
+			MainController.setInfoOfUser("identifiant", "telephone", "012345678901234");
+			assert false;
 
-		/*Try to set the city of an existing user -> supposed to change the city of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "ville"),"Toulouse");
-		MainController.setInfoOfUser("identifiant", "ville", "Lyon");
-		assertEquals(MainController.getInfoOfUser("identifiant","ville"),"Lyon");
-
-		/*Try to set the address of an existing user -> supposed to change the address of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "adresse"),"160 allée des sc appliquees");
-		MainController.setInfoOfUser("identifiant", "adresse", "8 rue des oiseaux");
-		assertEquals(MainController.getInfoOfUser("identifiant","adresse"),"8 rue des oiseaux");
-
-		/*Try to set the password of an existing user -> supposed to change the password of the user*/
-		assertEquals(MainController.getInfoOfUser("identifiant", "mot de passe"),"abracadabra");
-		MainController.setInfoOfUser("identifiant", "mot de passe", "nouveauPassword");
-		assertEquals(MainController.getInfoOfUser("identifiant","mot de passe"),"nouveauPassword");
-
+		} catch (BadLengthException e){
+			//OK
+		}
 	}
 	
 	

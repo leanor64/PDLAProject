@@ -5,6 +5,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import Controller.*;
+import Model.BadLengthException;
 import Model.UnexistingInfoException;
 import Model.UnexistingUserException;
 
@@ -193,6 +194,7 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 			try {
 				MainController.setInfoOfUser(idUser,"nom",jtfnom.getText());
 				MainController.setInfoOfUser(idUser,"prenom",jtfprenom.getText());
+				int verifAge = Integer.parseInt(jtfage.getText());
 				MainController.setInfoOfUser(idUser,"age",jtfage.getText());
 				MainController.setInfoOfUser(idUser,"email",jtfemail.getText());
 				MainController.setInfoOfUser(idUser,"adresse",jtfadresse.getText());
@@ -200,14 +202,15 @@ public class ChangementInfos  extends JFrame implements ActionListener, KeyListe
 				MainController.setInfoOfUser(idUser,"telephone",jtftelephone.getText());
 				MainController.setInfoOfUser(idUser,"mot de passe",toString(jpfpassword.getPassword()));
 				dispose();
-			} catch (UnexistingInfoException exc1) {
+			} catch (UnexistingInfoException | UnexistingUserException exc1) {
 				System.out.println("erreur " + exc1.getMessage());
 				dispose();
-			} catch (UnexistingUserException exc2) {
-				System.out.println("erreur " + exc2.getMessage());
-				dispose();
+			} catch (BadLengthException e){
+				afficherTailleNonValide(e.getMessage());
+			} catch (NumberFormatException exc3) {
+				afficherAgeNonValide();
 			}
-    	} else if (choix == 1) {
+		} else if (choix == 1) {
     		//on ne fait rien
     	}
 	}

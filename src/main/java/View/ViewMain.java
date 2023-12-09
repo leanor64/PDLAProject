@@ -72,10 +72,4 @@ public class ViewMain extends JFrame implements ActionListener {
 			}
 		}
 
-		public static void main(String[] args) {
-
-	     ViewMain main = new ViewMain();
-	     main.setVisible(true);
-		}
-
 }
