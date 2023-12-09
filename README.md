@@ -17,8 +17,3 @@ To **run** the project, you need to be in `YOUR-DIRECTORY/PDLAProject/` :
 
 To **compile and run** :
 - `mvn package && java -cp target/pdlaProject-0.0.1-SNAPSHOT.jar View.ViewMain`
-
-## Available commands
-Once the initialization phase is done, you can :
-- change your pseudo : `changepseudo`,
-- logout : `logout`.
