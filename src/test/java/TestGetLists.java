@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestGetLists {
 
 	@BeforeAll
-	public static void FillDB() throws BadLengthException, SQLIntegrityConstraintViolationException, UnexistingUserException {
+	public static void FillDB() {
 		try {
 			MainController.EmptyDB("Avis");
 			MainController.EmptyDB("DemandeAide");

@@ -1,5 +1,6 @@
 import Controller.MainController;
 import Model.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,23 +8,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSetInfo {
 
-	@BeforeEach
-	public void EmptyDB() {
+	@BeforeAll
+	public static void FillDB() {
 		MainController.EmptyDB("Avis");
 		MainController.EmptyDB("DemandeAide");
 		MainController.EmptyDB("Person");
+
+		try {
+			MainController.NewUser ("identifiant", "abracadabra", "Camus", "Albert", 28, "albert@gmail.com", "0123456789", "Toulouse", "160 allée des sc appliquees", 1);
+			MainController.NewUser ("identifiant2", "youpiyoupi", "Verlaine", "Paul", 17, "verlaine@gmail.com", "0123456789", "Assas", "9 rue des poissons rouges", 2);
+			MainController.NewDemande ("Besoin daide 1", "Détails de la demande", "identifiant2", "09/12/2023", "Lyon");
+		} catch (Exception e){
+			System.out.println("Erreur add User, Demands and Avis");
+		}
+
 	}
 
 	@Test
 	void testSetBenevoleDemande() throws UnexistingDemandException, UnexistingUserException, UnexistingInfoException {
-
-		try{
-			MainController.NewUser ("identifiant", "abracadabra", "Camus", "Albert", 28, "albert@gmail.com", "0123456789", "Toulouse", "160 allée des sc appliquees", 1);
-			MainController.NewUser ("identifiant2", "youpiyoupi", "Verlaine", "Paul", 17, "verlaine@gmail.com", "0123456789", "Assas", "9 rue des poissons rouges", 2);
-			MainController.NewDemande ("Besoin daide 1", "Détails de la demande", "identifiant2", "09/12/2023", "Lyon");
-		} catch (Exception e) {
-			System.out.println("Erreur add User et Demand");
-		}
 
 		/*Try to set the benevole of an unexisting demand -> supposed to throw an UnexistingDemandException*/
 		try {
@@ -55,24 +57,16 @@ public class TestSetInfo {
 	@Test
 	void testSetStatusDemande() throws UnexistingInfoException, UnexistingDemandException {
 
-		try{
-			MainController.NewUser ("identifiant", "abracadabra", "Camus", "Albert", 28, "albert@gmail.com", "0123456789", "Toulouse", "160 allée des sc appliquees", 1);
-			MainController.NewDemande ("Besoin daide 1", "Détails de la demande", "identifiant", "09/12/2023", "Lyon");
-		} catch (Exception e) {
-			System.out.println("Erreur add User et Demand");
-		}
-
 		/*Try to set the state of an unexisting demand -> supposed to throw an UnexistingDemandException*/
 		try {
-			assert !MainController.ExistsInDB("DemandeAide", "2");
-			MainController.setStatusOfDemand(2, StatutDemande.VALIDEE);
+			assert !MainController.ExistsInDB("DemandeAide", "3");
+			MainController.setStatusOfDemand(3, StatutDemande.VALIDEE);
 			assert false ;
 		} catch (UnexistingDemandException e) {
 			//OK
 		}
 
 		/*Try to set the state of a demand -> supposed to change the state of the demande*/
-		assertEquals("EN_ATTENTE", MainController.getInfoOfDemand(1,"statut"));
 		MainController.setStatusOfDemand(1, StatutDemande.REFUSEE_INAPPROPRIEE);
 		assertEquals("REFUSEE_INAPPROPRIEE", MainController.getInfoOfDemand(1,"statut"));
 
@@ -80,11 +74,6 @@ public class TestSetInfo {
 	
 	@Test
 	void testSetInfoUser() throws UnexistingInfoException, UnexistingUserException, BadLengthException {
-		try{
-			MainController.NewUser ("identifiant", "abracadabra", "Camus", "Albert", 28, "albert@gmail.com", "0123456789", "Toulouse", "160 allée des sc appliquees", 1);
-		} catch (Exception e) {
-			System.out.println("Erreur add User");
-		}
 
 		/*Try to set an info of an unexisting User -> supposed to throw an UnexistingUserException*/
 		try {

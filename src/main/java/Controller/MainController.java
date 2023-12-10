@@ -40,6 +40,8 @@ public class MainController {
 	            System.out.println("\n---------------------------------------------------------------------------");
 	        } 
 	        res.close();
+			conn.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		    System.out.println("Erreur");
@@ -75,6 +77,7 @@ public class MainController {
 		    } 
 		    result.close();
 		    state.close();
+			conn.close();
 
 		    
 		} catch (Exception exce){
@@ -97,11 +100,12 @@ public class MainController {
 		    String commande = "TRUNCATE "+ table +";";
 		    state.executeUpdate(commande);
 		    state.close();
+			conn.close();
         
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 	}
 	
@@ -141,13 +145,14 @@ public class MainController {
 	        
 	        //fermer la connexion avec la base de données
 	        state.close();
+			conn.close();
 	        
 		} catch (SQLIntegrityConstraintViolationException exc) {
 			throw exc;
 		} catch (Exception e){
 		    e.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}
@@ -161,9 +166,9 @@ public class MainController {
 		/*vérification taille des arguments*/
 		if (message.length() > 300) {
 			throw new BadLengthException ("Message");
-		} else if ((destinataire.length() > 20) || (destinataire.length()==0)){
+		} else if ((destinataire.length() > 20) || (destinataire.isEmpty())){
 			throw new BadLengthException ("Destinataire");
-		} else if ((emetteur.length() > 50) || (emetteur.length()==0)) {
+		} else if ((emetteur.length() > 50) || (emetteur.isEmpty())) {
 			throw new BadLengthException ("Emetteur");
 		}	
 		
@@ -208,12 +213,12 @@ public class MainController {
 	        result.close();
 	        result2.close();
 	        state.close();
-	        
+	        conn.close();
 	        
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}
@@ -226,15 +231,15 @@ public class MainController {
 		String passwd = "Rei4wie9";
 		
 		/*vérification taille des arguments*/
-		if ((title.length() > 50) || (title.length()==0)){
+		if ((title.length() > 50) || (title.isEmpty())){
 			throw new BadLengthException ("Titre");
-		} else if ((explication.length() > 300) || (explication.length()==0)){
+		} else if ((explication.length() > 300) || (explication.isEmpty())){
 			throw new BadLengthException ("Détails");
-		} else if ((demandeur.length() > 20) || (demandeur.length()==0)){
+		} else if ((demandeur.length() > 20) || (demandeur.isEmpty())){
 			throw new BadLengthException ("Beneficiaire");
-		} else if ((jour.length() > 10) || (jour.length()==0)) {
+		} else if ((jour.length() > 10) || (jour.isEmpty())) {
 			throw new BadLengthException ("Date");
-		} else if ((ville.length() > 30) || (ville.length()==0)){
+		} else if ((ville.length() > 30) || (ville.isEmpty())){
 			throw new BadLengthException ("Ville");
 		}  
 		
@@ -261,11 +266,12 @@ public class MainController {
 		    state.executeUpdate(commande);
 		  
 	        state.close();
+			conn.close();
 	        
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}	
@@ -292,6 +298,7 @@ public class MainController {
 	        //fermer la connexion avec la base de données
 	        result.close();
 	        state.close();
+			conn.close();
 		  
 		}catch (Exception exce){
 		    exce.printStackTrace();
@@ -327,6 +334,7 @@ public class MainController {
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
@@ -377,18 +385,19 @@ public class MainController {
 		    /*On récupère la ligne correspondant au numero de la demande dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM DemandeAide WHERE num = '"+noDemande+"';");
 		    if (res.next()) {
-		    information = res.getString(column) ;
+		   		information = res.getString(column) ;
 		    }
 		    
 		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 		return information ;
@@ -441,13 +450,13 @@ public class MainController {
 		    /*On récupère la ligne correspondant à l'id dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Person WHERE userName = '"+idUser+"';");
 		    if (res.next()) {
-			information = res.getString(column) ;
-		    
+				information = res.getString(column);
+			}
 		    		    
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
-		    }
+		    conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
@@ -492,12 +501,13 @@ public class MainController {
 		    /*On récupère la ligne correspondant au title dans la base de données*/
 		    ResultSet res = state.executeQuery("SELECT * FROM Avis WHERE num = '"+noAvis+"';");
 		    if (res.next()) {
-			information = res.getString(column) ;
-		    
+				information = res.getString(column);
+			}
+
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
-		    }
+		    conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
@@ -530,11 +540,12 @@ public class MainController {
 		    
 		  //fermer la connexion avec la base de données
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}
@@ -563,11 +574,12 @@ public class MainController {
 		    
 		  //fermer la connexion avec la base de données
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}
@@ -640,12 +652,13 @@ public class MainController {
 	    			    
 		  //fermer la connexion avec la base de données
 	        state.close();
+			conn.close();
 		
 
 		} catch (java.sql.SQLException exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 		
 	}
@@ -670,11 +683,12 @@ public class MainController {
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 	
 		return listDemands ;
@@ -705,11 +719,12 @@ public class MainController {
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();
 		    System.out.println("Erreur");
-	    	    System.exit(0);
+			System.exit(0);
 	    }
 	
 		return listDemands ;
@@ -741,6 +756,7 @@ public class MainController {
 		  //fermer la connexion avec la base de données
 	        res.close();
 	        state.close();
+			conn.close();
 		
 		} catch (Exception exce){
 		    exce.printStackTrace();

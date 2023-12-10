@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestGetInfo {
 
 	@BeforeAll
-	public static void EmptyDB() {
+	public static void FillDB() {
 		MainController.EmptyDB("Avis");
 		MainController.EmptyDB("DemandeAide");
 		MainController.EmptyDB("Person");
